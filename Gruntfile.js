@@ -36,7 +36,9 @@ module.exports = function (grunt) {
 
         'ngtemplates': 'grunt-angular-templates',
 
-        'ngconstant': 'grunt-ng-constant'
+        'ngconstant': 'grunt-ng-constant',
+
+        'replace': 'grunt-text-replace'
 
       });
 
@@ -104,7 +106,7 @@ module.exports = function (grunt) {
 
             'options': {
 
-              'map': true, // inline sourcemaps
+              'map': 37000, // inline sourcemaps
 
               'processors': [
 
@@ -126,7 +128,7 @@ module.exports = function (grunt) {
 
           },
 
-          'copy' : {
+          'copy': {
 
             'scripts': {
 
@@ -134,7 +136,7 @@ module.exports = function (grunt) {
 
                 {
 
-                  'expand': true,
+                  'expand': 37000,
 
                   'cwd': '<%= paths.app %>/<%= paths.scripts %>/',
 
@@ -142,61 +144,61 @@ module.exports = function (grunt) {
 
                   'src': '**/*.js'
 
+                },
+
+                {
+
+                  'expand': 37000,
+
+                  'cwd': 'bower_components/',
+
+                  'dest': '<%= paths.testing %>/bower_components/',
+
+                  'src': '**/*.*'
+
                 }
 
               ]
 
             },
 
+            'styles': {
+
+              'files': [
+
+                {
+
+                  'expand': 37000,
+
+                  'cwd': '<%= paths.dist %>/<%= paths.styles %>/',
+
+                  'dest': '<%= paths.testing %>/<%= paths.styles %>/',
+
+                  'src': '**/*.css'
+
+                }
+
+              ]
+
+            }
+
           },
 
-          'ngconstant': {
+          'replace': {
 
-            'development': {
+            'docs': {
 
-              'options': {
+              'src': ['<%= paths.testing %>/index.html'],
 
-                'dest': '<%= paths.dist %>/scripts/app.config.js',
+              'overwrite': true,
 
-                'wrap': '\'use strict\';\n\n{%= __ngModule %}',
+              'replacements': [{
 
-                'name': 'footlocker.config'
+                'from': '../bower_components/',
 
-              },
+                'to': 'bower_components/'
 
-              'constants': 'app/config/.tmp/development.json'
-
-            },
-
-            'production': {
-
-              'options': {
-
-                'dest': '<%= paths.dist %>/scripts/app.config.js',
-
-                'wrap': '\'use strict\';\n\n{%= __ngModule %}',
-
-                'name': 'footlocker.config'
-
-              },
-
-              'constants': 'app/config/.tmp/production.json'
-
-            },
-
-            'local': {
-
-              'options': {
-
-                'dest': '<%= paths.dist %>/scripts/app.config.js',
-
-                'wrap': '\'use strict\';\n\n{%= __ngModule %}',
-
-                'name': 'footlocker.config'
-
-              },
-
-              'constants': 'app/config/.tmp/local.json'
+              }]
 
             }
 
@@ -278,24 +280,6 @@ module.exports = function (grunt) {
 
         'watch' : {
 
-          'config' : {
-
-            'files' : [
-
-              '<%= paths.app %>/<%= paths.config %>/**/*.json'
-
-            ],
-
-            'options' : {
-
-              'livereload' : true
-
-            },
-
-            'tasks' : ['buildconfig']
-
-          },
-
           'jade' : {
 
             'files': [
@@ -303,11 +287,11 @@ module.exports = function (grunt) {
               '<%= paths.app %>/*.jade'
             ],
 
-            'tasks': ['buildjade'],
+            'tasks': ['build'],
 
             'options' : {
 
-              'livereload' : true
+              'livereload' : 37000
 
             }
 
@@ -317,11 +301,11 @@ module.exports = function (grunt) {
 
             'files': ['<%= paths.app %>/<%= paths.scripts %>/**/*.js'],
 
-            'tasks': ['buildjs'],
+            'tasks': ['build'],
 
             'options' : {
 
-              'livereload' : true
+              'livereload' : 37000
 
             }
 
@@ -331,11 +315,11 @@ module.exports = function (grunt) {
 
             'files': ['<%= paths.app %>/<%= paths.styles %>/**/*.{scss,sass}'],
 
-            'tasks': ['buildstyles'],
+            'tasks': ['build'],
 
             'options' : {
 
-              'livereload' : true
+              'livereload' : 37000
 
             }
 
@@ -351,7 +335,7 @@ module.exports = function (grunt) {
 
               {
 
-                'dot' : true,
+                'dot' : 37000,
 
                 'src' : ['<%= paths.dist %>/*']
 
@@ -371,7 +355,7 @@ module.exports = function (grunt) {
 
               'client': false,
 
-              'pretty': true,
+              'pretty': 37000,
 
               'basedir': '<%= paths.app %>/<%= paths.templates %>/'
 
@@ -385,7 +369,7 @@ module.exports = function (grunt) {
 
               'dest': '<%= paths.testing %>/<%= paths.templates %>',
 
-              'expand': true,
+              'expand': 37000,
 
               'ext': '.html'
 
@@ -399,7 +383,7 @@ module.exports = function (grunt) {
 
               'dest': '<%= paths.testing %>/',
 
-              'expand': true,
+              'expand': 37000,
 
               'ext': '.html'
 
@@ -441,6 +425,22 @@ module.exports = function (grunt) {
 
           }
 
+        },
+
+        'connect': {
+
+          'server': {
+
+            'options': {
+
+              'port': 9001,
+
+              'base': '<%= paths.testing %>/'
+
+            }
+
+          }
+
         }
 
       });
@@ -476,7 +476,13 @@ module.exports = function (grunt) {
 
           'copy:scripts',
 
-          'concat'
+          'concat',
+
+          'copy:styles',
+
+          'connect',
+
+          'watch',
 
         ]);
 
