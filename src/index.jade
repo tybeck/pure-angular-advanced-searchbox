@@ -5,9 +5,14 @@ html(ng-app="app")
     // endbower
     link(rel="stylesheet", href="styles/main.css")
   body
+    paasb-search-box(
+      paasb-search-box-filtering=""
+    )
     // bower:js
     // endbower
     script(src="scripts/ui.module.js")
     script(src="scripts/ui.templates.js")
+    script(src="scripts/directives/searchbox.js")
+    script(src="scripts/directives/searchbox-filtering.js")
     script(src="scripts/testing/app.js")
     script(src="//localhost:37000/livereload.js")

@@ -51,6 +51,7 @@ bower_components/
 node_modules/
 testing/scripts/ui.module.js
 testing/scripts/ui.templates.js
+testing/scripts/directives/
 testing/styles
 testing/views/
 testing/index.html
