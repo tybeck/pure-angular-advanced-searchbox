@@ -1,0 +1,45 @@
+{
+  "name": "pure-angular-advanced-searchbox",
+  "version": "1.0.0",
+  "description": "Pure angular-based advanced search",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tybeck/pure-angular-advanced-searchbox.git"
+  },
+  "keywords": [
+    "Pure",
+    "Angular",
+    "Advanced",
+    "Search"
+  ],
+  "author": "Tyler Beck",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tybeck/pure-angular-advanced-searchbox/issues"
+  },
+  "homepage": "https://github.com/tybeck/pure-angular-advanced-searchbox#readme",
+  "devDependencies": {
+    "autoprefixer": "^6.3.6",
+    "chalk": "^1.1.3",
+    "cssnano": "^3.6.2",
+    "es6-promise": "^3.2.1",
+    "grunt": "~0.4.0",
+    "grunt-angular-templates": "^1.0.4",
+    "grunt-config": "^1.0.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-compass": "^1.1.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-jade": "^1.0.0",
+    "grunt-ng-constant": "^2.0.1",
+    "jit-grunt": "^0.10.0",
+    "jshint-stylish": "^2.2.0",
+    "pixrem": "^3.0.1",
+    "time-grunt": "^1.3.0",
+    "grunt-bower-install": "^1.6.0"
+  }
+}
