@@ -55,11 +55,11 @@ angular.module('paasb')
 
 							'element': compiledElement,
 
-							'scope': childScope,
-
-							'editing': true
+							'scope': childScope
 
 						});
+
+						scope.hasFilters = true;
 
             this.addedFilters.push(filter);
 
@@ -100,6 +100,8 @@ angular.module('paasb')
 
 									addedFilter.notFiltered = true;
 
+									scope.hasFilters = false;
+
 									self.addedFilters.splice(addedObject.length - 1 - addedIndex, 1);
 
 								}
@@ -111,7 +113,16 @@ angular.module('paasb')
 
           removeAll: function () {
 
-            console.log('remove all filters');
+						var self = this;
+
+						this.addedFilters
+							.slice()
+							.reverse()
+							.forEach(function (addedFilter) {
+
+								return self.remove(addedFilter);
+
+							});
 
           }
 

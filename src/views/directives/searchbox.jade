@@ -2,7 +2,7 @@ div(class="paasb-searchbox")
   div(class="paasb-searchbox-wrapper")
     i(
       class="fa",
-      ng-class="{ 'fa-search': !searchParams.query.length, 'fa-trash': searchParams.query && searchParams.query.length }",
+      ng-class="{ 'fa-search': !searchParams.query.length, 'fa-trash': ((searchParams.query && searchParams.query.length) || hasFilters) }",
       ng-click="handleGarbage();"
     )
     input(

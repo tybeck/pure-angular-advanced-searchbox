@@ -66,7 +66,7 @@ angular.module('paasb')
 
                     handleGarbage: function () {
 
-                      if(params.query && params.query.length) {
+                      if((params.query && params.query.length) || $scope.hasFilters) {
 
                         params.query = '';
 

@@ -17,8 +17,9 @@ angular.module('paasb')
 
     .directive('paasbSearchBoxAddedFilter', [
       '$timeout',
+      '$document',
       'Ui',
-      function ($timeout, Ui) {
+      function ($timeout, $document, Ui) {
 
         return {
 
@@ -50,6 +51,22 @@ angular.module('paasb')
 
                 'events': {
 
+                  searchboxClick: function (ev) {
+
+                    var isChild = $element[0].contains(ev.target);
+
+                    var isSelf = $element[0] == ev.target;
+
+                    var isInside = isChild || isSelf;
+
+                    if(!isInside) {
+
+                      $scope.closeFilter();
+
+                    }
+
+                  },
+
                   inputKeyEvents: function (ev) {
 
                     if(ev.keyCode === 13) {
@@ -61,6 +78,40 @@ angular.module('paasb')
                       });
 
                     }
+
+                  }
+
+                },
+
+                closeFilter: function () {
+
+                  var self = this;
+
+                  Ui.safeApply($scope, function () {
+
+                    filter.editing = false;
+
+                    $document.unbind('click', self.events.searchboxClick);
+
+                  });
+
+                },
+
+                openFilter: function () {
+
+                  var self = this;
+
+                  if(!filter.editing) {
+
+                    filter.editing = true;
+
+                    $timeout(function () {
+
+                      $document.bind('click', self.events.searchboxClick);
+
+                    }, 25);
+
+                    $scope.setFocus();
 
                   }
 
@@ -105,11 +156,11 @@ angular.module('paasb')
                 }
 
               });
-
+console.log('okay');
               $scope
                 .getElements()
                 .registerEvents($scope.events)
-                .setFocus();
+                .openFilter();
 
             }
 
@@ -271,7 +322,7 @@ angular.module('paasb')
 
                     handleGarbage: function () {
 
-                      if(params.query && params.query.length) {
+                      if((params.query && params.query.length) || $scope.hasFilters) {
 
                         params.query = '';
 
@@ -436,11 +487,11 @@ angular.module('paasb')
 
 							'element': compiledElement,
 
-							'scope': childScope,
-
-							'editing': true
+							'scope': childScope
 
 						});
+
+						scope.hasFilters = true;
 
             this.addedFilters.push(filter);
 
@@ -481,6 +532,8 @@ angular.module('paasb')
 
 									addedFilter.notFiltered = true;
 
+									scope.hasFilters = false;
+
 									self.addedFilters.splice(addedObject.length - 1 - addedIndex, 1);
 
 								}
@@ -492,7 +545,16 @@ angular.module('paasb')
 
           removeAll: function () {
 
-            console.log('remove all filters');
+						var self = this;
+
+						this.addedFilters
+							.slice()
+							.reverse()
+							.forEach(function (addedFilter) {
+
+								return self.remove(addedFilter);
+
+							});
 
           }
 
@@ -584,7 +646,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
   $templateCache.put('views/directives/searchbox.html',
     "\n" +
     "<div class=\"paasb-searchbox\">\n" +
-    "  <div class=\"paasb-searchbox-wrapper\"><i ng-class=\"{ 'fa-search': !searchParams.query.length, 'fa-trash': searchParams.query &amp;&amp; searchParams.query.length }\" ng-click=\"handleGarbage();\" class=\"fa\"></i>\n" +
+    "  <div class=\"paasb-searchbox-wrapper\"><i ng-class=\"{ 'fa-search': !searchParams.query.length, 'fa-trash': ((searchParams.query &amp;&amp; searchParams.query.length) || hasFilters) }\" ng-click=\"handleGarbage();\" class=\"fa\"></i>\n" +
     "    <input type=\"text\" ng-model=\"searchParams.query\" placeholder=\"{{placeholder}}\" id=\"{{searchInputId}}\"/>\n" +
     "  </div>\n" +
     "  <paasb-search-box-filtering search=\"Search\" filters=\"paasbSearchBoxFiltering\" ng-if=\"paasbSearchBoxFiltering &amp;&amp; paasbSearchBoxFiltering.length\"></paasb-search-box-filtering>\n" +

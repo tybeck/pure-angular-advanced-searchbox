@@ -11,8 +11,9 @@ angular.module('paasb')
 
     .directive('paasbSearchBoxAddedFilter', [
       '$timeout',
+      '$document',
       'Ui',
-      function ($timeout, Ui) {
+      function ($timeout, $document, Ui) {
 
         return {
 
@@ -44,6 +45,22 @@ angular.module('paasb')
 
                 'events': {
 
+                  searchboxClick: function (ev) {
+
+                    var isChild = $element[0].contains(ev.target);
+
+                    var isSelf = $element[0] == ev.target;
+
+                    var isInside = isChild || isSelf;
+
+                    if(!isInside) {
+
+                      $scope.closeFilter();
+
+                    }
+
+                  },
+
                   inputKeyEvents: function (ev) {
 
                     if(ev.keyCode === 13) {
@@ -55,6 +72,40 @@ angular.module('paasb')
                       });
 
                     }
+
+                  }
+
+                },
+
+                closeFilter: function () {
+
+                  var self = this;
+
+                  Ui.safeApply($scope, function () {
+
+                    filter.editing = false;
+
+                    $document.unbind('click', self.events.searchboxClick);
+
+                  });
+
+                },
+
+                openFilter: function () {
+
+                  var self = this;
+
+                  if(!filter.editing) {
+
+                    filter.editing = true;
+
+                    $timeout(function () {
+
+                      $document.bind('click', self.events.searchboxClick);
+
+                    }, 25);
+
+                    $scope.setFocus();
 
                   }
 
@@ -99,11 +150,11 @@ angular.module('paasb')
                 }
 
               });
-
+console.log('okay');
               $scope
                 .getElements()
                 .registerEvents($scope.events)
-                .setFocus();
+                .openFilter();
 
             }
 
