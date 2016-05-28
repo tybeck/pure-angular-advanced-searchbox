@@ -1,0 +1,12 @@
+div(
+  class="paasb-filtering paasb-clearfix"
+)
+  span Filters:
+  ul
+    li(
+      ng-repeat="filter in filters",
+      data-filter-name="{{filter.name}}",
+      ng-bind="filter.displayName",
+      ng-click="addFilter($event);",
+      ng-if="filter.notFiltered"
+    )

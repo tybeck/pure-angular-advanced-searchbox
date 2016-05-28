@@ -1,0 +1,13 @@
+.paasb-clearfix:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+     }
+.paasb-clearfix { display: inline-block; }
+/* start commented backslash hack \*/
+* html .paasb-clearfix { height: 1%; }
+.paasb-clearfix { display: block; }
+/* close commented backslash hack */

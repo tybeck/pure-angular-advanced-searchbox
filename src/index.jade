@@ -4,9 +4,12 @@ html(ng-app="app")
     // bower:css
     // endbower
     link(rel="stylesheet", href="styles/main.css")
-  body
+  body(ng-controller="AppCtrl")
+    h1 Pure Angular Advanced Searchbox
     paasb-search-box(
-      paasb-search-box-filtering=""
+      search-params="sOptions",
+      paasb-search-box-filtering="sFilters",
+      placeholder="Enter your query here..."
     )
     // bower:js
     // endbower
@@ -14,5 +17,9 @@ html(ng-app="app")
     script(src="scripts/ui.templates.js")
     script(src="scripts/directives/searchbox.js")
     script(src="scripts/directives/searchbox-filtering.js")
+    script(src="scripts/directives/searchbox-added-filter.js")
+    script(src="scripts/services/ui.js")
+    script(src="scripts/services/filtering.js")
     script(src="scripts/testing/app.js")
+    script(src="scripts/testing/controllers/app.js")
     script(src="//localhost:37000/livereload.js")

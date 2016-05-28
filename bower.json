@@ -5,7 +5,10 @@
     "Tyler Beck <y2xtreme600@yahoo.com>"
   ],
   "description": "Pure angular-based advanced search",
-  "main": "src/core.js",
+  "main": [
+    "dist/scripts/ui-core.js",
+    "dist/styles/main.css"
+  ],
   "keywords": [
     "Pure",
     "Angular",

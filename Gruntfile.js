@@ -337,7 +337,13 @@ module.exports = function (grunt) {
 
                 'dot' : 37000,
 
-                'src' : ['<%= paths.dist %>/*']
+                'src' : [
+                  '<%= paths.dist %>/*',
+                  '<%= paths.testing %>/bower_components/',
+                  '<%= paths.testing %>/styles/',
+                  '<%= paths.testing %>/views/',
+                  '<%= paths.testing %>/index.html'
+                ]
 
               }
 

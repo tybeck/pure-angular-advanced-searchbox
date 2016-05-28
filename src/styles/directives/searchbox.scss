@@ -1,0 +1,49 @@
+div.paasb-searchbox {
+
+  border: 1px solid rgba(4, 4, 4, 0.3);
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  border-radius: 4px;
+  padding: 4px;
+
+  div.paasb-searchbox-wrapper {
+
+    position: relative;
+
+    i {
+
+      position: absolute;
+      margin: -1px 0 0 0;
+      top: 50%;
+      transform: translate(0, -50%);
+      font-size: 18px;
+      right: 15px;
+
+      &.fa-trash {
+
+        cursor: pointer;
+        color: #337ab7;
+
+        &:hover {
+
+          color: #000;
+
+        }
+
+      }
+
+    }
+
+    > input {
+      font-size: 18px;
+      border: none;
+      width: 100%;
+      outline: none;
+      padding: 8px 8px 8px 10px;
+      color: rgba(0, 0, 0, 0.68);
+      font-weight: normal;
+      font-style: italic;
+    }
+
+  }
+
+}

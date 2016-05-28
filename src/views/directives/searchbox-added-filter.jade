@@ -1,0 +1,18 @@
+div(
+  class="paasb-searchbox-added-filter",
+  ng-click="openFilter();"
+)
+  span(ng-bind="filter.displayName + ':'")
+  span(
+    ng-bind="filter.value",
+    ng-hide="filter.editing"
+  )
+  input(
+    type="text", 
+    ng-model="filter.value",
+    ng-hide="!filter.editing"
+  )
+  i(
+    class="fa fa-times",
+    ng-click="destroy();"
+  )

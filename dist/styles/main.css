@@ -1,0 +1,130 @@
+/* line 1, ../../src/styles/global.scss */
+.paasb-clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+/* line 9, ../../src/styles/global.scss */
+.paasb-clearfix {
+  display: inline-block;
+}
+
+/* start commented backslash hack \*/
+/* line 11, ../../src/styles/global.scss */
+* html .paasb-clearfix {
+  height: 1%;
+}
+
+/* line 12, ../../src/styles/global.scss */
+.paasb-clearfix {
+  display: block;
+}
+
+/* close commented backslash hack */
+/* line 1, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox {
+  border: 1px solid rgba(4, 4, 4, 0.3);
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  border-radius: 4px;
+  padding: 4px;
+}
+/* line 8, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper {
+  position: relative;
+}
+/* line 12, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i {
+  position: absolute;
+  margin: -1px 0 0 0;
+  top: 50%;
+  transform: translate(0, -50%);
+  font-size: 18px;
+  right: 15px;
+}
+/* line 21, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-trash {
+  cursor: pointer;
+  color: #337ab7;
+}
+/* line 26, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-trash:hover {
+  color: #000;
+}
+/* line 36, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper > input {
+  font-size: 18px;
+  border: none;
+  width: 100%;
+  outline: none;
+  padding: 8px 8px 8px 10px;
+  color: rgba(0, 0, 0, 0.68);
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* line 1, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering {
+  margin-bottom: 6px;
+  margin-top: 0px;
+}
+/* line 6, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering span {
+  border-left: 1px solid rgba(4, 4, 4, 0.3);
+  border-right: 1px solid rgba(4, 4, 4, 0.3);
+  border-bottom: 1px solid rgba(4, 4, 4, 0.3);
+  border-radius: 6px;
+  margin-top: -5px;
+  padding: 11px 10px 8px 10px;
+  cursor: pointer;
+  float: left;
+  margin-left: 8px;
+  font-size: 15px;
+  font-weight: normal;
+  margin-right: 8px;
+  vertical-align: middle;
+  display: block;
+  background: -moz-linear-gradient(top, rgba(125, 185, 232, 0) 0%, rgba(125, 185, 232, 0.06) 40%, rgba(30, 87, 153, 0.14) 100%);
+  background: -webkit-linear-gradient(top, rgba(125, 185, 232, 0) 0%, rgba(125, 185, 232, 0.06) 40%, rgba(30, 87, 153, 0.14) 100%);
+  background: linear-gradient(to bottom, rgba(125, 185, 232, 0) 0%, rgba(125, 185, 232, 0.06) 40%, rgba(30, 87, 153, 0.14) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#007db9e8', endColorstr='#241e5799',GradientType=0 );
+}
+/* line 27, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering ul {
+  list-style-type: none;
+  padding: 2px 0 0 0;
+  margin: 0;
+}
+/* line 33, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering ul li {
+  float: left;
+  font-size: 14px;
+  margin-right: 8px;
+  background: rgba(155, 200, 255, 0.3);
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  transition: background .25s ease-in-out;
+  -moz-transition: background .25s ease-in-out;
+  -webkit-transition: background .25s ease-in-out;
+}
+/* line 51, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering ul li:hover {
+  background: rgba(155, 200, 255, 0.55);
+}
+
+/* line 5, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter i {
+  position: inherit;
+  top: 0;
+  margin: 0;
+  right: 0;
+}

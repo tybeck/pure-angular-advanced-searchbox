@@ -10,8 +10,43 @@
 
 angular.module('app')
 
-  .controller('AppCtrl', ['$scope', 'App', function ($scope, App) {
+  .controller('AppCtrl', [
+    '$scope',
+    function ($scope) {
 
-    angular.extend(this, App.init($scope, this));
+      $scope.sOptions = {
+
+      };
+
+      $scope.sFilters = [
+
+        {
+          'name': 'cpi',
+          'displayName': 'CPI'
+        }, {
+          'name': 'vendor_desc',
+          'displayName': 'Vendor Description'
+        }, {
+          'name': 'vendor_abbr',
+          'displayName': 'Vendor Abbreviation'
+        }, {
+          'name': 'vendor_sku',
+          'displayName': 'Vendor SKU'
+        }, {
+          'name': 'color',
+          'displayName': 'Vendor Color'
+        }, {
+          'name': 'Gender',
+          'displayName': 'Vendor Gender',
+          'suggestedValues': [
+            'Men\'s',
+            'Women\'s',
+            'Girls Infant',
+            'Boys Infant',
+            'Non Traditional'
+          ]
+        }
+
+      ];
 
   }]);
