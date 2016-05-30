@@ -19,7 +19,8 @@ angular.module('paasb')
       '$timeout',
       '$document',
       'Ui',
-      function ($timeout, $document, Ui) {
+      'Utils',
+      function ($timeout, $document, Ui, Utils) {
 
         return {
 
@@ -49,6 +50,8 @@ angular.module('paasb')
 
               angular.extend($scope, {
 
+                'Utils': Utils,
+
                 'events': {
 
                   searchboxClick: function (ev) {
@@ -71,15 +74,17 @@ angular.module('paasb')
 
                     if(ev.keyCode === 13) {
 
-                      Ui.safeApply($scope, function () {
-
-                        filter.editing = false;
-
-                      });
+                      $scope.closeFilter();
 
                     }
 
                   }
+
+                },
+
+                takeSuggestion: function (val) {
+
+                  filter.value = val;
 
                 },
 
@@ -92,6 +97,28 @@ angular.module('paasb')
                     filter.editing = false;
 
                     $document.unbind('click', self.events.searchboxClick);
+
+                    if(!filter.value) {
+
+                      Filtering.remove(filter);
+
+                    } else {
+
+                      if(filter.suggestedValue) {
+
+                        filter.value = filter.suggestedValue.value;
+
+                      } else {
+
+                        if(filter.restrictedSuggestedValues) {
+
+                          Filtering.remove(filter);
+
+                        }
+
+                      }
+
+                    }
 
                   });
 
@@ -156,7 +183,7 @@ angular.module('paasb')
                 }
 
               });
-console.log('okay');
+
               $scope
                 .getElements()
                 .registerEvents($scope.events)
@@ -433,6 +460,135 @@ angular.module('paasb')
 'use strict';
 
 /**
+ * @ngdoc filter
+ * @name paasb.filter:suggest
+ * @description
+ * # suggest filter
+ */
+
+angular.module('paasb')
+
+  .filter('suggest', [function () {
+
+      return _.memoize(function (suggestions, value, filter) {
+
+        console.log(suggestions, filter);
+
+        if(!value) {
+
+          var modifiedSuggestions = [];
+
+          angular.forEach(suggestions, function (suggestion) {
+
+            modifiedSuggestions.push({
+
+              'modified': suggestion,
+
+              'value': suggestion
+
+            });
+
+          });
+
+          return modifiedSuggestions;
+
+        }
+
+        var percentageSuggestions = [],
+
+          showSuggestions = [],
+
+          val = new String(value);
+
+        angular.forEach(suggestions, function (suggestion) {
+
+          var lSuggestion = suggestion.toLowerCase(),
+
+            lVal = val.toLowerCase();
+
+          if(lSuggestion.indexOf(lVal) !== -1) {
+
+            var matches = [],
+
+              looping = true,
+
+              needle = -1;
+
+            while(looping) {
+
+              needle = lSuggestion.indexOf(lVal, ((matches.length) ? (needle + 1) : needle));
+
+              if(needle !== -1) {
+
+                var len = lVal.length;
+
+                matches.push({
+
+                  'start': needle,
+
+                  'end': len,
+
+                  'len': len - 1
+
+                });
+
+              } else {
+
+                looping = false;
+
+              }
+
+            };
+
+            var modifiedSuggestion = suggestion,
+
+              addedCharacters = 0;
+
+            angular.forEach(matches, function (match) {
+
+              var firstString = modifiedSuggestion.substr(0, match.start + addedCharacters),
+
+                middleString = '<b>' + modifiedSuggestion.substr(match.start + addedCharacters, match.end) + '</b>',
+
+                endString = modifiedSuggestion.substr(match.start + addedCharacters + 1 + match.len, modifiedSuggestion.length);
+
+              modifiedSuggestion = firstString + middleString + endString;
+
+              addedCharacters += 7;
+
+            });
+
+          }
+
+          if(modifiedSuggestion) {
+
+            showSuggestions.push({
+
+              'modified': modifiedSuggestion,
+
+              'value': suggestion
+
+            });
+
+          }
+
+        });
+
+        filter.suggestedValue = (showSuggestions && showSuggestions.length ? showSuggestions[0] : null);
+
+        return showSuggestions;
+
+      }, function (items, field) {
+
+        return items.length + field;
+
+      });
+
+  }]);
+
+'use strict';
+
+/**
  * @ngdoc service
  * @name paasb.service:Filtering
  * @description
@@ -516,7 +672,9 @@ angular.module('paasb')
 
 										'value',
 
-										'editing'
+										'editing',
+
+										'suggestedValue'
 
 									];
 
@@ -622,13 +780,45 @@ angular.module('paasb')
 
 	}]);
 
+'use strict';
+
+/**
+ * @ngdoc service
+ * @name paasb.service:Utils
+ * @description
+ * # Utils Services
+ */
+
+angular.module('paasb')
+
+	.factory('Utils', [
+    '$sce',
+    function ($sce) {
+
+			var Utils = {
+
+        trust: function (html) {
+
+          return $sce.trustAsHtml(html);
+
+        }
+
+  		};
+
+  		return Utils;
+
+	}]);
+
 angular.module('paasb').run(['$templateCache', function($templateCache) {
   'use strict';
 
   $templateCache.put('views/directives/searchbox-added-filter.html',
     "\n" +
     "<div ng-click=\"openFilter();\" class=\"paasb-searchbox-added-filter\"><span ng-bind=\"filter.displayName + ':'\"></span><span ng-bind=\"filter.value\" ng-hide=\"filter.editing\"></span>\n" +
-    "  <input type=\"text\" ng-model=\"filter.value\" ng-hide=\"!filter.editing\"/><i ng-click=\"destroy();\" class=\"fa fa-times\"></i>\n" +
+    "  <input type=\"text\" ng-model=\"filter.value\" ng-hide=\"!filter.editing\"/>\n" +
+    "  <ul ng-hide=\"!filter.editing\">\n" +
+    "    <li ng-repeat=\"suggestion in filter.suggestedValues | suggest: filter.value:filter\" ng-click=\"takeSuggestion(suggestion.value)\"><span ng-bind-html=\"Utils.trust(suggestion.modified)\"></span></li>\n" +
+    "  </ul><i ng-click=\"destroy();\" class=\"fa fa-times\"></i>\n" +
     "</div>"
   );
 

@@ -84,7 +84,9 @@ angular.module('paasb')
 
 										'value',
 
-										'editing'
+										'editing',
+
+										'suggestedValue'
 
 									];
 

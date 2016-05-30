@@ -53,6 +53,7 @@ testing/scripts/ui.module.js
 testing/scripts/ui.templates.js
 testing/scripts/directives/
 testing/scripts/services/
+testing/scripts/filters/
 testing/styles
 testing/views/
 testing/index.html

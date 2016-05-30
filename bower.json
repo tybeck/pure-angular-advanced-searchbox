@@ -25,6 +25,7 @@
   ],
   "dependencies": {
     "angular": "^1.5.5",
-    "components-font-awesome": "^4.6.3"
+    "components-font-awesome": "^4.6.3",
+    "lodash": "^4.13.1"
   }
 }

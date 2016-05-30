@@ -44,7 +44,8 @@ angular.module('app')
             'Girls Infant',
             'Boys Infant',
             'Non Traditional'
-          ]
+          ],
+          'restrictedSuggestedValues': true
         }
 
       ];

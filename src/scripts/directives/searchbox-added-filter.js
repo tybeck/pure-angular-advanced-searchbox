@@ -13,7 +13,8 @@ angular.module('paasb')
       '$timeout',
       '$document',
       'Ui',
-      function ($timeout, $document, Ui) {
+      'Utils',
+      function ($timeout, $document, Ui, Utils) {
 
         return {
 
@@ -43,6 +44,8 @@ angular.module('paasb')
 
               angular.extend($scope, {
 
+                'Utils': Utils,
+
                 'events': {
 
                   searchboxClick: function (ev) {
@@ -65,15 +68,17 @@ angular.module('paasb')
 
                     if(ev.keyCode === 13) {
 
-                      Ui.safeApply($scope, function () {
-
-                        filter.editing = false;
-
-                      });
+                      $scope.closeFilter();
 
                     }
 
                   }
+
+                },
+
+                takeSuggestion: function (val) {
+
+                  filter.value = val;
 
                 },
 
@@ -86,6 +91,28 @@ angular.module('paasb')
                     filter.editing = false;
 
                     $document.unbind('click', self.events.searchboxClick);
+
+                    if(!filter.value) {
+
+                      Filtering.remove(filter);
+
+                    } else {
+
+                      if(filter.suggestedValue) {
+
+                        filter.value = filter.suggestedValue.value;
+
+                      } else {
+
+                        if(filter.restrictedSuggestedValues) {
+
+                          Filtering.remove(filter);
+
+                        }
+
+                      }
+
+                    }
 
                   });
 
@@ -150,7 +177,7 @@ angular.module('paasb')
                 }
 
               });
-console.log('okay');
+
               $scope
                 .getElements()
                 .registerEvents($scope.events)
