@@ -13,12 +13,17 @@ div(
     ng-hide="!filter.editing"
   )
   span(ng-hide="!filter.loading") Loading...
-  ul(ng-hide="!filter.editing")
-    li(
-      ng-repeat="suggestion in filter.suggestedValues | suggest: filter.value:filter"
-      ng-click="takeSuggestion(suggestion.value)"
+  div(ng-if="filter.suggestedValues")
+    ul(
+      ng-hide="!filter.editing",
+      paasb-auto-size="filter",
+      ng-if="!filter.loading"
     )
-      span(ng-bind-html="Utils.trust(suggestion.modified)")
+      li(
+        ng-repeat="suggestion in filter.suggestedValues | suggest: filter.value:filter"
+        ng-click="takeSuggestion(suggestion.value)"
+      )
+        span(ng-bind-html="Utils.trust(suggestion.modified)")
   i(
     class="fa fa-times",
     ng-click="destroy();"

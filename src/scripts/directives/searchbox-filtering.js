@@ -58,11 +58,19 @@ angular.module('paasb')
 
                         if(filter.name === filterName) {
 
-                          filter.notFiltered = !filter.notFiltered;
-
-                          if(!filter.notFiltered) {
+                          if(filter.restrictedSuggestedValues) {
 
                             Search.Filtering.add(filter);
+
+                          } else {
+
+                            filter.notFiltered = !filter.notFiltered;
+
+                            if(!filter.notFiltered) {
+
+                              Search.Filtering.add(filter);
+
+                            }
 
                           }
 

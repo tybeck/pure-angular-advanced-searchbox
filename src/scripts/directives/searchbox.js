@@ -40,7 +40,7 @@ angular.module('paasb')
 
                 searchBox = {
 
-                  'searchInputId': ('searchInput-' + new Date().getTime()),
+                  'searchInputId': ('searchInput-' + _.uuid()),
 
                   make: function (name, extend, method) {
 

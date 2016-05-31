@@ -40,11 +40,13 @@ angular.module('paasb')
 
           add: function (filter) {
 
-            var childScope = scope.$new(true);
+            var childScope = scope.$new(true),
+
+							clonedFilter = _.clone(filter);
 
 						angular.extend(childScope, {
 
-              'filter': filter,
+              'filter': clonedFilter,
 
 							'filtering': this
 
@@ -54,17 +56,19 @@ angular.module('paasb')
 
             scope.wrapper.prepend(compiledElement);
 
-						angular.extend(filter, {
+						angular.extend(clonedFilter, {
 
 							'element': compiledElement,
 
-							'scope': childScope
+							'scope': childScope,
+
+							'uuid': _.uuid()
 
 						});
 
 						scope.hasFilters = true;
 
-            this.addedFilters.push(filter);
+            this.addedFilters.push(clonedFilter);
 
           },
 
@@ -77,43 +81,23 @@ angular.module('paasb')
 							.reverse()
 							.forEach(function (addedFilter, addedIndex, addedObject) {
 
-								if(addedFilter.name === filter.name) {
-
-									var attributes = [
-
-										'element',
-
-										'scope',
-
-										'value',
-
-										'editing',
-
-										'suggestedValue',
-
-										'loading'
-
-									];
+								if(addedFilter.uuid === filter.uuid) {
 
 									addedFilter.element.remove();
 
 									addedFilter.scope.$destroy();
-
-									angular.forEach(attributes, function (attribute) {
-
-										delete addedFilter[attribute];
-
-									});
-
-									addedFilter.notFiltered = true;
-
-									scope.hasFilters = false;
 
 									self.addedFilters.splice(addedObject.length - 1 - addedIndex, 1);
 
 								}
 
 							});
+
+							if(this.addedFilters && !this.addedFilters.length) {
+
+								scope.hasFilters = false;
+
+							}
 
           },
 
@@ -139,6 +123,14 @@ angular.module('paasb')
 						$http
 							.get(filter.source)
 								.then(function (options) {
+
+									if(filter.suggestedDataPoint) {
+
+										return deferred.resolve(options && options.data[filter.suggestedDataPoint] ?
+
+											options.data[filter.suggestedDataPoint] : null);
+
+									}
 
 									return deferred.resolve(options ? options.data : null);
 

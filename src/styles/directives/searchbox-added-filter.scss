@@ -2,6 +2,50 @@ div.paasb-searchbox {
 
   div.paasb-searchbox-added-filter {
 
+    ul {
+
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: block;
+      position: absolute;
+      z-index: 5;
+      border-left: 1px solid #A9A9A9;
+      border-right: 1px solid #A9A9A9;
+      border-bottom: 1px solid #A9A9A9;
+      max-height: 130px;
+      overflow-y: scroll;
+
+      li {
+
+        cursor: pointer;
+
+        &:nth-child(odd) {
+
+          background: rgb(236, 245, 255);
+
+        }
+
+        &:nth-child(even) {
+
+          background: #FFF;
+
+        }
+
+        &:hover {
+          font-style: italic;
+        }
+
+        span {
+          display: block;
+          padding: 6px;
+          font-size: 14px;
+        }
+
+      }
+
+    }
+
     i {
 
       position: inherit;
@@ -9,6 +53,10 @@ div.paasb-searchbox {
       margin: 0;
       right: 0;
 
+    }
+
+    input {
+      outline: none;
     }
 
   }

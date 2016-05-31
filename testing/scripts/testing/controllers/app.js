@@ -38,9 +38,11 @@ angular.module('app')
         }, {
           'name': 'Gender',
           'displayName': 'Vendor Gender',
-          'suggestedValues': 'http://demo0993385.mockable.io/gender',
+          'suggestedValues': 'http://10.219.26.26:7010/gender',
+          'suggestedDataPoint': 'data',
           'reloadOnCreate': true,
-          'restrictedSuggestedValues': true
+          'restrictedSuggestedValues': true,
+          'multi': true
         }
 
       ];

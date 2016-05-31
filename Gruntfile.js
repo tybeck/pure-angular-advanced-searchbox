@@ -106,7 +106,7 @@ module.exports = function (grunt) {
 
             'options': {
 
-              'map': 37000, // inline sourcemaps
+              'map': true, // inline sourcemaps
 
               'processors': [
 
@@ -130,13 +130,33 @@ module.exports = function (grunt) {
 
           'copy': {
 
+            'dist': {
+
+              'files': [
+
+                {
+
+                  'expand': true,
+
+                  'cwd': '<%= paths.dist %>/<%= paths.scripts %>/',
+
+                  'dest': '<%= paths.testing %>/<%= paths.scripts %>/',
+
+                  'src': '**/*.*'
+
+                }
+
+              ]
+
+            },
+
             'scripts': {
 
               'files': [
 
                 {
 
-                  'expand': 37000,
+                  'expand': true,
 
                   'cwd': '<%= paths.app %>/<%= paths.scripts %>/',
 
@@ -148,7 +168,7 @@ module.exports = function (grunt) {
 
                 {
 
-                  'expand': 37000,
+                  'expand': true,
 
                   'cwd': 'bower_components/',
 
@@ -168,7 +188,7 @@ module.exports = function (grunt) {
 
                 {
 
-                  'expand': 37000,
+                  'expand': true,
 
                   'cwd': '<%= paths.dist %>/<%= paths.styles %>/',
 
@@ -335,7 +355,7 @@ module.exports = function (grunt) {
 
               {
 
-                'dot' : 37000,
+                'dot' : true,
 
                 'src' : [
                   '<%= paths.dist %>/*',
@@ -361,7 +381,7 @@ module.exports = function (grunt) {
 
               'client': false,
 
-              'pretty': 37000,
+              'pretty': true,
 
               'basedir': '<%= paths.app %>/<%= paths.templates %>/'
 
@@ -375,7 +395,7 @@ module.exports = function (grunt) {
 
               'dest': '<%= paths.testing %>/<%= paths.templates %>',
 
-              'expand': 37000,
+              'expand': true,
 
               'ext': '.html'
 
@@ -389,7 +409,7 @@ module.exports = function (grunt) {
 
               'dest': '<%= paths.testing %>/',
 
-              'expand': 37000,
+              'expand': true,
 
               'ext': '.html'
 
@@ -407,7 +427,7 @@ module.exports = function (grunt) {
 
             'files': {
 
-              '<%= paths.dist %>/<%= paths.scripts %>/ui-core.js': [
+              '<%= paths.dist %>/<%= paths.scripts %>/ui.core.js': [
                 '<%= paths.app %>/<%= paths.scripts %>/ui.module.js',
                 '<%= paths.app %>/<%= paths.scripts %>/**/*.js',
                 '<%= paths.testing %>/<%= paths.scripts %>/ui.templates.js'
@@ -483,6 +503,8 @@ module.exports = function (grunt) {
           'copy:scripts',
 
           'concat',
+
+          'copy:dist',
 
           'copy:styles',
 

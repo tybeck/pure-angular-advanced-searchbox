@@ -6,7 +6,7 @@
   ],
   "description": "Pure angular-based advanced search",
   "main": [
-    "dist/scripts/ui-core.js",
+    "dist/scripts/ui.core.js",
     "dist/styles/main.css"
   ],
   "keywords": [
@@ -26,6 +26,7 @@
   "dependencies": {
     "angular": "^1.5.5",
     "components-font-awesome": "^4.6.3",
-    "lodash": "^4.13.1"
+    "lodash": "^4.13.1",
+    "lodash-mix": "^0.1.0"
   }
 }
