@@ -60,6 +60,8 @@ angular.module('paasb')
 
 							'element': compiledElement,
 
+							'$filter': filter,
+
 							'scope': childScope,
 
 							'uuid': _.uuid()
@@ -86,6 +88,8 @@ angular.module('paasb')
 									addedFilter.element.remove();
 
 									addedFilter.scope.$destroy();
+
+									filter.$filter.notFiltered = true;
 
 									self.addedFilters.splice(addedObject.length - 1 - addedIndex, 1);
 

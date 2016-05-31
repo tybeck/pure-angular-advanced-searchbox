@@ -92,7 +92,7 @@ angular.module('paasb')
 
             'templateUrl': 'views/directives/searchbox-added-filter.html',
 
-            'require': '^paasbSearchBox',
+            'require': '^paasbSearchBoxFiltering',
 
             'scope': {
 
@@ -296,6 +296,100 @@ angular.module('paasb')
                 .getElements()
                 .registerEvents($scope.events)
                 .openFilter();
+
+            }
+
+        };
+
+    }]);
+
+'use strict';
+
+/**
+ * @ngdoc directive
+ * @name paasb.directive:paasbSearchBoxFilterSelectors
+ * @description
+ * # Implementation of paasbSearchBoxFilterSelectors
+ */
+
+angular.module('paasb')
+
+    .directive('paasbSearchBoxFilterSelectors', [
+      function () {
+
+        return {
+
+            'restrict': 'E',
+
+            'replace': true,
+
+            'templateUrl': 'views/directives/searchbox-filter-selectors.html',
+
+            'require': '^paasbSearchBoxAddedFilter',
+
+            'scope': {
+
+              'filters': '=',
+
+              'search': '='
+
+            },
+
+            controller: function ($scope, $element, $attrs) {
+
+              var Search = null;
+
+              $scope.$watch('search', function (__new, __old) {
+
+                if((__new !== __old) && angular.isObject(__new)) {
+
+                  Search = __new;
+
+                  angular.forEach($scope.filters, function (filter) {
+
+                    filter.notFiltered = true;
+
+                  });
+
+                  angular.extend($scope, {
+
+                    addFilter: function (ev) {
+
+                      var target = angular.element(ev.target),
+
+                        filterName = target.attr('data-filter-name');
+
+                      angular.forEach($scope.filters, function (filter) {
+
+                        if(filter.name === filterName) {
+
+                          if(filter.restrictedSuggestedValues) {
+
+                            Search.Filtering.add(filter);
+
+                          } else {
+
+                            filter.notFiltered = !filter.notFiltered;
+
+                            if(!filter.notFiltered) {
+
+                              Search.Filtering.add(filter);
+
+                            }
+
+                          }
+
+                        }
+
+                      });
+
+                    }
+
+                  });
+
+                }
+
+              });
 
             }
 
@@ -762,6 +856,8 @@ angular.module('paasb')
 
 							'element': compiledElement,
 
+							'$filter': filter,
+
 							'scope': childScope,
 
 							'uuid': _.uuid()
@@ -788,6 +884,8 @@ angular.module('paasb')
 									addedFilter.element.remove();
 
 									addedFilter.scope.$destroy();
+
+									filter.$filter.notFiltered = true;
 
 									self.addedFilters.splice(addedObject.length - 1 - addedIndex, 1);
 
@@ -959,6 +1057,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
     "\n" +
     "<div ng-click=\"openFilter();\" class=\"paasb-searchbox-added-filter\"><span ng-bind=\"filter.displayName + ':'\"></span><span ng-bind=\"filter.value\" ng-hide=\"filter.editing\"></span>\n" +
     "  <input type=\"text\" ng-model=\"filter.value\" ng-hide=\"!filter.editing\"/><span ng-hide=\"!filter.loading\">Loading...</span>\n" +
+    "  <paasb-searchbox-filter-selectors filter=\"filter\"></paasb-searchbox-filter-selectors>\n" +
     "  <div ng-if=\"filter.suggestedValues\">\n" +
     "    <ul ng-hide=\"!filter.editing\" paasb-auto-size=\"filter\" ng-if=\"!filter.loading\">\n" +
     "      <li ng-repeat=\"suggestion in filter.suggestedValues | suggest: filter.value:filter\" ng-click=\"takeSuggestion(suggestion.value)\"><span ng-bind-html=\"Utils.trust(suggestion.modified)\"></span></li>\n" +

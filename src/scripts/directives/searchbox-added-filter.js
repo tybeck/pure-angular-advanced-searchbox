@@ -24,7 +24,7 @@ angular.module('paasb')
 
             'templateUrl': 'views/directives/searchbox-added-filter.html',
 
-            'require': '^paasbSearchBox',
+            'require': '^paasbSearchBoxFiltering',
 
             'scope': {
 

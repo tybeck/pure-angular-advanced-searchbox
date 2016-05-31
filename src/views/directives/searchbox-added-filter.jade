@@ -13,6 +13,7 @@ div(
     ng-hide="!filter.editing"
   )
   span(ng-hide="!filter.loading") Loading...
+  paasb-searchbox-filter-selectors(filter="filter")
   div(ng-if="filter.suggestedValues")
     ul(
       ng-hide="!filter.editing",
