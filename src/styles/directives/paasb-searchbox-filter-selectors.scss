@@ -1,0 +1,9 @@
+div.paasb-searchbox-filter-selectors {
+
+  visibility: hidden;
+
+  &.loaded {
+    visibility: visible;
+  }
+
+}

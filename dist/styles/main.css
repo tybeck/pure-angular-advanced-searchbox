@@ -168,3 +168,12 @@ div.paasb-searchbox div.paasb-searchbox-added-filter i {
 div.paasb-searchbox div.paasb-searchbox-added-filter input {
   outline: none;
 }
+
+/* line 1, ../../src/styles/directives/paasb-searchbox-filter-selectors.scss */
+div.paasb-searchbox-filter-selectors {
+  visibility: hidden;
+}
+/* line 5, ../../src/styles/directives/paasb-searchbox-filter-selectors.scss */
+div.paasb-searchbox-filter-selectors.loaded {
+  visibility: visible;
+}

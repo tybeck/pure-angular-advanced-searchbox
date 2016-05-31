@@ -10,47 +10,63 @@
 angular.module('paasb')
 
     .directive('paasbAutoSize', [
-      function () {
+      '$parse',
+      function ($parse) {
 
         return {
 
             'restrict': 'A',
 
-            'require': '^paasbSearchBox',
+            controller: function ($scope, $element, $attrs) {
 
-            'scope': {
+              $attrs.$observe('paasbAutoSize', function () {
 
-              'paasbAutoSize': '='
+                var filter = $parse($attrs.paasbAutoSize)($scope),
 
-            },
+                  getStyle = function(elem, style) {
 
-            controller: function ($scope, $element) {
+                    return parseInt(window.getComputedStyle(elem, null).getPropertyValue(style));
 
-              var filter = $scope.paasbAutoSize,
+                  };
 
-                getStyle = function(elem, style) {
+                var filterSelectorsHeight = 0;
 
-                  return parseInt(window.getComputedStyle(elem, null).getPropertyValue(style));
+                angular
+                  .element($element)
+                    .ready(function () {
 
-                };
+                      var searchInput = filter.element.find('input')[0],
 
-              angular
-                .element($element)
-                  .ready(function () {
+                        bounding = searchInput.getBoundingClientRect(),
 
-                    var searchInput = filter.element.find('input')[0],
+                        boundingParent = filter.element[0].getBoundingClientRect(),
 
-                      bounding = searchInput.getBoundingClientRect(),
+                        left = (bounding.left - boundingParent.left);
 
-                      boundingParent = filter.element[0].getBoundingClientRect(),
+                      if(filter.hasFilterSelectors) {
 
-                      left = (bounding.left - boundingParent.left);
+                        var selectorElem = filter.hasFilterSelectors,
 
-                    var extraSpace = getStyle(searchInput, 'border-left-width');
+                          elem = $element[0];
 
-                    $element
-                      .css('left', left + 'px')
-                      .css('width', (bounding.width - extraSpace) + 'px');
+                        if(!selectorElem[0].contains(elem)) {
+
+                          filterSelectorsHeight = selectorElem.find('ul')[0]
+
+                            .getBoundingClientRect().height + bounding.height;
+
+                        }
+
+                      }
+
+                      var extraSpace = getStyle(searchInput, 'border-left-width');
+
+                      $element
+                        .css('left', left + 'px')
+                        .css('width', (bounding.width - extraSpace) + 'px')
+                        .css('top', filterSelectorsHeight ? (filterSelectorsHeight + 'px') : 'auto');
+
+                });
 
               });
 

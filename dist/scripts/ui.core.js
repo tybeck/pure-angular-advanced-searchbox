@@ -16,47 +16,63 @@ angular.module('paasb', [
 angular.module('paasb')
 
     .directive('paasbAutoSize', [
-      function () {
+      '$parse',
+      function ($parse) {
 
         return {
 
             'restrict': 'A',
 
-            'require': '^paasbSearchBox',
+            controller: function ($scope, $element, $attrs) {
 
-            'scope': {
+              $attrs.$observe('paasbAutoSize', function () {
 
-              'paasbAutoSize': '='
+                var filter = $parse($attrs.paasbAutoSize)($scope),
 
-            },
+                  getStyle = function(elem, style) {
 
-            controller: function ($scope, $element) {
+                    return parseInt(window.getComputedStyle(elem, null).getPropertyValue(style));
 
-              var filter = $scope.paasbAutoSize,
+                  };
 
-                getStyle = function(elem, style) {
+                var filterSelectorsHeight = 0;
 
-                  return parseInt(window.getComputedStyle(elem, null).getPropertyValue(style));
+                angular
+                  .element($element)
+                    .ready(function () {
 
-                };
+                      var searchInput = filter.element.find('input')[0],
 
-              angular
-                .element($element)
-                  .ready(function () {
+                        bounding = searchInput.getBoundingClientRect(),
 
-                    var searchInput = filter.element.find('input')[0],
+                        boundingParent = filter.element[0].getBoundingClientRect(),
 
-                      bounding = searchInput.getBoundingClientRect(),
+                        left = (bounding.left - boundingParent.left);
 
-                      boundingParent = filter.element[0].getBoundingClientRect(),
+                      if(filter.hasFilterSelectors) {
 
-                      left = (bounding.left - boundingParent.left);
+                        var selectorElem = filter.hasFilterSelectors,
 
-                    var extraSpace = getStyle(searchInput, 'border-left-width');
+                          elem = $element[0];
 
-                    $element
-                      .css('left', left + 'px')
-                      .css('width', (bounding.width - extraSpace) + 'px');
+                        if(!selectorElem[0].contains(elem)) {
+
+                          filterSelectorsHeight = selectorElem.find('ul')[0]
+
+                            .getBoundingClientRect().height + bounding.height;
+
+                        }
+
+                      }
+
+                      var extraSpace = getStyle(searchInput, 'border-left-width');
+
+                      $element
+                        .css('left', left + 'px')
+                        .css('width', (bounding.width - extraSpace) + 'px')
+                        .css('top', filterSelectorsHeight ? (filterSelectorsHeight + 'px') : 'auto');
+
+                });
 
               });
 
@@ -329,67 +345,13 @@ angular.module('paasb')
 
             'scope': {
 
-              'filters': '=',
-
-              'search': '='
+              'filter': '='
 
             },
 
             controller: function ($scope, $element, $attrs) {
 
-              var Search = null;
-
-              $scope.$watch('search', function (__new, __old) {
-
-                if((__new !== __old) && angular.isObject(__new)) {
-
-                  Search = __new;
-
-                  angular.forEach($scope.filters, function (filter) {
-
-                    filter.notFiltered = true;
-
-                  });
-
-                  angular.extend($scope, {
-
-                    addFilter: function (ev) {
-
-                      var target = angular.element(ev.target),
-
-                        filterName = target.attr('data-filter-name');
-
-                      angular.forEach($scope.filters, function (filter) {
-
-                        if(filter.name === filterName) {
-
-                          if(filter.restrictedSuggestedValues) {
-
-                            Search.Filtering.add(filter);
-
-                          } else {
-
-                            filter.notFiltered = !filter.notFiltered;
-
-                            if(!filter.notFiltered) {
-
-                              Search.Filtering.add(filter);
-
-                            }
-
-                          }
-
-                        }
-
-                      });
-
-                    }
-
-                  });
-
-                }
-
-              });
+              $scope.filter.hasFilterSelectors = $element;
 
             }
 
@@ -1057,12 +1019,22 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
     "\n" +
     "<div ng-click=\"openFilter();\" class=\"paasb-searchbox-added-filter\"><span ng-bind=\"filter.displayName + ':'\"></span><span ng-bind=\"filter.value\" ng-hide=\"filter.editing\"></span>\n" +
     "  <input type=\"text\" ng-model=\"filter.value\" ng-hide=\"!filter.editing\"/><span ng-hide=\"!filter.loading\">Loading...</span>\n" +
-    "  <paasb-searchbox-filter-selectors filter=\"filter\"></paasb-searchbox-filter-selectors>\n" +
+    "  <paasb-search-box-filter-selectors filter=\"filter\"></paasb-search-box-filter-selectors>\n" +
     "  <div ng-if=\"filter.suggestedValues\">\n" +
     "    <ul ng-hide=\"!filter.editing\" paasb-auto-size=\"filter\" ng-if=\"!filter.loading\">\n" +
     "      <li ng-repeat=\"suggestion in filter.suggestedValues | suggest: filter.value:filter\" ng-click=\"takeSuggestion(suggestion.value)\"><span ng-bind-html=\"Utils.trust(suggestion.modified)\"></span></li>\n" +
     "    </ul>\n" +
     "  </div><i ng-click=\"destroy();\" class=\"fa fa-times\"></i>\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('views/directives/searchbox-filter-selectors.html',
+    "\n" +
+    "<div ng-class=\"{ 'loaded' : !filter.loading }\" class=\"paasb-searchbox-filter-selectors\">\n" +
+    "  <ul paasb-auto-size=\"filter\">\n" +
+    "    <li>Yo.</li>\n" +
+    "  </ul>\n" +
     "</div>"
   );
 
