@@ -10,7 +10,8 @@
 angular.module('paasb')
 
 	.factory('Ui', [
-    function () {
+		'$timeout',
+    function ($timeout) {
 
 			var Ui = {
 

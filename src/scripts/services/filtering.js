@@ -10,8 +10,11 @@
 angular.module('paasb')
 
 	.factory('Filtering', [
+		'$q',
     '$compile',
-    function ($compile) {
+		'$http',
+		'Ui',
+    function ($q, $compile, $http, Ui) {
 
       var scope = null;
 
@@ -86,7 +89,9 @@ angular.module('paasb')
 
 										'editing',
 
-										'suggestedValue'
+										'suggestedValue',
+
+										'loading'
 
 									];
 
@@ -112,7 +117,6 @@ angular.module('paasb')
 
           },
 
-
           removeAll: function () {
 
 						var self = this;
@@ -126,7 +130,23 @@ angular.module('paasb')
 
 							});
 
-          }
+          },
+
+					loadSource: function (filter) {
+
+						var deferred = $q.defer();
+
+						$http
+							.get(filter.source)
+								.then(function (options) {
+
+									return deferred.resolve(options ? options.data : null);
+
+						});
+
+						return deferred.promise;
+
+					}
 
         });
 

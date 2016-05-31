@@ -12,6 +12,7 @@ div(
     ng-model="filter.value",
     ng-hide="!filter.editing"
   )
+  span(ng-hide="!filter.loading") Loading...
   ul(ng-hide="!filter.editing")
     li(
       ng-repeat="suggestion in filter.suggestedValues | suggest: filter.value:filter"

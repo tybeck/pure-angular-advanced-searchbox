@@ -48,6 +48,52 @@ angular.module('paasb')
 
                 input;
 
+              filter.loading = false;
+
+              if(Utils.isURL(filter.suggestedValues) || (Utils.isURL(filter.source) && filter.reloadOnCreate)) {
+
+                Ui.safeApply($scope, function () {
+
+                  var url = filter.source || filter.suggestedValues;
+
+                  angular.extend(filter, {
+
+                    'loading': true,
+
+                    'suggestedValues': [],
+
+                    'source': url
+
+                  });
+
+                });
+
+                Filtering
+                  .loadSource(filter)
+                    .then(function (data) {
+
+                      Ui.safeApply($scope, function () {
+
+                        angular.extend(filter, {
+
+                          'suggestedValues': data,
+
+                          'loading': false,
+
+                          'value': ''
+
+                        });
+
+                      });
+
+                    });
+
+              } else {
+
+                filter.value = '';
+
+              }
+
               angular.extend($scope, {
 
                 'Utils': Utils,
@@ -470,119 +516,117 @@ angular.module('paasb')
 
   .filter('suggest', [function () {
 
-      return _.memoize(function (suggestions, value, filter) {
+    return _.memoize(function (suggestions, value, filter, suggested) {
 
-        console.log(suggestions, filter);
+      if(!value) {
 
-        if(!value) {
-
-          var modifiedSuggestions = [];
-
-          angular.forEach(suggestions, function (suggestion) {
-
-            modifiedSuggestions.push({
-
-              'modified': suggestion,
-
-              'value': suggestion
-
-            });
-
-          });
-
-          return modifiedSuggestions;
-
-        }
-
-        var percentageSuggestions = [],
-
-          showSuggestions = [],
-
-          val = new String(value);
+        var modifiedSuggestions = [];
 
         angular.forEach(suggestions, function (suggestion) {
 
-          var lSuggestion = suggestion.toLowerCase(),
+          modifiedSuggestions.push({
 
-            lVal = val.toLowerCase();
+            'modified': suggestion,
 
-          if(lSuggestion.indexOf(lVal) !== -1) {
+            'value': suggestion
 
-            var matches = [],
-
-              looping = true,
-
-              needle = -1;
-
-            while(looping) {
-
-              needle = lSuggestion.indexOf(lVal, ((matches.length) ? (needle + 1) : needle));
-
-              if(needle !== -1) {
-
-                var len = lVal.length;
-
-                matches.push({
-
-                  'start': needle,
-
-                  'end': len,
-
-                  'len': len - 1
-
-                });
-
-              } else {
-
-                looping = false;
-
-              }
-
-            };
-
-            var modifiedSuggestion = suggestion,
-
-              addedCharacters = 0;
-
-            angular.forEach(matches, function (match) {
-
-              var firstString = modifiedSuggestion.substr(0, match.start + addedCharacters),
-
-                middleString = '<b>' + modifiedSuggestion.substr(match.start + addedCharacters, match.end) + '</b>',
-
-                endString = modifiedSuggestion.substr(match.start + addedCharacters + 1 + match.len, modifiedSuggestion.length);
-
-              modifiedSuggestion = firstString + middleString + endString;
-
-              addedCharacters += 7;
-
-            });
-
-          }
-
-          if(modifiedSuggestion) {
-
-            showSuggestions.push({
-
-              'modified': modifiedSuggestion,
-
-              'value': suggestion
-
-            });
-
-          }
+          });
 
         });
 
-        filter.suggestedValue = (showSuggestions && showSuggestions.length ? showSuggestions[0] : null);
+        return modifiedSuggestions;
 
-        return showSuggestions;
+      }
 
-      }, function (items, field) {
+      var percentageSuggestions = [],
 
-        return items.length + field;
+        showSuggestions = [],
+
+        val = new String(value);
+
+      angular.forEach(suggestions, function (suggestion) {
+
+        var lSuggestion = suggestion.toLowerCase(),
+
+          lVal = val.toLowerCase();
+
+        if(lSuggestion.indexOf(lVal) !== -1) {
+
+          var matches = [],
+
+            looping = true,
+
+            needle = -1;
+
+          while(looping) {
+
+            needle = lSuggestion.indexOf(lVal, ((matches.length) ? (needle + 1) : needle));
+
+            if(needle !== -1) {
+
+              var len = lVal.length;
+
+              matches.push({
+
+                'start': needle,
+
+                'end': len,
+
+                'len': len - 1
+
+              });
+
+            } else {
+
+              looping = false;
+
+            }
+
+          };
+
+          var modifiedSuggestion = suggestion,
+
+            addedCharacters = 0;
+
+          angular.forEach(matches, function (match) {
+
+            var firstString = modifiedSuggestion.substr(0, match.start + addedCharacters),
+
+              middleString = '<b>' + modifiedSuggestion.substr(match.start + addedCharacters, match.end) + '</b>',
+
+              endString = modifiedSuggestion.substr(match.start + addedCharacters + 1 + match.len, modifiedSuggestion.length);
+
+            modifiedSuggestion = firstString + middleString + endString;
+
+            addedCharacters += 7;
+
+          });
+
+        }
+
+        if(modifiedSuggestion) {
+
+          showSuggestions.push({
+
+            'modified': modifiedSuggestion,
+
+            'value': suggestion
+
+          });
+
+        }
 
       });
+
+      filter.suggestedValue = (showSuggestions && showSuggestions.length ? showSuggestions[0] : null);
+
+      return showSuggestions;
+
+    }, function (items, field) {
+
+      return items.length + field;
+
+    });
 
   }]);
 
@@ -598,8 +642,11 @@ angular.module('paasb')
 angular.module('paasb')
 
 	.factory('Filtering', [
+		'$q',
     '$compile',
-    function ($compile) {
+		'$http',
+		'Ui',
+    function ($q, $compile, $http, Ui) {
 
       var scope = null;
 
@@ -674,7 +721,9 @@ angular.module('paasb')
 
 										'editing',
 
-										'suggestedValue'
+										'suggestedValue',
+
+										'loading'
 
 									];
 
@@ -700,7 +749,6 @@ angular.module('paasb')
 
           },
 
-
           removeAll: function () {
 
 						var self = this;
@@ -714,7 +762,23 @@ angular.module('paasb')
 
 							});
 
-          }
+          },
+
+					loadSource: function (filter) {
+
+						var deferred = $q.defer();
+
+						$http
+							.get(filter.source)
+								.then(function (options) {
+
+									return deferred.resolve(options ? options.data : null);
+
+						});
+
+						return deferred.promise;
+
+					}
 
         });
 
@@ -734,7 +798,8 @@ angular.module('paasb')
 angular.module('paasb')
 
 	.factory('Ui', [
-    function () {
+		'$timeout',
+    function ($timeout) {
 
 			var Ui = {
 
@@ -801,6 +866,22 @@ angular.module('paasb')
 
           return $sce.trustAsHtml(html);
 
+        },
+
+        isURL: function (url) {
+
+          var expression = '^(?!mailto:)(?:(?:http|https|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?:(?:[1-9]\\d?|1\\d\\d|' +
+
+            '2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[0-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u' +
+
+            '00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a' +
+
+            '-z\\u00a1-\\uffff]{2,})))|localhost)(?::\\d{2,5})?(?:(/|\\?|#)[^\\s]*)?$',
+
+            regex = new RegExp(expression, 'i');
+
+          return regex.test(url);
+
         }
 
   		};
@@ -815,7 +896,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
   $templateCache.put('views/directives/searchbox-added-filter.html',
     "\n" +
     "<div ng-click=\"openFilter();\" class=\"paasb-searchbox-added-filter\"><span ng-bind=\"filter.displayName + ':'\"></span><span ng-bind=\"filter.value\" ng-hide=\"filter.editing\"></span>\n" +
-    "  <input type=\"text\" ng-model=\"filter.value\" ng-hide=\"!filter.editing\"/>\n" +
+    "  <input type=\"text\" ng-model=\"filter.value\" ng-hide=\"!filter.editing\"/><span ng-hide=\"!filter.loading\">Loading...</span>\n" +
     "  <ul ng-hide=\"!filter.editing\">\n" +
     "    <li ng-repeat=\"suggestion in filter.suggestedValues | suggest: filter.value:filter\" ng-click=\"takeSuggestion(suggestion.value)\"><span ng-bind-html=\"Utils.trust(suggestion.modified)\"></span></li>\n" +
     "  </ul><i ng-click=\"destroy();\" class=\"fa fa-times\"></i>\n" +

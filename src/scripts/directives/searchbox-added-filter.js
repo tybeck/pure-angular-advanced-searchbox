@@ -42,6 +42,52 @@ angular.module('paasb')
 
                 input;
 
+              filter.loading = false;
+
+              if(Utils.isURL(filter.suggestedValues) || (Utils.isURL(filter.source) && filter.reloadOnCreate)) {
+
+                Ui.safeApply($scope, function () {
+
+                  var url = filter.source || filter.suggestedValues;
+
+                  angular.extend(filter, {
+
+                    'loading': true,
+
+                    'suggestedValues': [],
+
+                    'source': url
+
+                  });
+
+                });
+
+                Filtering
+                  .loadSource(filter)
+                    .then(function (data) {
+
+                      Ui.safeApply($scope, function () {
+
+                        angular.extend(filter, {
+
+                          'suggestedValues': data,
+
+                          'loading': false,
+
+                          'value': ''
+
+                        });
+
+                      });
+
+                    });
+
+              } else {
+
+                filter.value = '';
+
+              }
+
               angular.extend($scope, {
 
                 'Utils': Utils,

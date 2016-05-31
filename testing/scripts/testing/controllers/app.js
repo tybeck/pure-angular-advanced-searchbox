@@ -38,13 +38,8 @@ angular.module('app')
         }, {
           'name': 'Gender',
           'displayName': 'Vendor Gender',
-          'suggestedValues': [
-            'Men\'s',
-            'Women\'s',
-            'Girls Infant',
-            'Boys Infant',
-            'Non Traditional'
-          ],
+          'suggestedValues': 'http://demo0993385.mockable.io/gender',
+          'reloadOnCreate': true,
           'restrictedSuggestedValues': true
         }
 
