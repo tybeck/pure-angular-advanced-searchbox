@@ -10,9 +10,9 @@
 angular.module('paasb')
 
     .directive('paasbSearchBox', [
-      'Ui',
-      'Filtering',
-      function (Ui, Filtering) {
+      'paasbUi',
+      'paasbFiltering',
+      function (paasbUi, paasbFiltering) {
 
         return {
 
@@ -108,7 +108,7 @@ angular.module('paasb')
 
                     params = $scope.searchParams;
 
-                    Ui.extend($scope, {
+                    paasbUi.extend($scope, {
 
                       'searchInputId': this.searchInputId
 
@@ -134,7 +134,7 @@ angular.module('paasb')
 
                   register: function () {
 
-                    Filterer = new Filtering($scope);
+                    Filterer = new paasbFiltering($scope);
 
                     angular.extend($scope, {
 
@@ -156,7 +156,7 @@ angular.module('paasb')
 
                       searchWrapper = searchInput.parent();
 
-                    Ui.extend($scope, {
+                    paasbUi.extend($scope, {
 
                       'input': searchInput,
 

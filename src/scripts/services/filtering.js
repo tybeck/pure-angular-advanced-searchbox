@@ -2,19 +2,19 @@
 
 /**
  * @ngdoc service
- * @name paasb.service:Filtering
+ * @name paasb.service:paasbFiltering
  * @description
- * # Filtering Services
+ * # paasbFiltering Services
  */
 
 angular.module('paasb')
 
-	.factory('Filtering', [
+	.factory('paasbFiltering', [
 		'$q',
     '$compile',
 		'$http',
-		'Ui',
-    function ($q, $compile, $http, Ui) {
+		'paasbUi',
+    function ($q, $compile, $http, paasbUi) {
 
       var scope = null;
 
@@ -122,7 +122,7 @@ angular.module('paasb')
 
 						scope.addedScopes[clonedFilter.uuid] = childScope;
 
-						Ui.safeApply(scope, function () {
+						paasbUi.safeApply(scope, function () {
 
 							scope.hasFilters = true;
 

@@ -106,9 +106,9 @@ angular.module('paasb')
     .directive('paasbSearchBoxAddedFilter', [
       '$timeout',
       '$document',
-      'Ui',
-      'Utils',
-      function ($timeout, $document, Ui, Utils) {
+      'paasbUi',
+      'paasbUtils',
+      function ($timeout, $document, paasbUi, paasbUtils) {
 
         return {
 
@@ -138,9 +138,9 @@ angular.module('paasb')
 
               filter.loading = false;
 
-              if(Utils.isURL(filter.suggestedValues) || (Utils.isURL(filter.source) && filter.reloadOnCreate)) {
+              if(paasbUtils.isURL(filter.suggestedValues) || (paasbUtils.isURL(filter.source) && filter.reloadOnCreate)) {
 
-                Ui.safeApply($scope, function () {
+                paasbUi.safeApply($scope, function () {
 
                   var url = filter.source || filter.suggestedValues;
 
@@ -160,7 +160,7 @@ angular.module('paasb')
                   .loadSource(filter)
                     .then(function (data) {
 
-                      Ui.safeApply($scope, function () {
+                      paasbUi.safeApply($scope, function () {
 
                         angular.extend(filter, {
 
@@ -184,7 +184,7 @@ angular.module('paasb')
 
               angular.extend($scope, {
 
-                'Utils': Utils,
+                'Utils': paasbUtils,
 
                 'events': {
 
@@ -226,7 +226,7 @@ angular.module('paasb')
 
                   var self = this;
 
-                  Ui.safeApply($scope, function () {
+                  paasbUi.safeApply($scope, function () {
 
                     filter.editing = false;
 
@@ -597,9 +597,9 @@ angular.module('paasb')
 angular.module('paasb')
 
     .directive('paasbSearchBox', [
-      'Ui',
-      'Filtering',
-      function (Ui, Filtering) {
+      'paasbUi',
+      'paasbFiltering',
+      function (paasbUi, paasbFiltering) {
 
         return {
 
@@ -695,7 +695,7 @@ angular.module('paasb')
 
                     params = $scope.searchParams;
 
-                    Ui.extend($scope, {
+                    paasbUi.extend($scope, {
 
                       'searchInputId': this.searchInputId
 
@@ -721,7 +721,7 @@ angular.module('paasb')
 
                   register: function () {
 
-                    Filterer = new Filtering($scope);
+                    Filterer = new paasbFiltering($scope);
 
                     angular.extend($scope, {
 
@@ -743,7 +743,7 @@ angular.module('paasb')
 
                       searchWrapper = searchInput.parent();
 
-                    Ui.extend($scope, {
+                    paasbUi.extend($scope, {
 
                       'input': searchInput,
 
@@ -906,19 +906,19 @@ angular.module('paasb')
 
 /**
  * @ngdoc service
- * @name paasb.service:Filtering
+ * @name paasb.service:paasbFiltering
  * @description
- * # Filtering Services
+ * # paasbFiltering Services
  */
 
 angular.module('paasb')
 
-	.factory('Filtering', [
+	.factory('paasbFiltering', [
 		'$q',
     '$compile',
 		'$http',
-		'Ui',
-    function ($q, $compile, $http, Ui) {
+		'paasbUi',
+    function ($q, $compile, $http, paasbUi) {
 
       var scope = null;
 
@@ -1026,7 +1026,7 @@ angular.module('paasb')
 
 						scope.addedScopes[clonedFilter.uuid] = childScope;
 
-						Ui.safeApply(scope, function () {
+						paasbUi.safeApply(scope, function () {
 
 							scope.hasFilters = true;
 
@@ -1122,18 +1122,18 @@ angular.module('paasb')
 
 /**
  * @ngdoc service
- * @name paasb.service:Ui
+ * @name paasb.service:paasbUi
  * @description
- * # Ui Services
+ * # paasbUi Services
  */
 
 angular.module('paasb')
 
-	.factory('Ui', [
+	.factory('paasbUi', [
 		'$timeout',
     function ($timeout) {
 
-			var Ui = {
+			var paasbUi = {
 
 				extend: function (scope, opts) {
 
@@ -1173,7 +1173,7 @@ angular.module('paasb')
 
   		};
 
-  		return Ui;
+  		return paasbUi;
 
 	}]);
 
@@ -1181,18 +1181,18 @@ angular.module('paasb')
 
 /**
  * @ngdoc service
- * @name paasb.service:Utils
+ * @name paasb.service:paasbUtils
  * @description
- * # Utils Services
+ * # paasbUtils Services
  */
 
 angular.module('paasb')
 
-	.factory('Utils', [
+	.factory('paasbUtils', [
     '$sce',
     function ($sce) {
 
-			var Utils = {
+			var paasbUtils = {
 
         trust: function (html) {
 
@@ -1218,7 +1218,7 @@ angular.module('paasb')
 
   		};
 
-  		return Utils;
+  		return paasbUtils;
 
 	}]);
 

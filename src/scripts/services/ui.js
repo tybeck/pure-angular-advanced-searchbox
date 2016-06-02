@@ -2,18 +2,18 @@
 
 /**
  * @ngdoc service
- * @name paasb.service:Ui
+ * @name paasb.service:paasbUi
  * @description
- * # Ui Services
+ * # paasbUi Services
  */
 
 angular.module('paasb')
 
-	.factory('Ui', [
+	.factory('paasbUi', [
 		'$timeout',
     function ($timeout) {
 
-			var Ui = {
+			var paasbUi = {
 
 				extend: function (scope, opts) {
 
@@ -53,6 +53,6 @@ angular.module('paasb')
 
   		};
 
-  		return Ui;
+  		return paasbUi;
 
 	}]);

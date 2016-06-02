@@ -2,18 +2,18 @@
 
 /**
  * @ngdoc service
- * @name paasb.service:Utils
+ * @name paasb.service:paasbUtils
  * @description
- * # Utils Services
+ * # paasbUtils Services
  */
 
 angular.module('paasb')
 
-	.factory('Utils', [
+	.factory('paasbUtils', [
     '$sce',
     function ($sce) {
 
-			var Utils = {
+			var paasbUtils = {
 
         trust: function (html) {
 
@@ -39,6 +39,6 @@ angular.module('paasb')
 
   		};
 
-  		return Utils;
+  		return paasbUtils;
 
 	}]);

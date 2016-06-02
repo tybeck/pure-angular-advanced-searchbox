@@ -12,9 +12,9 @@ angular.module('paasb')
     .directive('paasbSearchBoxAddedFilter', [
       '$timeout',
       '$document',
-      'Ui',
-      'Utils',
-      function ($timeout, $document, Ui, Utils) {
+      'paasbUi',
+      'paasbUtils',
+      function ($timeout, $document, paasbUi, paasbUtils) {
 
         return {
 
@@ -44,9 +44,9 @@ angular.module('paasb')
 
               filter.loading = false;
 
-              if(Utils.isURL(filter.suggestedValues) || (Utils.isURL(filter.source) && filter.reloadOnCreate)) {
+              if(paasbUtils.isURL(filter.suggestedValues) || (paasbUtils.isURL(filter.source) && filter.reloadOnCreate)) {
 
-                Ui.safeApply($scope, function () {
+                paasbUi.safeApply($scope, function () {
 
                   var url = filter.source || filter.suggestedValues;
 
@@ -66,7 +66,7 @@ angular.module('paasb')
                   .loadSource(filter)
                     .then(function (data) {
 
-                      Ui.safeApply($scope, function () {
+                      paasbUi.safeApply($scope, function () {
 
                         angular.extend(filter, {
 
@@ -90,7 +90,7 @@ angular.module('paasb')
 
               angular.extend($scope, {
 
-                'Utils': Utils,
+                'Utils': paasbUtils,
 
                 'events': {
 
@@ -132,7 +132,7 @@ angular.module('paasb')
 
                   var self = this;
 
-                  Ui.safeApply($scope, function () {
+                  paasbUi.safeApply($scope, function () {
 
                     filter.editing = false;
 
