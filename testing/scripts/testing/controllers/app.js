@@ -12,7 +12,8 @@ angular.module('app')
 
   .controller('AppCtrl', [
     '$scope',
-    function ($scope) {
+    '$timeout',
+    function ($scope, $timeout) {
 
       $scope.sOptions = {
 
@@ -50,6 +51,12 @@ angular.module('app')
         }
 
       ];
+
+      $timeout(function () {
+
+        console.log($scope.sFilters);
+
+      }, 2500);
 
       $scope.sConfig = {
 

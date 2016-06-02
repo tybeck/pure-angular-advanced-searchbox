@@ -33,7 +33,7 @@ angular.module('paasb')
 
             'restrict': 'A',
 
-            controller: function ($scope, $element, $attrs) {
+            controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
 
               $attrs.$observe('paasbAutoSize', function () {
 
@@ -86,7 +86,7 @@ angular.module('paasb')
 
               });
 
-            }
+            }]
 
         };
 
@@ -128,7 +128,7 @@ angular.module('paasb')
 
             },
 
-            controller: function ($scope, $element, $attrs) {
+            controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
 
               var Filtering = $scope.filtering,
 
@@ -360,7 +360,7 @@ angular.module('paasb')
                 .addWatch()
                 .openFilter();
 
-            }
+            }]
 
         };
 
@@ -399,7 +399,7 @@ angular.module('paasb')
 
             },
 
-            controller: function ($scope, $element, $attrs) {
+            controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
 
               var Filtering = $scope.filtering,
 
@@ -503,7 +503,7 @@ angular.module('paasb')
                 .setAvailableSelectors()
                 .setDefaultSelector();
 
-            }
+            }]
 
         };
 
@@ -541,7 +541,7 @@ angular.module('paasb')
 
             },
 
-            controller: function ($scope, $element, $attrs) {
+            controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
 
               var Search = null;
 
@@ -550,6 +550,8 @@ angular.module('paasb')
                 if((__new !== __old) && angular.isObject(__new)) {
 
                   Search = __new;
+
+                  $scope.filters = _.cloneDeep($scope.filters);
 
                   $scope.filters
       							.slice()
@@ -606,7 +608,7 @@ angular.module('paasb')
 
               });
 
-            }
+            }]
 
         };
 
@@ -648,7 +650,7 @@ angular.module('paasb')
 
             },
 
-            controller: function ($scope, $element, $attrs) {
+            controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
 
               var params = null,
 
@@ -803,7 +805,7 @@ angular.module('paasb')
 
                 });
 
-            }
+            }]
 
         };
 

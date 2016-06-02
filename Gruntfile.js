@@ -508,16 +508,64 @@ module.exports = function (grunt) {
 
         },
 
-        'merge-json' : {
+        'merge-json': {
 
-          'all' : {
+          'all': {
 
-            'src' : [
+            'src': [
               'src/config/**/*.json',
               '!src/config/tmp/**/*.json'
             ],
 
             'dest': 'src/config/.tmp/development.json'
+
+          }
+
+        },
+
+        'ngAnnotate': {
+
+          'options': {
+
+            'singleQuotes': true
+
+          },
+
+          'all': {
+
+            'files': {
+
+              '<%= paths.dist %>/<%= paths.scripts %>/ui.core.js': [
+                '<%= paths.dist %>/<%= paths.scripts %>/ui.core.js'
+              ]
+
+            }
+
+          }
+
+        },
+
+        'uglify': {
+
+          'options': {
+
+            'preserveComments': false,
+
+            'mangle': true,
+
+            'screwIE8': true
+
+          },
+
+          'all': {
+
+            'files': {
+
+              '<%= paths.dist %>/<%= paths.scripts %>/ui.core.min.js': [
+                '<%= paths.dist %>/<%= paths.scripts %>/ui.core.js'
+              ]
+
+            }
 
           }
 
@@ -558,8 +606,6 @@ module.exports = function (grunt) {
 
           'concat',
 
-          'copy:dist',
-
           'copy:styles',
 
           'merge-json:all',
@@ -567,6 +613,12 @@ module.exports = function (grunt) {
           'ngconstant:all',
 
           'clean:tmp',
+
+          'ngAnnotate:all',
+
+          'uglify:all',
+
+          'copy:dist',
 
           'connect',
 

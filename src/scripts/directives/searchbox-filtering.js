@@ -40,6 +40,8 @@ angular.module('paasb')
 
                   Search = __new;
 
+                  $scope.filters = _.cloneDeep($scope.filters);
+
                   $scope.filters
       							.slice()
       							.reverse()
