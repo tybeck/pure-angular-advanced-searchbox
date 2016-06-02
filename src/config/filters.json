@@ -1,0 +1,22 @@
+{
+  "FILTERS": {
+    "SELECTORS": [
+      {
+        "name": "Contains",
+        "key": "contains",
+        "selected": true,
+        "notAllowed": [
+          "restrictedSuggestedValues"
+        ]
+      },
+      {
+        "name": "Is Equal To",
+        "key": "isEqualTo"
+      },
+      {
+        "name": "Is Not Equal To",
+        "key": "isNotEqualTo"
+      }
+    ]
+  }
+}

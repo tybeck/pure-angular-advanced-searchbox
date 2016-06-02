@@ -11,7 +11,8 @@ angular.module('paasb')
 
     .directive('paasbAutoSize', [
       '$parse',
-      function ($parse) {
+      '$window',
+      function ($parse, $window) {
 
         return {
 
@@ -25,7 +26,7 @@ angular.module('paasb')
 
                   getStyle = function(elem, style) {
 
-                    return parseInt(window.getComputedStyle(elem, null).getPropertyValue(style));
+                    return parseInt($window.getComputedStyle(elem, null).getPropertyValue(style));
 
                   };
 

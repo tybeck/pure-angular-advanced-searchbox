@@ -68,7 +68,13 @@ angular.module('paasb')
 
                       if((params.query && params.query.length) || $scope.hasFilters) {
 
-                        params.query = '';
+                        angular.extend(params, {
+
+                          'query': '',
+
+                          'filters': []
+
+                        });
 
                         angular.forEach(params, function (param) {
 
@@ -93,7 +99,9 @@ angular.module('paasb')
                     this
                       .make('searchParams', {
 
-                        'query': ''
+                        'query': '',
+
+                        'filters': []
 
                       }, 'isObject')
                       .make('paasbSearchBoxFiltering', [], 'isArray');
@@ -113,6 +121,12 @@ angular.module('paasb')
                   addEvents: function () {
 
                     angular.extend($scope, this.events);
+
+                    Filterer.watch(function (filterParams) {
+
+                      params.filters = filterParams;
+
+                    });
 
                     return this;
 

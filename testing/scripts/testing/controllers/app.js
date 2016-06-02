@@ -36,9 +36,9 @@ angular.module('app')
           'name': 'color',
           'displayName': 'Vendor Color'
         }, {
-          'name': 'Gender',
+          'name': 'gender',
           'displayName': 'Vendor Gender',
-          'suggestedValues': 'http://10.219.26.26:7010/gender',
+          'suggestedValues': 'http://10.219.26.22:7010/gender',
           'suggestedDataPoint': 'data',
           'reloadOnCreate': true,
           'restrictedSuggestedValues': true,

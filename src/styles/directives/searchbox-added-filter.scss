@@ -2,6 +2,20 @@ div.paasb-searchbox {
 
   div.paasb-searchbox-added-filter {
 
+    span {
+
+      &.selector-type {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: bold;
+        margin-top: 1px;
+        margin-left: 4px;
+        opacity: 0.6;
+      }
+
+    }
+
     ul {
 
       list-style-type: none;

@@ -6,4 +6,16 @@ div.paasb-searchbox-filter-selectors {
     visibility: visible;
   }
 
+  ul {
+
+    li {
+
+      &.active {
+        font-weight: bold;
+      }
+
+    }
+
+  }
+
 }

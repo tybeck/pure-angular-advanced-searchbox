@@ -34,9 +34,63 @@ angular.module('paasb')
 
         });
 
+				angular.extend(scope, {
+
+					'addedFilters': [],
+
+					'addedScopes': {}
+
+				});
+
         angular.extend(this, {
 
-          'addedFilters': [],
+					watch: function (fn) {
+
+						this.callback = fn;
+
+					},
+
+					update: function () {
+
+						this.callback(this.buildParameters());
+
+					},
+
+					buildParameters: function () {
+
+						var params = {
+
+						};
+
+						angular.forEach(scope.paasbSearchBoxFiltering, function (type) {
+
+							angular.forEach(scope.addedFilters, function (filter) {
+
+								if(filter.name === type.name) {
+
+									if(!params[filter.name]) {
+
+										params[filter.name] = [];
+
+									}
+
+									params[filter.name].push({
+
+										'condition': filter.selector.key,
+
+										'value': filter.value
+
+									});
+
+								}
+
+							});
+
+						});
+
+						return params;
+
+					},
 
           add: function (filter) {
 
@@ -62,23 +116,25 @@ angular.module('paasb')
 
 							'$filter': filter,
 
-							'scope': childScope,
-
 							'uuid': _.uuid()
 
 						});
 
-						scope.hasFilters = true;
+						scope.addedScopes[clonedFilter.uuid] = childScope;
 
-            this.addedFilters.push(clonedFilter);
+						Ui.safeApply(scope, function () {
+
+							scope.hasFilters = true;
+
+							scope.addedFilters.push(clonedFilter);
+
+						});
 
           },
 
           remove: function (filter) {
 
-						var self = this;
-
-						this.addedFilters
+						scope.addedFilters
 							.slice()
 							.reverse()
 							.forEach(function (addedFilter, addedIndex, addedObject) {
@@ -87,17 +143,25 @@ angular.module('paasb')
 
 									addedFilter.element.remove();
 
-									addedFilter.scope.$destroy();
+									var addedScope = scope.addedScopes[filter.uuid];
+
+									if(addedScope) {
+
+										addedScope.$destroy();
+
+										delete scope.addedScopes[filter.uuid];
+
+									}
 
 									filter.$filter.notFiltered = true;
 
-									self.addedFilters.splice(addedObject.length - 1 - addedIndex, 1);
+									scope.addedFilters.splice(addedObject.length - 1 - addedIndex, 1);
 
 								}
 
 							});
 
-							if(this.addedFilters && !this.addedFilters.length) {
+							if(scope.addedFilters && !scope.addedFilters.length) {
 
 								scope.hasFilters = false;
 
@@ -109,7 +173,7 @@ angular.module('paasb')
 
 						var self = this;
 
-						this.addedFilters
+						scope.addedFilters
 							.slice()
 							.reverse()
 							.forEach(function (addedFilter) {

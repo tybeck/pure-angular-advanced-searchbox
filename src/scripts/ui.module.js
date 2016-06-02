@@ -2,4 +2,6 @@
 
 angular.module('paasb', [
 
+  'paasb.config'
+
 ]);

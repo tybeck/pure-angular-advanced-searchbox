@@ -102,6 +102,26 @@ module.exports = function (grunt) {
 
           },
 
+          'ngconstant': {
+
+            'all': {
+
+              'options': {
+
+                'dest': '<%= paths.testing %>/<%= paths.scripts %>/ui.config.js',
+
+                'wrap': '\'use strict\';\n\n{%= __ngModule %}',
+
+                'name': 'paasb.config'
+
+              },
+
+              'constants': 'src/config/.tmp/development.json'
+
+            },
+
+          },
+
           'postcss': {
 
             'options': {
@@ -347,7 +367,25 @@ module.exports = function (grunt) {
 
         },
 
-        'clean' : {
+        'clean': {
+
+          'tmp': {
+
+            'files': [
+
+              {
+
+                'dot': true,
+
+                'src': [
+                  'src/config/.tmp/'
+                ]
+
+              }
+
+            ]
+
+          },
 
           'dist' : {
 
@@ -429,6 +467,7 @@ module.exports = function (grunt) {
 
               '<%= paths.dist %>/<%= paths.scripts %>/ui.core.js': [
                 '<%= paths.app %>/<%= paths.scripts %>/ui.module.js',
+                '<%= paths.testing %>/<%= paths.scripts %>/ui.config.js',
                 '<%= paths.app %>/<%= paths.scripts %>/**/*.js',
                 '<%= paths.testing %>/<%= paths.scripts %>/ui.templates.js'
               ]
@@ -464,6 +503,21 @@ module.exports = function (grunt) {
               'base': '<%= paths.testing %>/'
 
             }
+
+          }
+
+        },
+
+        'merge-json' : {
+
+          'all' : {
+
+            'src' : [
+              'src/config/**/*.json',
+              '!src/config/tmp/**/*.json'
+            ],
+
+            'dest': 'src/config/.tmp/development.json'
 
           }
 
@@ -507,6 +561,12 @@ module.exports = function (grunt) {
           'copy:dist',
 
           'copy:styles',
+
+          'merge-json:all',
+
+          'ngconstant:all',
+
+          'clean:tmp',
 
           'connect',
 

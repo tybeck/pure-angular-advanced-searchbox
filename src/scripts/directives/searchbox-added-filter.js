@@ -124,7 +124,7 @@ angular.module('paasb')
 
                 takeSuggestion: function (val) {
 
-                  filter.value = val;
+                  $scope.value = val;
 
                 },
 
@@ -220,6 +220,24 @@ angular.module('paasb')
 
                   return $scope;
 
+                },
+
+                addWatch: function () {
+
+                  $scope.$watch('value', function (__new) {
+
+                    filter.value = __new || '';
+
+                    if(filter.value) {
+
+                      Filtering.update(filter);
+
+                    }
+
+                  });
+
+                  return $scope;
+
                 }
 
               });
@@ -227,6 +245,7 @@ angular.module('paasb')
               $scope
                 .getElements()
                 .registerEvents($scope.events)
+                .addWatch()
                 .openFilter();
 
             }
