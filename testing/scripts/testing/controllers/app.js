@@ -19,7 +19,11 @@ angular.module('app')
       };
 
       $scope.sFilters = [
-
+        {
+          'name': 'example',
+          'displayName': 'Example',
+          'dontFilter': true
+        },
         {
           'name': 'cpi',
           'displayName': 'CPI'

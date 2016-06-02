@@ -40,11 +40,20 @@ angular.module('paasb')
 
                   Search = __new;
 
-                  angular.forEach($scope.filters, function (filter) {
+                  $scope.filters
+      							.slice()
+      							.reverse()
+      							.forEach(function (filter, filterIndex, filterObject) {
 
-                    filter.notFiltered = true;
+                      filter.notFiltered = true;
 
-                  });
+                      if(filter.dontFilter) {
+
+                        $scope.filters.splice(filterObject.length - 1 - filterIndex, 1);
+
+                      }
+
+                    });
 
                   angular.extend($scope, {
 
