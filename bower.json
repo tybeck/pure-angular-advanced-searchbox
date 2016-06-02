@@ -4,6 +4,7 @@
   "authors": [
     "Tyler Beck <y2xtreme600@yahoo.com>"
   ],
+  "version": "1.0.4-alpha",
   "description": "Pure angular-based advanced search",
   "main": [
     "dist/scripts/ui.core.js",
