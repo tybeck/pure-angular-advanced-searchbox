@@ -40,47 +40,65 @@ angular.module('paasb')
 
                 filter = $scope.filter,
 
+                config = null,
+
                 input;
 
               filter.loading = false;
 
-              if(paasbUtils.isURL(filter.suggestedValues) || (paasbUtils.isURL(filter.source) && filter.reloadOnCreate)) {
+              if(typeof filter.suggestedValues === 'string') {
 
-                paasbUi.safeApply($scope, function () {
+                config = Filtering.getConfig();
 
-                  var url = filter.source || filter.suggestedValues;
+                var deepValue = paasbUtils.getDeepValue(config, filter.suggestedValues);
 
-                  angular.extend(filter, {
+                if(deepValue) {
 
-                    'loading': true,
+                  filter.suggestedValues = deepValue;
 
-                    'suggestedValues': [],
+                }
 
-                    'source': url
+              }
+
+              if(paasbUtils.isURL(filter.suggestedValues) ||
+
+                (paasbUtils.isURL(filter.source) && filter.reloadOnCreate)) {
+
+                  paasbUi.safeApply($scope, function () {
+
+                    var url = filter.source || filter.suggestedValues;
+
+                    angular.extend(filter, {
+
+                      'loading': true,
+
+                      'suggestedValues': [],
+
+                      'source': url
+
+                    });
 
                   });
 
-                });
+                  Filtering
+                    .loadSource(filter)
+                      .then(function (data) {
 
-                Filtering
-                  .loadSource(filter)
-                    .then(function (data) {
+                        paasbUi.safeApply($scope, function () {
 
-                      paasbUi.safeApply($scope, function () {
+                          angular.extend(filter, {
 
-                        angular.extend(filter, {
+                            'suggestedValues': data,
 
-                          'suggestedValues': data,
+                            'loading': false,
 
-                          'loading': false,
+                            'value': ''
 
-                          'value': ''
+                          });
 
                         });
 
                       });
-
-                    });
 
               } else {
 

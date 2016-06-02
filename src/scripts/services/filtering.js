@@ -16,11 +16,15 @@ angular.module('paasb')
 		'paasbUi',
     function ($q, $compile, $http, paasbUi) {
 
-      var scope = null;
+      var scope = null,
 
-  		return function (_scope) {
+				config = null;
+
+  		return function (_scope, _config) {
 
         scope = _scope;
+
+				config = _config;
 
         var Search = null;
 
@@ -43,6 +47,12 @@ angular.module('paasb')
 				});
 
         angular.extend(this, {
+
+					getConfig: function () {
+
+						return config;
+
+					},
 
 					watch: function (fn) {
 

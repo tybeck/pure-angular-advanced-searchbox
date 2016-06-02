@@ -134,47 +134,65 @@ angular.module('paasb')
 
                 filter = $scope.filter,
 
+                config = null,
+
                 input;
 
               filter.loading = false;
 
-              if(paasbUtils.isURL(filter.suggestedValues) || (paasbUtils.isURL(filter.source) && filter.reloadOnCreate)) {
+              if(typeof filter.suggestedValues === 'string') {
 
-                paasbUi.safeApply($scope, function () {
+                config = Filtering.getConfig();
 
-                  var url = filter.source || filter.suggestedValues;
+                var deepValue = paasbUtils.getDeepValue(config, filter.suggestedValues);
 
-                  angular.extend(filter, {
+                if(deepValue) {
 
-                    'loading': true,
+                  filter.suggestedValues = deepValue;
 
-                    'suggestedValues': [],
+                }
 
-                    'source': url
+              }
+
+              if(paasbUtils.isURL(filter.suggestedValues) ||
+
+                (paasbUtils.isURL(filter.source) && filter.reloadOnCreate)) {
+
+                  paasbUi.safeApply($scope, function () {
+
+                    var url = filter.source || filter.suggestedValues;
+
+                    angular.extend(filter, {
+
+                      'loading': true,
+
+                      'suggestedValues': [],
+
+                      'source': url
+
+                    });
 
                   });
 
-                });
+                  Filtering
+                    .loadSource(filter)
+                      .then(function (data) {
 
-                Filtering
-                  .loadSource(filter)
-                    .then(function (data) {
+                        paasbUi.safeApply($scope, function () {
 
-                      paasbUi.safeApply($scope, function () {
+                          angular.extend(filter, {
 
-                        angular.extend(filter, {
+                            'suggestedValues': data,
 
-                          'suggestedValues': data,
+                            'loading': false,
 
-                          'loading': false,
+                            'value': ''
 
-                          'value': ''
+                          });
 
                         });
 
                       });
-
-                    });
 
               } else {
 
@@ -624,6 +642,8 @@ angular.module('paasb')
 
               'paasbSearchBoxFiltering': '=?',
 
+              'paasbSearchBoxConfig': '=?',
+
               'placeholder': '@'
 
             },
@@ -631,6 +651,8 @@ angular.module('paasb')
             controller: function ($scope, $element, $attrs) {
 
               var params = null,
+
+                config = null,
 
                 Filterer = null,
 
@@ -700,9 +722,12 @@ angular.module('paasb')
                         'filters': []
 
                       }, 'isObject')
-                      .make('paasbSearchBoxFiltering', [], 'isArray');
+                      .make('paasbSearchBoxFiltering', [], 'isArray')
+                      .make('paasbSearchBoxConfig', {}, 'isObject');
 
                     params = $scope.searchParams;
+
+                    config = $scope.paasbSearchBoxConfig;
 
                     paasbUi.extend($scope, {
 
@@ -730,7 +755,7 @@ angular.module('paasb')
 
                   register: function () {
 
-                    Filterer = new paasbFiltering($scope);
+                    Filterer = new paasbFiltering($scope, config);
 
                     angular.extend($scope, {
 
@@ -771,8 +796,8 @@ angular.module('paasb')
                 .ready(function () {
 
                   searchBox
-                    .register()
                     .configure()
+                    .register()
                     .addEvents()
                     .dom();
 
@@ -929,11 +954,15 @@ angular.module('paasb')
 		'paasbUi',
     function ($q, $compile, $http, paasbUi) {
 
-      var scope = null;
+      var scope = null,
 
-  		return function (_scope) {
+				config = null;
+
+  		return function (_scope, _config) {
 
         scope = _scope;
+
+				config = _config;
 
         var Search = null;
 
@@ -956,6 +985,12 @@ angular.module('paasb')
 				});
 
         angular.extend(this, {
+
+					getConfig: function () {
+
+						return config;
+
+					},
 
 					watch: function (fn) {
 
@@ -1223,7 +1258,29 @@ angular.module('paasb')
 
           return regex.test(url);
 
-        }
+        },
+
+				getDeepValue: function (root, path) {
+
+					var segments = path.split('.'),
+
+				      cursor = root,
+
+				      target;
+
+				  for (var i = 0; i < segments.length; ++i) {
+						
+						target = cursor[segments[i]];
+
+						if (typeof target == "undefined") return void 0;
+
+						cursor = target;
+
+				  }
+
+				  return cursor;
+
+				}
 
   		};
 

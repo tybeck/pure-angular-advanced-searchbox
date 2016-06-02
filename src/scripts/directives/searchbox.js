@@ -28,6 +28,8 @@ angular.module('paasb')
 
               'paasbSearchBoxFiltering': '=?',
 
+              'paasbSearchBoxConfig': '=?',
+
               'placeholder': '@'
 
             },
@@ -35,6 +37,8 @@ angular.module('paasb')
             controller: function ($scope, $element, $attrs) {
 
               var params = null,
+
+                config = null,
 
                 Filterer = null,
 
@@ -104,9 +108,12 @@ angular.module('paasb')
                         'filters': []
 
                       }, 'isObject')
-                      .make('paasbSearchBoxFiltering', [], 'isArray');
+                      .make('paasbSearchBoxFiltering', [], 'isArray')
+                      .make('paasbSearchBoxConfig', {}, 'isObject');
 
                     params = $scope.searchParams;
+
+                    config = $scope.paasbSearchBoxConfig;
 
                     paasbUi.extend($scope, {
 
@@ -134,7 +141,7 @@ angular.module('paasb')
 
                   register: function () {
 
-                    Filterer = new paasbFiltering($scope);
+                    Filterer = new paasbFiltering($scope, config);
 
                     angular.extend($scope, {
 
@@ -175,8 +182,8 @@ angular.module('paasb')
                 .ready(function () {
 
                   searchBox
-                    .register()
                     .configure()
+                    .register()
                     .addEvents()
                     .dom();
 

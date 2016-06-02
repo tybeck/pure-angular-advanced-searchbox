@@ -42,7 +42,7 @@ angular.module('app')
         }, {
           'name': 'gender',
           'displayName': 'Vendor Gender',
-          'suggestedValues': 'http://10.219.26.22:7010/gender',
+          'suggestedValues': 'GENDER',
           'suggestedDataPoint': 'data',
           'reloadOnCreate': true,
           'restrictedSuggestedValues': true,
@@ -50,5 +50,11 @@ angular.module('app')
         }
 
       ];
+
+      $scope.sConfig = {
+
+        'GENDER': 'http://10.219.26.22:7010/gender'
+
+      };
 
   }]);

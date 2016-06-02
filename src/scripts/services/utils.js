@@ -35,7 +35,29 @@ angular.module('paasb')
 
           return regex.test(url);
 
-        }
+        },
+
+				getDeepValue: function (root, path) {
+
+					var segments = path.split('.'),
+
+				      cursor = root,
+
+				      target;
+
+				  for (var i = 0; i < segments.length; ++i) {
+						
+						target = cursor[segments[i]];
+
+						if (typeof target == "undefined") return void 0;
+
+						cursor = target;
+
+				  }
+
+				  return cursor;
+
+				}
 
   		};
 
