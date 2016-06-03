@@ -1,12 +1,21 @@
 div(
   class="paasb-filtering paasb-clearfix"
 )
-  span Filters:
-  ul
+  span(
+    ng-click="toggleFilters();",
+    ng-class="{ 'active': active }"
+  )
+    i(class="fa fa-filter")
+  ul(ng-hide="!active")
     li(
       ng-repeat="filter in filters",
       data-filter-name="{{filter.name}}",
-      ng-bind="filter.displayName",
+      ng-class="{ 'child-filter': filter.child, 'root-filter': filter.root }",
       ng-click="addFilter($event);",
       ng-if="filter.notFiltered"
     )
+      span(ng-bind="filter.displayName")
+      span(
+        ng-bind-html="Utils.trust(filter.filteredFrom)",
+        class="filtered-from"
+      )

@@ -27,19 +27,24 @@ angular.module('app')
         },
         {
           'name': 'cpi',
-          'displayName': 'CPI'
+          'displayName': 'CPI',
+          'root': 'Product'
         }, {
           'name': 'vendor_desc',
-          'displayName': 'Vendor Description'
+          'displayName': 'Vendor Description',
+          'root': 'Product'
         }, {
           'name': 'vendor_abbr',
-          'displayName': 'Vendor Abbreviation'
+          'displayName': 'Vendor Abbreviation',
+          'root': 'Product'
         }, {
           'name': 'vendor_sku',
-          'displayName': 'Vendor SKU'
+          'displayName': 'Vendor SKU',
+          'root': 'Product'
         }, {
           'name': 'color',
-          'displayName': 'Vendor Color'
+          'displayName': 'Vendor Color',
+          'root': 'Product'
         }, {
           'name': 'gender',
           'displayName': 'Vendor Gender',
@@ -47,7 +52,12 @@ angular.module('app')
           'suggestedDataPoint': 'data',
           'reloadOnCreate': true,
           'restrictedSuggestedValues': true,
-          'multi': true
+          'multi': true,
+          'root': 'Product'
+        }, {
+          'name': 'upc',
+          'displayName': 'UPC',
+          'child': 'Size'
         }
 
       ];

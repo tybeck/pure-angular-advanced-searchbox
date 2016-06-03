@@ -7,7 +7,7 @@
   "version": "1.0.9-alpha",
   "description": "Pure angular-based advanced search",
   "main": [
-    "dist/scripts/ui.core.min.js",
+    "dist/scripts/ui.core.js",
     "dist/styles/main.css"
   ],
   "keywords": [

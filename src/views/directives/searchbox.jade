@@ -1,4 +1,9 @@
 div(class="paasb-searchbox")
+  paasb-search-box-filtering(
+      search="Search",
+      filters="paasbSearchBoxFiltering",
+      ng-if="paasbSearchBoxFiltering && paasbSearchBoxFiltering.length"
+  )
   div(class="paasb-searchbox-wrapper")
     i(
       class="fa",
@@ -11,8 +16,3 @@ div(class="paasb-searchbox")
       placeholder="{{placeholder}}",
       id="{{searchInputId}}"
     )
-  paasb-search-box-filtering(
-      search="Search",
-      filters="paasbSearchBoxFiltering",
-      ng-if="paasbSearchBoxFiltering && paasbSearchBoxFiltering.length"
-  )
