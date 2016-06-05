@@ -11,9 +11,16 @@ angular.module('paasb')
 
 	.factory('paasbUtils', [
     '$sce',
-    function ($sce) {
+		'$window',
+    function ($sce, $window) {
 
 			var paasbUtils = {
+
+				getStyle: function (elem, style) {
+
+					return parseInt($window.getComputedStyle(elem, null).getPropertyValue(style));
+
+				},
 
         trust: function (html) {
 
@@ -46,7 +53,7 @@ angular.module('paasb')
 				      target;
 
 				  for (var i = 0; i < segments.length; ++i) {
-						
+
 						target = cursor[segments[i]];
 
 						if (typeof target == "undefined") return void 0;

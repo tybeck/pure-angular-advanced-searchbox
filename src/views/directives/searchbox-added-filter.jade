@@ -1,8 +1,12 @@
 div(
   class="paasb-searchbox-added-filter",
-  ng-click="openFilter();"
+  ng-click="openFilter();",
+  ng-class="{ 'child': filter.child, 'root': filter.root }"
 )
-  span(ng-bind="filter.displayName + ':'")
+  span(
+    class="filter-name",
+    ng-bind="filter.displayName + ':'"
+  )
   span(
     class="selector-type",
     ng-bind="filter.selector.name",
@@ -10,7 +14,8 @@ div(
   )
   span(
     ng-bind="filter.value",
-    ng-hide="filter.editing"
+    ng-hide="filter.editing",
+    class="filter-value"
   )
   input(
     type="text", 

@@ -16,6 +16,14 @@
       {
         "name": "Is Not Equal To",
         "key": "isNotEqualTo"
+      },
+      {
+        "name": "Starts with",
+        "key": "startsWith"
+      },
+      {
+        "name": "Ends with",
+        "key": "endsWith"
       }
     ]
   }

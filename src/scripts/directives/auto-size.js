@@ -12,7 +12,9 @@ angular.module('paasb')
     .directive('paasbAutoSize', [
       '$parse',
       '$window',
-      function ($parse, $window) {
+      '$timeout',
+      'paasbUtils',
+      function ($parse, $window, $timeout, paasbUtils) {
 
         return {
 
@@ -20,52 +22,58 @@ angular.module('paasb')
 
             controller: function ($scope, $element, $attrs) {
 
-              $attrs.$observe('paasbAutoSize', function () {
+              var filter = null;
 
-                var filter = $parse($attrs.paasbAutoSize)($scope),
-
-                  getStyle = function(elem, style) {
-
-                    return parseInt($window.getComputedStyle(elem, null).getPropertyValue(style));
-
-                  };
+              $scope.reAutoSize = function () {
 
                 var filterSelectorsHeight = 0;
+
+                $timeout(function () {
+
+                  var searchInput = filter.element.find('input')[0],
+
+                    bounding = searchInput.getBoundingClientRect(),
+
+                    boundingParent = filter.element[0].getBoundingClientRect(),
+
+                    left = bounding.left;
+
+                  if(filter.hasFilterSelectors) {
+
+                    var selectorElem = filter.hasFilterSelectors,
+
+                      elem = $element[0];
+
+                    if(!selectorElem[0].contains(elem)) {
+
+                      filterSelectorsHeight = selectorElem.find('ul')[0]
+
+                        .getBoundingClientRect().height + bounding.height;
+
+                    }
+
+                  }
+
+                  var extraSpace = paasbUtils.getStyle(searchInput, 'border-left-width');
+
+                  $element
+                    .css('left', left + 'px')
+                    .css('width', (bounding.width - extraSpace) + 'px')
+                    .css('top', filterSelectorsHeight ? (filterSelectorsHeight + 'px') : 'auto');
+
+                });
+
+              };
+
+              $attrs.$observe('paasbAutoSize', function () {
+
+                filter = $parse($attrs.paasbAutoSize)($scope);
 
                 angular
                   .element($element)
                     .ready(function () {
 
-                      var searchInput = filter.element.find('input')[0],
-
-                        bounding = searchInput.getBoundingClientRect(),
-
-                        boundingParent = filter.element[0].getBoundingClientRect(),
-
-                        left = (bounding.left - boundingParent.left);
-
-                      if(filter.hasFilterSelectors) {
-
-                        var selectorElem = filter.hasFilterSelectors,
-
-                          elem = $element[0];
-
-                        if(!selectorElem[0].contains(elem)) {
-
-                          filterSelectorsHeight = selectorElem.find('ul')[0]
-
-                            .getBoundingClientRect().height + bounding.height;
-
-                        }
-
-                      }
-
-                      var extraSpace = getStyle(searchInput, 'border-left-width');
-
-                      $element
-                        .css('left', left + 'px')
-                        .css('width', (bounding.width - extraSpace) + 'px')
-                        .css('top', filterSelectorsHeight ? (filterSelectorsHeight + 'px') : 'auto');
+                      $scope.reAutoSize();
 
                 });
 

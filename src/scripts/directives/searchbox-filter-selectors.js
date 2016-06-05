@@ -67,6 +67,12 @@ angular.module('paasb')
 
                   }
 
+                  $scope.reAutoSize();
+
+                  var input = filter.element.find('input')[0];
+
+                  input.focus();
+
                 },
 
                 setDefaultSelector: function () {

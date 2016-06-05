@@ -10,9 +10,10 @@
 angular.module('paasb')
 
     .directive('paasbSearchBox', [
+      '$timeout',
       'paasbUi',
       'paasbFiltering',
-      function (paasbUi, paasbFiltering) {
+      function ($timeout, paasbUi, paasbFiltering) {
 
         return {
 
@@ -41,6 +42,8 @@ angular.module('paasb')
                 config = null,
 
                 Filterer = null,
+
+                timer = null,
 
                 searchBox = {
 
@@ -131,7 +134,53 @@ angular.module('paasb')
 
                     Filterer.watch(function (filterParams) {
 
-                      params.filters = filterParams;
+                      if(config.delay) {
+
+                        if(timer) {
+
+                          $timeout.cancel(timer);
+
+                        }
+
+                        timer = $timeout(function () {
+
+                          params.filters = filterParams;
+
+                        }, config.delay);
+
+                      } else {
+
+                        params.filters = filterParams;
+
+                      }
+
+                    });
+
+                    $scope.$watch('query', function (__new) {
+
+                      if(typeof __new !== 'undefined') {
+
+                        if(config.delay) {
+
+                          if(timer) {
+
+                            $timeout.cancel(timer);
+
+                          }
+
+                          timer = $timeout(function () {
+
+                            params.query = __new;
+
+                          }, config.delay);
+
+                        } else {
+
+                          params.query = __new;
+
+                        }
+
+                      }
 
                     });
 

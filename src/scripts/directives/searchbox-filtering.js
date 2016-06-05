@@ -10,11 +10,12 @@
 angular.module('paasb')
 
     .directive('paasbSearchBoxFiltering', [
-      'paasbUtils',
-      'paasbUi',
       '$document',
       '$timeout',
-      function (paasbUtils, paasbUi, $document, $timeout) {
+      '$window',
+      'paasbUtils',
+      'paasbUi',
+      function ($document, $timeout, $window, paasbUtils, paasbUi) {
 
         return {
 
@@ -123,9 +124,41 @@ angular.module('paasb')
 
                     },
 
+                    position: function () {
+
+                      if($scope.active) {
+
+                        $timeout(function () {
+
+                          var el = $element.parent(),
+
+                            list = $element.find('ul'),
+
+                            listBoundingBox = list[0].getBoundingClientRect(),
+
+                            elBoundingBox = el[0].getBoundingClientRect();
+
+                          list
+                            .css('top', (elBoundingBox.height - 5) + 'px')
+                            .css('width', (elBoundingBox.width + paasbUtils.getStyle(el[0], 'padding-right') +
+
+                              paasbUtils.getStyle(el[0], 'padding-left')) + 'px');
+
+                        }, 25);
+
+                      }
+
+                    },
+
                     toggleFilters: function () {
 
-                      $scope.active = !$scope.active;
+                      paasbUi.extend($scope, {
+
+                        'active': !$scope.active
+
+                      });
+
+                      this.position();
 
                     },
 
@@ -133,7 +166,11 @@ angular.module('paasb')
 
                       Search.Filtering.add(filter);
 
-                      $scope.active = false;
+                      paasbUi.extend($scope, {
+
+                        'active': !$scope.active
+
+                      });
 
                     },
 
@@ -179,6 +216,18 @@ angular.module('paasb')
 
                     },
 
+                    registerEvents: function () {
+
+                      angular
+                        .element($window)
+                        .on('resize', function () {
+
+                          $scope.position();
+
+                        });
+
+                    },
+
                     addFilter: function (ev) {
 
                       var self = this,
@@ -214,6 +263,8 @@ angular.module('paasb')
                     }
 
                   });
+
+                  $scope.registerEvents();
 
                 }
 

@@ -19,6 +19,12 @@ angular.module('app')
 
       };
 
+      $scope.$watch('sOptions', function (__new) {
+
+        console.log(__new);
+
+      }, true);
+
       $scope.sFilters = [
         {
           'name': 'example',
@@ -69,6 +75,8 @@ angular.module('app')
       }, 2500);
 
       $scope.sConfig = {
+
+        'delay': 1000,
 
         'GENDER': 'http://10.219.26.22:7010/gender'
 

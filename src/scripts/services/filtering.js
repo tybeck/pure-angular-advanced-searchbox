@@ -102,6 +102,33 @@ angular.module('paasb')
 
 					},
 
+					getFilterContainer: function () {
+
+						if(!this.filterContainerId) {
+
+							this.filterContainerId = _.uuid();
+
+							var div = document.createElement('div');
+
+							div.id = this.filterContainerId;
+
+							angular
+								.element(div)
+								.attr('ng-hide', '!addedFilters.length')
+								.addClass('paasb-added-filters-wrapper paasb-clearfix');
+
+							scope.wrapper
+								.parent()
+								.append(
+									$compile(div)(scope)
+								);
+
+						}
+
+						return angular.element(document.getElementById(this.filterContainerId));
+
+					},
+
           add: function (filter) {
 
             var childScope = scope.$new(true),
@@ -116,9 +143,13 @@ angular.module('paasb')
 
             });
 
-						var compiledElement = $compile('<paasb-search-box-added-filter filter="filter" filtering="filtering" />')(childScope);
+						var compiledElement = $compile('<paasb-search-box-added-filter ' +
 
-            scope.wrapper.prepend(compiledElement);
+							'filter="filter" filtering="filtering" />')(childScope);
+
+            this
+							.getFilterContainer()
+							.append(compiledElement);
 
 						angular.extend(clonedFilter, {
 

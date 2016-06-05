@@ -16,11 +16,13 @@ div.paasb-filtering {
     }
 
     i {
+
       font-size: 20px;
       display: inline;
       margin-left: auto;
       margin-right: auto;
       text-align: center;
+
     }
 
     border-right: 1px solid rgba(4, 4, 4, 0.3);
@@ -69,11 +71,18 @@ div.paasb-filtering {
 
     li {
 
+      i {
+        &.fa-filter {
+          opacity: 0.45;
+          margin-right: 5px;
+        }
+      }
+
       &:hover {
 
         span {
 
-          &:first-child {
+          &.filter-display-name {
 
             font-weight: bold;
 

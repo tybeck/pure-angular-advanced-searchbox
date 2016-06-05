@@ -14,7 +14,11 @@ div(
       ng-click="addFilter($event);",
       ng-if="filter.notFiltered"
     )
-      span(ng-bind="filter.displayName")
+      i(class="fa fa-filter")
+      span(
+        ng-bind="filter.displayName",
+        class="filter-display-name"
+      )
       span(
         ng-bind-html="Utils.trust(filter.filteredFrom)",
         class="filtered-from"
