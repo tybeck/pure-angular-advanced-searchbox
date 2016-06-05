@@ -1,3 +1,4 @@
+<img src="img/angular.png" alt="Angular" align="right" />
 ## Pure Angular Advanced Searchbox
 [![Bower version](https://badge.fury.io/bo/pure-angular-advanced-searchbox.svg)](https://badge.fury.io/bo/pure-angular-advanced-searchbox)
 &nbsp;&nbsp;&nbsp;
@@ -76,7 +77,7 @@ $scope.sConfig = {
 };
 ```
 
-### Available Search Parameters Properties
+### Available Search Filter Properties
 
 <table>
   <thead>
@@ -88,34 +89,49 @@ $scope.sConfig = {
   </thead>
   <tbody>
     <tr>
-      <td>key</td>
-      <td>Unique key of the search parameter that is used for the ng-model value.</td>
+      <td>name</td>
+      <td>Unique key of the search filter.</td>
       <td>string</td>
     </tr>
     <tr>
-      <td>name</td>
+      <td>displayName</td>
       <td>User friendly display name of the search parameter.</td>
       <td>string</td>
     </tr>
     <tr>
-      <td>placeholder</td>
-      <td>Specifies a short hint in the parameter search box</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td>allowMultiple</td>
-      <td>Should multiple search parameters of the same key allowed? Output type changes to array of values. Default is false.</td>
+      <td>multi</td>
+      <td>Should multiple search filters of the same key allowed? Default is <b>false</b></td>
       <td>boolean</td>
     </tr>
     <tr>
       <td>suggestedValues</td>
-      <td>An array of suggested search values, e.g. ['Berlin', 'London', 'Paris']</td>
-      <td>string[]</td>
+      <td>An array of suggested search values, e.g. ['A', 'B', 'C', 'D'], can take a config from search configuration, url, or an array</td>
+      <td>string[], string</td>
     </tr>
     <tr>
-      <td>restrictToSuggestedValues</td>
-      <td>Should it restrict possible search values to the ones from the suggestedValues array? Default is false.</td>
+      <td>suggestedDataPoint</td>
+      <td>If an API endpoint (URL) is used via <b>suggestedValues</b>; sometimes the data is stored within an object from the response.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td>restrictedSuggestedValues</td>
+      <td>Should it restrict possible search values to the ones from the suggestedValues array? Default is <b>false</b>.</td>
       <td>boolean</td>
+    </tr>
+    <tr>
+      <td>reloadOnCreate</td>
+      <td>Should we reload the suggested values when you re-open the filter?  This only works when a URL is provided. Default is <b>false</b>.</td>
+      <td>boolean</td>
+    </tr>
+    <tr>
+      <td>root</td>
+      <td>Is this a root level filter? This usually helps derive filters to different tables if necessary.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td>child</td>
+      <td>Is this a child level filter? This usually helps derive filters to different tables if necessary.</td>
+      <td>string</td>
     </tr>
   </tbody>
 </table>
