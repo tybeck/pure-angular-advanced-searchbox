@@ -1,0 +1,67 @@
+.paasb-auto-complete-container {
+
+  position: absolute;
+  background: #FFF;
+  border-left: 1px solid rgba(4, 4, 4, 0.3);
+  border-right: 1px solid rgba(4, 4, 4, 0.3);
+  border-bottom: 1px solid rgba(4, 4, 4, 0.3);
+  border-top: 1px solid rgba(4,4,4,.1);
+  left: 36px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  width: 782px;
+  z-index: 1;
+
+  p {
+    padding: 5px 0 8px 8px;
+    margin: 0;
+    font-weight: bold;
+    background: #D9EEFF;
+  }
+
+  ul {
+
+    margin: 0;
+    list-style: none;
+    padding: 0;
+
+    li {
+
+      padding: 8px;
+      border-bottom: 1px solid rgba(4, 4, 4, 0.3);
+      cursor: pointer;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      span {
+
+        &.suggestion-count {
+          text-transform: uppercase;
+          font-size: 12px;
+          opacity: .6;
+          letter-spacing: 1px;
+        }
+
+      }
+
+      &:hover {
+
+        span {
+
+          &.suggestion-value {
+
+            font-weight: bold;
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+}

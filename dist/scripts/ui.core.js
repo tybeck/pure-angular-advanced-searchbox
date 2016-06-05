@@ -386,7 +386,10 @@ angular.module('paasb')
 angular.module('paasb')
 
     .directive('paasbSearchBoxAutoComplete', [
-      function () {
+      'paasbUi',
+      'paasbUtils',
+      'paasbAutoComplete',
+      function (paasbUi, paasbUtils, paasbAutoComplete) {
 
         return {
 
@@ -400,17 +403,49 @@ angular.module('paasb')
 
             'scope': {
 
-              'query': '='
+              'query': '=',
+
+              'config': '='
 
             },
 
             controller: ['$scope', '$element', function ($scope, $element) {
 
+              var config = $scope.config;
+
               $scope.$watch('query', function (__new) {
 
-                if(__new) {
+                if($scope.tookSuggestion !== __new) {
 
+                  $scope.tookSuggestion = null;
 
+                  if(__new) {
+
+                    paasbAutoComplete
+                      .load(config.autoCompleteUrl)
+                        .then(function (data) {
+
+                          $scope.autoSuggestions = data;
+
+                        });
+
+                  }
+
+                }
+
+              });
+
+              angular.extend($scope, {
+
+                'Utils': paasbUtils,
+
+                'tookSuggestion': null,
+
+                takeAutoComplete: function (suggestion) {
+
+                  $scope.tookSuggestion = suggestion;
+
+                  $scope.$emit('take.autoSuggestion', suggestion);
 
                 }
 
@@ -958,6 +993,8 @@ angular.module('paasb')
 
                         });
 
+                        $scope.query = '';
+
                         angular.forEach(params, function (param) {
 
                           if(param !== 'query') {
@@ -1036,11 +1073,19 @@ angular.module('paasb')
 
                     });
 
+                    $scope.$on('take.autoSuggestion', function (ev, data) {
+
+                      $scope.skipDelay = true;
+
+                      $scope.query = data;
+
+                    });
+
                     $scope.$watch('query', function (__new) {
 
                       if(typeof __new !== 'undefined') {
 
-                        if(config.delay) {
+                        if(config.delay && !$scope.skipDelay) {
 
                           if(timer) {
 
@@ -1055,6 +1100,14 @@ angular.module('paasb')
                           }, config.delay);
 
                         } else {
+
+                          if(timer) {
+
+                            $timeout.cancel(timer);
+
+                          }
+
+                          $scope.skipDelay = false;
 
                           params.query = __new;
 
@@ -1263,11 +1316,37 @@ angular.module('paasb')
 angular.module('paasb')
 
 	.factory('paasbAutoComplete', [
-		'$timeout',
+		'$q',
     '$http',
-    function ($timeout, $http) {
+    function ($q, $http) {
 
 			var paasbAutoComplete = {
+
+        load: function (url) {
+
+          var deferred = $q.defer();
+
+          $http({
+            'method': 'GET',
+            'url': url
+          })
+            .then(function (response) {
+
+              if(response && response.data) {
+
+                deferred.resolve(response.data);
+
+              }
+
+            }, function () {
+
+              deferred.resolve([]);
+
+            });
+
+          return deferred.promise;
+
+        }
 
   		};
 
@@ -1684,11 +1763,10 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('views/directives/searchbox-auto-complete.html',
     "\n" +
-    "<div class=\"paasb-auto-complete-container\">\n" +
+    "<div ng-hide=\"!autoSuggestions.length\" class=\"paasb-auto-complete-container\">\n" +
+    "  <p>Most Popular Suggestions</p>\n" +
     "  <ul>\n" +
-    "    <li><span>For</span></li>\n" +
-    "    <li><span>Fourth</span></li>\n" +
-    "    <li><span>Follow</span></li>\n" +
+    "    <li ng-repeat=\"suggestion in autoSuggestions\" ng-click=\"takeAutoComplete(suggestion.value);\"><span ng-bind=\"suggestion.value\" class=\"suggestion-value\"></span><span ng-bind-html=\"Utils.trust(' - Suggested &lt;b&gt;' + suggestion.suggestedCount + '&lt;/b&gt; times')\" class=\"suggestion-count\"></span></li>\n" +
     "  </ul>\n" +
     "</div>"
   );
@@ -1720,7 +1798,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
     "  <paasb-search-box-filtering search=\"Search\" filters=\"paasbSearchBoxFiltering\" ng-if=\"paasbSearchBoxFiltering &amp;&amp; paasbSearchBoxFiltering.length\"></paasb-search-box-filtering>\n" +
     "  <div class=\"paasb-searchbox-wrapper\"><i ng-class=\"{ 'fa-search': !searchParams.query.length, 'fa-trash': ((searchParams.query &amp;&amp; searchParams.query.length) || hasFilters) }\" ng-click=\"handleGarbage();\" class=\"fa\"></i>\n" +
     "    <input type=\"text\" ng-model=\"query\" placeholder=\"{{placeholder}}\" id=\"{{searchInputId}}\"/>\n" +
-    "    <paasb-search-box-auto-complete query=\"searchParams.query\" ng-if=\"autoCompleteEnabled\"></paasb-search-box-auto-complete>\n" +
+    "    <paasb-search-box-auto-complete query=\"searchParams.query\" config=\"paasbSearchBoxAutoComplete\" ng-if=\"autoCompleteEnabled\"></paasb-search-box-auto-complete>\n" +
     "  </div>\n" +
     "</div>"
   );

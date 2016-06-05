@@ -312,3 +312,52 @@ div.paasb-searchbox-filter-selectors.loaded {
 div.paasb-searchbox-filter-selectors ul li.active {
   font-weight: bold;
 }
+
+/* line 1, ../../src/styles/directives/searchbox-auto-complete.scss */
+.paasb-auto-complete-container {
+  position: absolute;
+  background: #FFF;
+  border-left: 1px solid rgba(4, 4, 4, 0.3);
+  border-right: 1px solid rgba(4, 4, 4, 0.3);
+  border-bottom: 1px solid rgba(4, 4, 4, 0.3);
+  border-top: 1px solid rgba(4, 4, 4, 0.1);
+  left: 36px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  width: 782px;
+  z-index: 1;
+}
+/* line 15, ../../src/styles/directives/searchbox-auto-complete.scss */
+.paasb-auto-complete-container p {
+  padding: 5px 0 8px 8px;
+  margin: 0;
+  font-weight: bold;
+  background: #D9EEFF;
+}
+/* line 22, ../../src/styles/directives/searchbox-auto-complete.scss */
+.paasb-auto-complete-container ul {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+/* line 28, ../../src/styles/directives/searchbox-auto-complete.scss */
+.paasb-auto-complete-container ul li {
+  padding: 8px;
+  border-bottom: 1px solid rgba(4, 4, 4, 0.3);
+  cursor: pointer;
+}
+/* line 34, ../../src/styles/directives/searchbox-auto-complete.scss */
+.paasb-auto-complete-container ul li:last-child {
+  border-bottom: none;
+}
+/* line 40, ../../src/styles/directives/searchbox-auto-complete.scss */
+.paasb-auto-complete-container ul li span.suggestion-count {
+  text-transform: uppercase;
+  font-size: 12px;
+  opacity: .6;
+  letter-spacing: 1px;
+}
+/* line 53, ../../src/styles/directives/searchbox-auto-complete.scss */
+.paasb-auto-complete-container ul li:hover span.suggestion-value {
+  font-weight: bold;
+}

@@ -10,7 +10,10 @@
 angular.module('paasb')
 
     .directive('paasbSearchBoxAutoComplete', [
-      function () {
+      'paasbUi',
+      'paasbUtils',
+      'paasbAutoComplete',
+      function (paasbUi, paasbUtils, paasbAutoComplete) {
 
         return {
 
@@ -24,17 +27,49 @@ angular.module('paasb')
 
             'scope': {
 
-              'query': '='
+              'query': '=',
+
+              'config': '='
 
             },
 
             controller: function ($scope, $element) {
 
+              var config = $scope.config;
+
               $scope.$watch('query', function (__new) {
 
-                if(__new) {
+                if($scope.tookSuggestion !== __new) {
 
+                  $scope.tookSuggestion = null;
 
+                  if(__new) {
+
+                    paasbAutoComplete
+                      .load(config.autoCompleteUrl)
+                        .then(function (data) {
+
+                          $scope.autoSuggestions = data;
+
+                        });
+
+                  }
+
+                }
+
+              });
+
+              angular.extend($scope, {
+
+                'Utils': paasbUtils,
+
+                'tookSuggestion': null,
+
+                takeAutoComplete: function (suggestion) {
+
+                  $scope.tookSuggestion = suggestion;
+
+                  $scope.$emit('take.autoSuggestion', suggestion);
 
                 }
 

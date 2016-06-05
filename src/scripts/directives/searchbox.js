@@ -107,6 +107,8 @@ angular.module('paasb')
 
                         });
 
+                        $scope.query = '';
+
                         angular.forEach(params, function (param) {
 
                           if(param !== 'query') {
@@ -185,11 +187,19 @@ angular.module('paasb')
 
                     });
 
+                    $scope.$on('take.autoSuggestion', function (ev, data) {
+
+                      $scope.skipDelay = true;
+
+                      $scope.query = data;
+
+                    });
+
                     $scope.$watch('query', function (__new) {
 
                       if(typeof __new !== 'undefined') {
 
-                        if(config.delay) {
+                        if(config.delay && !$scope.skipDelay) {
 
                           if(timer) {
 
@@ -204,6 +214,14 @@ angular.module('paasb')
                           }, config.delay);
 
                         } else {
+
+                          if(timer) {
+
+                            $timeout.cancel(timer);
+
+                          }
+
+                          $scope.skipDelay = false;
 
                           params.query = __new;
 
