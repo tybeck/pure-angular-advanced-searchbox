@@ -77,6 +77,41 @@ $scope.sConfig = {
 };
 ```
 
+### Available Directive Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>search-params</td>
+      <td>Object to store search parameters</td>
+      <td>object</td>
+    </tr>
+    <tr>
+      <td>paasb-search-box-filtering</td>
+      <td>Object array of filters to provide to searchbox</td>
+      <td>array[object]</td>
+    </tr>
+    <tr>
+      <td>paasb-search-box-config</td>
+      <td>Object for configuration parameters</td>
+      <td>object</td>
+    </tr>
+    <tr>
+      <td>placeholder</td>
+      <td>Placeholder text for searchbox</td>
+      <td>string</td>
+    </tr>
+  </tbody>
+</table>
+
+
 ### Available Search Filter Properties
 
 <table>
@@ -131,6 +166,31 @@ $scope.sConfig = {
     <tr>
       <td>child</td>
       <td>Is this a child level filter? This usually helps derive filters to different tables if necessary.</td>
+      <td>string</td>
+    </tr>
+  </tbody>
+</table>
+
+
+### Available Search Configuration Properties
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>delay</td>
+      <td>Would you like to provide a delay before the search parameters get updated? Default is <b>0</b></td>
+      <td>number</td>
+    </tr>
+    <tr>
+      <td>&lt;configName&gt;</td>
+      <td>Custom configuration property that can be injected into filter parameters; useful when using constants via <b>suggestedValues</b></td>
       <td>string</td>
     </tr>
   </tbody>
