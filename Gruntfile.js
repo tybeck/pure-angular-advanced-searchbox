@@ -66,6 +66,12 @@ module.exports = function (grunt) {
 
           'pkg': grunt.file.readJSON('package.json'),
 
+          'banner': '/*! \n * <%= pkg.title || pkg.name %> v<%= pkg.version %>\n' +
+            ' * <%= pkg.homepage %>\n' +
+            ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %> <%= pkg.author.url %>\n' +
+            ' * License: <%= pkg.license %>\n' +
+            ' */\n',
+
           'paths' : {
 
             'dist' : 'dist',
