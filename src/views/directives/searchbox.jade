@@ -16,3 +16,7 @@ div(class="paasb-searchbox")
       placeholder="{{placeholder}}",
       id="{{searchInputId}}"
     )
+    paasb-search-box-auto-complete(
+      query="searchParams.query",
+      ng-if="autoCompleteEnabled"
+    )

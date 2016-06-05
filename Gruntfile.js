@@ -585,6 +585,8 @@ module.exports = function (grunt) {
 
           'options': {
 
+            'commitMessage': 'Release v%VERSION%',
+
             'files': [
 
               'package.json',
@@ -678,15 +680,39 @@ module.exports = function (grunt) {
 
       });
 
-      grunt.registerTask('makeRelease', [
+      grunt.registerTask('makeRelease', function () {
 
-        'bump-only',
+        var msg = grunt.option('m');
 
-        'build:release',
+        if(msg) {
 
-        'bump-commit'
+          grunt.config.merge({
 
-      ]);
+            'bump': {
+
+              'options': {
+
+                'commitMessage': msg +  ' - Release v%VERSION%'
+
+              }
+
+            }
+
+          });
+
+        }
+
+        grunt.task.run([
+
+          'bump-only',
+
+          'build:release',
+
+          'bump-commit'
+
+        ]);
+
+      });
 
       return self;
 

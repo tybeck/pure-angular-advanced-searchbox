@@ -378,6 +378,54 @@ angular.module('paasb')
 
 /**
  * @ngdoc directive
+ * @name paasb.directive:paasbSearchBoxAutoComplete
+ * @description
+ * # Implementation of paasbSearchBoxAutoComplete
+ */
+
+angular.module('paasb')
+
+    .directive('paasbSearchBoxAutoComplete', [
+      function () {
+
+        return {
+
+            'restrict': 'E',
+
+            'replace': true,
+
+            'templateUrl': 'views/directives/searchbox-auto-complete.html',
+
+            'require': '^paasbSearchBox',
+
+            'scope': {
+
+              'query': '='
+
+            },
+
+            controller: ['$scope', '$element', function ($scope, $element) {
+
+              $scope.$watch('query', function (__new) {
+
+                if(__new) {
+
+
+
+                }
+
+              });
+
+            }]
+
+        };
+
+    }]);
+
+'use strict';
+
+/**
+ * @ngdoc directive
  * @name paasb.directive:paasbSearchBoxFilterSelectors
  * @description
  * # Implementation of paasbSearchBoxFilterSelectors
@@ -834,6 +882,8 @@ angular.module('paasb')
 
               'paasbSearchBoxConfig': '=?',
 
+              'paasbSearchBoxAutoComplete': '=?',
+
               'placeholder': '@'
 
             },
@@ -844,6 +894,8 @@ angular.module('paasb')
 
                 config = null,
 
+                autoComplete = null,
+
                 Filterer = null,
 
                 timer = null,
@@ -852,17 +904,37 @@ angular.module('paasb')
 
                   'searchInputId': ('searchInput-' + _.uuid()),
 
+                  hasAutoCompleteConfigurations: function () {
+
+                    return config && config.autoCompleteUrl;
+
+                  },
+
                   make: function (name, extend, method) {
 
-                    if(!angular[method]($scope[name])) {
+                    var val = $scope[name];
 
-                      if(method === 'isObject') {
+                    if(angular[method]) {
 
-                        $scope[name] = angular.extend({}, extend);
+                      if(!angular[method](val)) {
 
-                      } else {
+                        if(method === 'isObject') {
 
-                        $scope[name] = extend;
+                          val = angular.extend({}, extend);
+
+                        } else {
+
+                          val = extend;
+
+                        }
+
+                      }
+
+                    } else {
+
+                      if(this[method]) {
+
+                        val = this[method](val);
 
                       }
 
@@ -915,11 +987,16 @@ angular.module('paasb')
 
                       }, 'isObject')
                       .make('paasbSearchBoxFiltering', [], 'isArray')
-                      .make('paasbSearchBoxConfig', {}, 'isObject');
+                      .make('paasbSearchBoxConfig', {}, 'isObject')
+                      .make('paasbSearchBoxAutoComplete', {}, 'isObject');
 
                     params = $scope.searchParams;
 
                     config = $scope.paasbSearchBoxConfig;
+
+                    autoComplete = $scope.paasbSearchBoxAutoComplete;
+
+                    $scope.autoCompleteEnabled = this.hasAutoCompleteConfigurations();
 
                     paasbUi.extend($scope, {
 
@@ -1173,6 +1250,30 @@ angular.module('paasb')
     });
 
   }]);
+
+'use strict';
+
+/**
+ * @ngdoc service
+ * @name paasb.service:paasbAutoComplete
+ * @description
+ * # paasbAutoComplete Services
+ */
+
+angular.module('paasb')
+
+	.factory('paasbAutoComplete', [
+		'$timeout',
+    '$http',
+    function ($timeout, $http) {
+
+			var paasbAutoComplete = {
+
+  		};
+
+  		return paasbAutoComplete;
+
+	}]);
 
 'use strict';
 
@@ -1581,6 +1682,18 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('views/directives/searchbox-auto-complete.html',
+    "\n" +
+    "<div class=\"paasb-auto-complete-container\">\n" +
+    "  <ul>\n" +
+    "    <li><span>For</span></li>\n" +
+    "    <li><span>Fourth</span></li>\n" +
+    "    <li><span>Follow</span></li>\n" +
+    "  </ul>\n" +
+    "</div>"
+  );
+
+
   $templateCache.put('views/directives/searchbox-filter-selectors.html',
     "\n" +
     "<div ng-class=\"{ 'loaded' : !filter.loading }\" ng-hide=\"!filter.editing\" class=\"paasb-searchbox-filter-selectors\">\n" +
@@ -1607,6 +1720,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
     "  <paasb-search-box-filtering search=\"Search\" filters=\"paasbSearchBoxFiltering\" ng-if=\"paasbSearchBoxFiltering &amp;&amp; paasbSearchBoxFiltering.length\"></paasb-search-box-filtering>\n" +
     "  <div class=\"paasb-searchbox-wrapper\"><i ng-class=\"{ 'fa-search': !searchParams.query.length, 'fa-trash': ((searchParams.query &amp;&amp; searchParams.query.length) || hasFilters) }\" ng-click=\"handleGarbage();\" class=\"fa\"></i>\n" +
     "    <input type=\"text\" ng-model=\"query\" placeholder=\"{{placeholder}}\" id=\"{{searchInputId}}\"/>\n" +
+    "    <paasb-search-box-auto-complete query=\"searchParams.query\" ng-if=\"autoCompleteEnabled\"></paasb-search-box-auto-complete>\n" +
     "  </div>\n" +
     "</div>"
   );

@@ -31,6 +31,8 @@ angular.module('paasb')
 
               'paasbSearchBoxConfig': '=?',
 
+              'paasbSearchBoxAutoComplete': '=?',
+
               'placeholder': '@'
 
             },
@@ -41,6 +43,8 @@ angular.module('paasb')
 
                 config = null,
 
+                autoComplete = null,
+
                 Filterer = null,
 
                 timer = null,
@@ -49,17 +53,37 @@ angular.module('paasb')
 
                   'searchInputId': ('searchInput-' + _.uuid()),
 
+                  hasAutoCompleteConfigurations: function () {
+
+                    return config && config.autoCompleteUrl;
+
+                  },
+
                   make: function (name, extend, method) {
 
-                    if(!angular[method]($scope[name])) {
+                    var val = $scope[name];
 
-                      if(method === 'isObject') {
+                    if(angular[method]) {
 
-                        $scope[name] = angular.extend({}, extend);
+                      if(!angular[method](val)) {
 
-                      } else {
+                        if(method === 'isObject') {
 
-                        $scope[name] = extend;
+                          val = angular.extend({}, extend);
+
+                        } else {
+
+                          val = extend;
+
+                        }
+
+                      }
+
+                    } else {
+
+                      if(this[method]) {
+
+                        val = this[method](val);
 
                       }
 
@@ -112,11 +136,16 @@ angular.module('paasb')
 
                       }, 'isObject')
                       .make('paasbSearchBoxFiltering', [], 'isArray')
-                      .make('paasbSearchBoxConfig', {}, 'isObject');
+                      .make('paasbSearchBoxConfig', {}, 'isObject')
+                      .make('paasbSearchBoxAutoComplete', {}, 'isObject');
 
                     params = $scope.searchParams;
 
                     config = $scope.paasbSearchBoxConfig;
+
+                    autoComplete = $scope.paasbSearchBoxAutoComplete;
+
+                    $scope.autoCompleteEnabled = this.hasAutoCompleteConfigurations();
 
                     paasbUi.extend($scope, {
 
