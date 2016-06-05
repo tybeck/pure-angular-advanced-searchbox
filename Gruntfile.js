@@ -38,7 +38,11 @@ module.exports = function (grunt) {
 
         'ngconstant': 'grunt-ng-constant',
 
-        'replace': 'grunt-text-replace'
+        'replace': 'grunt-text-replace',
+
+        'bump': 'grunt-bump',
+
+        'bump-only': 'grunt-bump'
 
       });
 
@@ -569,6 +573,42 @@ module.exports = function (grunt) {
 
           }
 
+        },
+
+        'bump': {
+
+          'options': {
+
+            'files': [
+
+              'package.json',
+
+              'bower.json'
+
+            ],
+
+            'updateConfigs': [
+
+              'pkg'
+
+            ],
+
+            'commit': true,
+
+            'commitFiles': [
+
+              '-a'
+
+            ],
+
+            'createTag': true,
+
+            'push': true,
+
+            'pushTo': 'origin'
+
+          }
+
         }
 
       });
@@ -588,9 +628,9 @@ module.exports = function (grunt) {
 
           grunt = self.grunt;
 
-      grunt.registerTask('build', function() {
+      grunt.registerTask('build', function (release) {
 
-        grunt.task.run([
+        var tasks = [
 
           'clean:dist',
 
@@ -618,15 +658,29 @@ module.exports = function (grunt) {
 
           'uglify:all',
 
-          'copy:dist',
+          'copy:dist'
 
-          'connect',
+        ]
 
-          'watch',
+        if(!release) {
 
-        ]);
+          tasks.push('connect', 'watch');
+
+        }
+
+        grunt.task.run(tasks);
 
       });
+
+      grunt.registerTask('makeRelease', [
+
+        'bump-only',
+
+        'build:release',
+
+        'bump-commit'
+
+      ]);
 
       return self;
 
