@@ -1,0 +1,362 @@
+/* line 1, ../../src/styles/global.scss */
+.paasb-clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+/* line 10, ../../src/styles/global.scss */
+.paasb-clearfix {
+  display: inline-block;
+}
+
+/* line 14, ../../src/styles/global.scss */
+* html .paasb-clearfix {
+  height: 1%;
+}
+
+/* line 18, ../../src/styles/global.scss */
+.paasb-clearfix {
+  display: block;
+}
+
+/* line 1, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox {
+  border: 1px solid rgba(4, 4, 4, 0.3);
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  border-radius: 4px;
+  background: #FFF;
+  padding: 4px;
+}
+/* line 9, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper {
+  position: relative;
+}
+/* line 13, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i {
+  position: absolute;
+  margin: -1px 0 0 0;
+  top: 50%;
+  transform: translate(0, -50%);
+  font-size: 18px;
+  right: 15px;
+}
+/* line 22, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-trash {
+  cursor: pointer;
+  color: #337ab7;
+}
+/* line 27, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-trash:hover {
+  color: #000;
+}
+/* line 37, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper > input {
+  font-size: 18px;
+  border: none;
+  width: 100%;
+  outline: none;
+  padding: 9px 8px 7px 50px;
+  color: rgba(0, 0, 0, 0.68);
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* line 1, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering {
+  margin-bottom: 0;
+  margin-top: 0;
+  position: absolute;
+  z-index: 10;
+}
+/* line 8, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering > span {
+  border-right: 1px solid rgba(4, 4, 4, 0.3);
+  margin-top: 0;
+  cursor: pointer;
+  float: left;
+  opacity: 0.75;
+  margin-left: 0;
+  font-size: 16px;
+  font-weight: normal;
+  margin-right: 8px;
+  vertical-align: middle;
+  display: block;
+  text-align: center;
+  width: 20px;
+  padding: 8px 8px 9px 8px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background: #cee8ff;
+  background: -moz-linear-gradient(top, #cee8ff 0%, #b5dcff 100%);
+  background: -webkit-linear-gradient(top, #cee8ff 0%, #b5dcff 100%);
+  background: linear-gradient(to bottom, #cee8ff 0%, #b5dcff 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cee8ff', endColorstr='#b5dcff',GradientType=0 );
+  transition: opacity .25s ease-in-out;
+  -moz-transition: opacity .25s ease-in-out;
+  -webkit-transition: opacity .25s ease-in-out;
+}
+/* line 10, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering > span.active {
+  background: #b5dcff;
+  background: -moz-linear-gradient(top, #b5dcff 0%, #cee8ff 100%);
+  background: -webkit-linear-gradient(top, #b5dcff 0%, #cee8ff 100%);
+  background: linear-gradient(to bottom, #b5dcff 0%, #cee8ff 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5dcff', endColorstr='#cee8ff',GradientType=0 );
+}
+/* line 18, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering > span i {
+  font-size: 20px;
+  display: inline;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+/* line 53, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering > span:hover {
+  opacity: 0.90;
+}
+/* line 59, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  top: 42px;
+  position: absolute;
+  left: -4px;
+  width: 911px;
+  border-bottom-right-radius: 8px;
+  overflow-y: scroll;
+  border-bottom-left-radius: 8px;
+}
+/* line 72, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering ul li {
+  font-size: 14px;
+  margin-right: 8px;
+  padding: 5px 10px;
+  border-bottom: 2px solid #FFF;
+  cursor: pointer;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  transition: background .25s ease-in-out;
+  -moz-transition: background .25s ease-in-out;
+  -webkit-transition: background .25s ease-in-out;
+}
+/* line 75, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering ul li i.fa-filter {
+  opacity: 0.45;
+  margin-right: 5px;
+}
+/* line 85, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering ul li:hover span.filter-display-name {
+  font-weight: bold;
+}
+/* line 97, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering ul li span.filtered-from {
+  opacity: .6;
+  font-size: 12px;
+  margin-left: 10px;
+}
+/* line 105, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering ul li span i.fa-level-up, div.paasb-filtering ul li span i.fa-level-down {
+  margin-right: 2px;
+}
+/* line 114, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering ul li.root-filter {
+  background: #CEE8FF;
+}
+/* line 120, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering ul li.child-filter {
+  background: #FFDFDF;
+}
+/* line 124, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering ul li.child-filter:hover {
+  background: #FFD6D6;
+}
+/* line 132, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering ul li:last-child {
+  border-bottom: none;
+}
+/* line 150, ../../src/styles/directives/searchbox-filtering.scss */
+div.paasb-filtering ul li:hover {
+  background: rgba(155, 200, 255, 0.55);
+}
+
+/* line 3, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-added-filters-wrapper {
+  padding: 0 0 8px 7px;
+  background: #E1F0FD;
+  border-radius: 6px;
+  margin-top: 7px;
+  margin-bottom: 4px;
+}
+/* line 11, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter {
+  float: left;
+  background: #FFF;
+  padding: 5px 6px 5px 6px;
+  border-radius: 6px;
+  margin-right: 10px;
+  margin-top: 8px;
+}
+/* line 17, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter.child span.selector-type {
+  background: #FFDFDF;
+}
+/* line 34, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter span.filter-name {
+  font-size: 13px;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.65);
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+/* line 42, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter span.filter-value {
+  display: inline-block;
+  padding-bottom: 2px;
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.82);
+}
+/* line 49, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter span.selector-type {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+  margin-top: 0px;
+  background: #CAE5FF;
+  margin-left: 9px;
+  padding: 4px;
+  opacity: 0.6;
+  border-radius: 4px;
+  margin-right: 7px;
+}
+/* line 65, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 5px 0 0 0;
+  display: block;
+  position: absolute;
+  z-index: 5;
+  border-left: 1px solid #A9A9A9;
+  border-right: 1px solid #A9A9A9;
+  border-bottom: 1px solid #A9A9A9;
+  max-height: 130px;
+  overflow-y: scroll;
+}
+/* line 79, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter ul li {
+  cursor: pointer;
+}
+/* line 83, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter ul li:nth-child(odd) {
+  background: #ecf5ff;
+}
+/* line 89, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter ul li:nth-child(even) {
+  background: #FFF;
+}
+/* line 95, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter ul li:hover {
+  font-style: italic;
+}
+/* line 99, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter ul li span {
+  display: block;
+  padding: 6px;
+  font-size: 14px;
+}
+/* line 109, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter i {
+  position: inherit;
+  top: 0;
+  margin: 0;
+  right: 0;
+}
+/* line 116, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter i.fa-times {
+  display: inline-block;
+  margin-left: 5px;
+  vertical-align: top;
+  font-size: 18px;
+  margin-right: 5px;
+}
+/* line 126, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter input {
+  outline: none;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border: 1px solid #D4D1D1;
+  font-size: 14px;
+  padding-left: 5px;
+}
+
+/* line 1, ../../src/styles/directives/searchbox-filter-selectors.scss */
+div.paasb-searchbox-filter-selectors {
+  visibility: hidden;
+  display: inline-block;
+}
+/* line 6, ../../src/styles/directives/searchbox-filter-selectors.scss */
+div.paasb-searchbox-filter-selectors.loaded {
+  visibility: visible;
+}
+/* line 14, ../../src/styles/directives/searchbox-filter-selectors.scss */
+div.paasb-searchbox-filter-selectors ul li.active {
+  font-weight: bold;
+}
+
+/* line 1, ../../src/styles/directives/searchbox-auto-complete.scss */
+.paasb-auto-complete-container {
+  position: absolute;
+  background: #FFF;
+  border-left: 1px solid rgba(4, 4, 4, 0.3);
+  border-right: 1px solid rgba(4, 4, 4, 0.3);
+  border-bottom: 1px solid rgba(4, 4, 4, 0.3);
+  border-top: 1px solid rgba(4, 4, 4, 0.1);
+  left: 0px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  z-index: 1;
+}
+/* line 14, ../../src/styles/directives/searchbox-auto-complete.scss */
+.paasb-auto-complete-container p {
+  padding: 5px 0 8px 8px;
+  margin: 0;
+  font-weight: bold;
+  background: #D9EEFF;
+}
+/* line 21, ../../src/styles/directives/searchbox-auto-complete.scss */
+.paasb-auto-complete-container ul {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+/* line 27, ../../src/styles/directives/searchbox-auto-complete.scss */
+.paasb-auto-complete-container ul li {
+  padding: 8px;
+  border-bottom: 1px solid rgba(4, 4, 4, 0.3);
+  cursor: pointer;
+}
+/* line 33, ../../src/styles/directives/searchbox-auto-complete.scss */
+.paasb-auto-complete-container ul li:last-child {
+  border-bottom: none;
+}
+/* line 39, ../../src/styles/directives/searchbox-auto-complete.scss */
+.paasb-auto-complete-container ul li span.suggestion-count {
+  text-transform: uppercase;
+  font-size: 12px;
+  opacity: .6;
+  letter-spacing: 1px;
+}
+/* line 52, ../../src/styles/directives/searchbox-auto-complete.scss */
+.paasb-auto-complete-container ul li:hover span.suggestion-value {
+  font-weight: bold;
+}
