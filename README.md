@@ -205,3 +205,8 @@ $scope.sConfig = {
     </tr>
   </tbody>
 </table>
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/tybeck/pure-angular-advanced-searchbox/badge.svg?style=beer-square)](https://beerpay.io/tybeck/pure-angular-advanced-searchbox)  [![Beerpay](https://beerpay.io/img/badges/make-wish-square.svg)](https://beerpay.io/tybeck/pure-angular-advanced-searchbox?focus=wish)
