@@ -386,10 +386,13 @@ angular.module('paasb')
 angular.module('paasb')
 
     .directive('paasbSearchBoxAutoComplete', [
+      '$window',
+      '$document',
+      '$timeout',
       'paasbUi',
       'paasbUtils',
       'paasbAutoComplete',
-      function (paasbUi, paasbUtils, paasbAutoComplete) {
+      function ($window, $document, $timeout, paasbUi, paasbUtils, paasbAutoComplete) {
 
         return {
 
@@ -405,7 +408,9 @@ angular.module('paasb')
 
               'query': '=',
 
-              'config': '='
+              'config': '=',
+
+              'input': '='
 
             },
 
@@ -427,6 +432,10 @@ angular.module('paasb')
 
                           $scope.autoSuggestions = data;
 
+                          $scope.showSuggestions = true;
+
+                          $scope.position();
+
                         });
 
                   }
@@ -441,15 +450,108 @@ angular.module('paasb')
 
                 'tookSuggestion': null,
 
+                'showSuggestions': false,
+
+                autoCompleteClick: function (ev) {
+
+                  var tgt = ev.target,
+
+                    elem = $element[0];
+
+                  if(!elem.contains(tgt)) {
+
+                    paasbUi.extend($scope, {
+
+                      'showSuggestions': false
+
+                    });
+
+                  }
+
+                  $document.unbind('click', $scope.autoCompleteClick);
+
+                },
+
+                position: function () {
+
+                  $timeout(function () {
+
+                    var input = $scope.input[0],
+
+                      inputPadding = paasbUtils.getStyle(input, 'padding-left'),
+
+                      inputWidth = paasbUtils.getStyle(input, 'width') -
+
+                        paasbUtils.getStyle(input, 'padding-right') -
+
+                        inputPadding;
+
+                    $element
+                      .css('left', inputPadding + 'px')
+                      .css('width', inputWidth + 'px');
+
+                  });
+
+                },
+
                 takeAutoComplete: function (suggestion) {
 
-                  $scope.tookSuggestion = suggestion;
+                  paasbUi.extend($scope, {
+
+                    'showSuggestions': false,
+
+                    'tookSuggestion': suggestion
+
+                  });
 
                   $scope.$emit('take.autoSuggestion', suggestion);
+
+                  $document.unbind('click', $scope.autoCompleteClick);
+
+                },
+
+                registerEvents: function () {
+
+                  angular
+                    .element($window)
+                    .on('resize', function () {
+
+                      $scope.position();
+
+                    });
+
+                  $scope.$on('input.focused', function () {
+
+                    if($scope.autoSuggestions && $scope.autoSuggestions.length) {
+
+                      paasbUi.extend($scope, {
+
+                        'showSuggestions': true
+
+                      });
+
+                    }
+
+                  });
+
+                  $scope.$watch('showSuggestions', function (__new) {
+
+                    if(__new) {
+
+                      $document.bind('mousedown', $scope.autoCompleteClick);
+
+                    }
+
+                  });
+
+                  return $scope;
 
                 }
 
               });
+
+              $scope
+                .registerEvents();
 
             }]
 
@@ -872,7 +974,8 @@ angular.module('paasb')
 
                   });
 
-                  $scope.registerEvents();
+                  $scope
+                    .registerEvents();
 
                 }
 
@@ -1117,6 +1220,12 @@ angular.module('paasb')
 
                     });
 
+                    $scope.input.on('focus', function () {
+
+                      $scope.$broadcast('input.focused');
+
+                    });
+
                     return this;
 
                   },
@@ -1166,8 +1275,8 @@ angular.module('paasb')
                   searchBox
                     .configure()
                     .register()
-                    .addEvents()
-                    .dom();
+                    .dom()
+                    .addEvents();
 
                 });
 
@@ -1763,7 +1872,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('views/directives/searchbox-auto-complete.html',
     "\n" +
-    "<div ng-hide=\"!autoSuggestions.length\" class=\"paasb-auto-complete-container\">\n" +
+    "<div ng-hide=\"!showSuggestions\" class=\"paasb-auto-complete-container\">\n" +
     "  <p>Most Popular Suggestions</p>\n" +
     "  <ul>\n" +
     "    <li ng-repeat=\"suggestion in autoSuggestions\" ng-click=\"takeAutoComplete(suggestion.value);\"><span ng-bind=\"suggestion.value\" class=\"suggestion-value\"></span><span ng-bind-html=\"Utils.trust(' - Suggested &lt;b&gt;' + suggestion.suggestedCount + '&lt;/b&gt; times')\" class=\"suggestion-count\"></span></li>\n" +
@@ -1798,7 +1907,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
     "  <paasb-search-box-filtering search=\"Search\" filters=\"paasbSearchBoxFiltering\" ng-if=\"paasbSearchBoxFiltering &amp;&amp; paasbSearchBoxFiltering.length\"></paasb-search-box-filtering>\n" +
     "  <div class=\"paasb-searchbox-wrapper\"><i ng-class=\"{ 'fa-search': !searchParams.query.length, 'fa-trash': ((searchParams.query &amp;&amp; searchParams.query.length) || hasFilters) }\" ng-click=\"handleGarbage();\" class=\"fa\"></i>\n" +
     "    <input type=\"text\" ng-model=\"query\" placeholder=\"{{placeholder}}\" id=\"{{searchInputId}}\"/>\n" +
-    "    <paasb-search-box-auto-complete query=\"searchParams.query\" config=\"paasbSearchBoxAutoComplete\" ng-if=\"autoCompleteEnabled\"></paasb-search-box-auto-complete>\n" +
+    "    <paasb-search-box-auto-complete query=\"searchParams.query\" config=\"paasbSearchBoxAutoComplete\" input=\"input\" ng-if=\"autoCompleteEnabled\"></paasb-search-box-auto-complete>\n" +
     "  </div>\n" +
     "</div>"
   );

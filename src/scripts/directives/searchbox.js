@@ -231,6 +231,12 @@ angular.module('paasb')
 
                     });
 
+                    $scope.input.on('focus', function () {
+
+                      $scope.$broadcast('input.focused');
+
+                    });
+
                     return this;
 
                   },
@@ -280,8 +286,8 @@ angular.module('paasb')
                   searchBox
                     .configure()
                     .register()
-                    .addEvents()
-                    .dom();
+                    .dom()
+                    .addEvents();
 
                 });
 

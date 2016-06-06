@@ -264,7 +264,8 @@ angular.module('paasb')
 
                   });
 
-                  $scope.registerEvents();
+                  $scope
+                    .registerEvents();
 
                 }
 
