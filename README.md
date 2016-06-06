@@ -1,12 +1,18 @@
 <img src="img/angular.png" alt="Angular" align="right" />
 ## Pure Angular Advanced Searchbox
-[![Bower version](https://badge.fury.io/bo/pure-angular-advanced-searchbox.svg)](https://badge.fury.io/bo/pure-angular-advanced-searchbox)
+![Bower version](https://img.shields.io/bower/v/pure-angular-advanced-searchbox.svg)
 &nbsp;&nbsp;&nbsp;
-[![GitHub version](https://badge.fury.io/gh/tybeck%2Fpure-angular-advanced-searchbox.svg)](https://badge.fury.io/gh/tybeck%2Fpure-angular-advanced-searchbox)
+![GitHub version](https://img.shields.io/github/tag/tybeck/pure-angular-advanced-searchbox.svg)
+&nbsp;&nbsp;&nbsp;
+![Commits Since](https://img.shields.io/github/commits-since/tybeck/pure-angular-advanced-searchbox/v1.1.1.svg)
 &nbsp;&nbsp;&nbsp;
 ![NPM Dependencies](https://david-dm.org/tybeck/pure-angular-advanced-searchbox.svg)
 &nbsp;&nbsp;&nbsp;
 ![NPM Dev Dependencies](https://david-dm.org/tybeck/pure-angular-advanced-searchbox/dev-status.svg)
+&nbsp;&nbsp;&nbsp;
+![Total Downloads](https://img.shields.io/github/downloads/pure-angular-advanced-searchbox/pure-angular-advanced-searchbox/total.svg)
+&nbsp;&nbsp;&nbsp;
+![Beerpay](https://img.shields.io/beerpay/tybeck/pure-angular-advanced-searchbox.svg)
 
 ### Usage
 1. Install with `bower`:
@@ -104,13 +110,17 @@ $scope.sConfig = {
       <td>object</td>
     </tr>
     <tr>
-      <td>placeholder</td>
-      <td>Placeholder text for searchbox</td>
-      <td>string</td>
+	    <td>paasb-search-box-auto-complete</td>
+	    <td>Object for auto complete parameters</td>
+	    <td>object</td>
     </tr>
+   <tr>
+     <td>placeholder</td>
+     <td>Placeholder text for searchbox</td>
+     <td>string</td>
+   </tr>
   </tbody>
 </table>
-
 
 ### Available Search Filter Properties
 
