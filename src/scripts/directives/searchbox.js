@@ -103,7 +103,9 @@ angular.module('paasb')
 
                           'query': '',
 
-                          'filters': []
+                          'filters': {},
+
+                          'summates': {}
 
                         });
 
@@ -134,7 +136,9 @@ angular.module('paasb')
 
                         'query': '',
 
-                        'filters': []
+                        'filters': {},
+
+                        'summates': {}
 
                       }, 'isObject')
                       .make('paasbSearchBoxFiltering', [], 'isArray')
@@ -163,25 +167,25 @@ angular.module('paasb')
 
                     angular.extend($scope, this.events);
 
-                    Filterer.watch(function (filterParams) {
+                    Filterer.watch(function (params, refresh) {
 
-                      if(config.delay) {
+                      if(timer) {
 
-                        if(timer) {
+                        $timeout.cancel(timer);
 
-                          $timeout.cancel(timer);
+                      }
 
-                        }
+                      if(config.delay && !refresh) {
 
                         timer = $timeout(function () {
 
-                          params.filters = filterParams;
+                          paasbUi.extend($scope, angular.extend($scope.searchParams, params));
 
                         }, config.delay);
 
                       } else {
 
-                        params.filters = filterParams;
+                        paasbUi.extend($scope, angular.extend($scope.searchParams, params));
 
                       }
 

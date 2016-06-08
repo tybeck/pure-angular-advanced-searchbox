@@ -60,15 +60,19 @@ angular.module('paasb')
 
 					},
 
-					update: function () {
+					update: function (forceRefresh) {
 
-						this.callback(this.buildParameters());
+						return this.callback(this.buildParameters(), forceRefresh);
 
 					},
 
 					buildParameters: function () {
 
 						var params = {
+
+							'filters': {},
+
+							'summates': {}
 
 						};
 
@@ -78,19 +82,39 @@ angular.module('paasb')
 
 								if(filter.name === type.name) {
 
-									if(!params[filter.name]) {
+									if(!params.filters[filter.name] && !filter.child) {
 
-										params[filter.name] = [];
+										params.filters[filter.name] = [];
 
 									}
 
-									params[filter.name].push({
+									if(!params.summates[filter.name] && filter.child) {
 
-										'condition': filter.selector.key,
+										params.summates[filter.name] = [];
 
-										'value': filter.value
+									}
 
-									});
+									if(filter.child) {
+
+										params.summates[filter.name].push({
+
+											'condition': filter.selector.key,
+
+											'value': filter.value
+
+										});
+
+									} else {
+
+										params.filters[filter.name].push({
+
+											'condition': filter.selector.key,
+
+											'value': filter.value
+
+										});
+
+									}
 
 								}
 
@@ -207,6 +231,8 @@ angular.module('paasb')
 								scope.hasFilters = false;
 
 							}
+
+							this.update(true);
 
           },
 

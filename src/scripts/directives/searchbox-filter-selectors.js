@@ -63,7 +63,7 @@ angular.module('paasb')
 
                   if(filter.value) {
 
-                    Filtering.update(filter);
+                    Filtering.update();
 
                   }
 

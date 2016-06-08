@@ -80,7 +80,7 @@ angular.module('app')
 
         'autoCompleteUrl': 'http://demo0550809.mockable.io/suggestions',
 
-        'GENDER': 'http://10.219.26.22:7010/gender'
+        'GENDER': 'http://demo0993385.mockable.io/gender'
 
       };
 
