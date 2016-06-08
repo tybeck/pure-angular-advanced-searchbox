@@ -1092,9 +1092,7 @@ angular.module('paasb')
 
                           'query': '',
 
-                          'filters': {},
-
-                          'summates': {}
+                          'filters': {}
 
                         });
 
@@ -1125,9 +1123,7 @@ angular.module('paasb')
 
                         'query': '',
 
-                        'filters': {},
-
-                        'summates': {}
+                        'filters': {}
 
                       }, 'isObject')
                       .make('paasbSearchBoxFiltering', [], 'isArray')
@@ -1156,7 +1152,7 @@ angular.module('paasb')
 
                     angular.extend($scope, this.events);
 
-                    Filterer.watch(function (params, refresh) {
+                    Filterer.watch(function (filters, refresh) {
 
                       if(timer) {
 
@@ -1168,13 +1164,13 @@ angular.module('paasb')
 
                         timer = $timeout(function () {
 
-                          paasbUi.extend($scope, angular.extend($scope.searchParams, params));
+                          params.filters = filters;
 
                         }, config.delay);
 
                       } else {
 
-                        paasbUi.extend($scope, angular.extend($scope.searchParams, params));
+                        params.filters = filters;
 
                       }
 
@@ -1539,10 +1535,6 @@ angular.module('paasb')
 
 						var params = {
 
-							'filters': {},
-
-							'summates': {}
-
 						};
 
 						angular.forEach(scope.paasbSearchBoxFiltering, function (type) {
@@ -1551,39 +1543,23 @@ angular.module('paasb')
 
 								if(filter.name === type.name) {
 
-									if(!params.filters[filter.name] && !filter.child) {
+									if(!params[filter.name]) {
 
-										params.filters[filter.name] = [];
-
-									}
-
-									if(!params.summates[filter.name] && filter.child) {
-
-										params.summates[filter.name] = [];
+										params[filter.name] = [];
 
 									}
 
-									if(filter.child) {
+									var data = data = {
 
-										params.summates[filter.name].push({
+										'condition': filter.selector.key,
 
-											'condition': filter.selector.key,
+										'value': filter.value
 
-											'value': filter.value
+									};
 
-										});
+									angular.extend(data, filter.extend || {});
 
-									} else {
-
-										params.filters[filter.name].push({
-
-											'condition': filter.selector.key,
-
-											'value': filter.value
-
-										});
-
-									}
+									params[filter.name].push(data);
 
 								}
 

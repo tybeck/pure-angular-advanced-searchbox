@@ -63,7 +63,12 @@ angular.module('app')
         }, {
           'name': 'upc',
           'displayName': 'UPC',
-          'child': 'Size'
+          'child': 'Size',
+          'extend': {
+            'match': 'product_id',
+            'core': 'product',
+            'columns': ['cpi']
+          }
         }
 
       ];
