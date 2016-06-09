@@ -1,18 +1,18 @@
 <img src="img/angular.png" alt="Angular" align="right" />
 ## Pure Angular Advanced Searchbox
-![Bower version](https://img.shields.io/bower/v/pure-angular-advanced-searchbox.svg)
+![Bower version](https://img.shields.io/bower/v/pure-angular-advanced-searchbox.svg?maxAge=2592000)
 &nbsp;&nbsp;&nbsp;
-![GitHub version](https://img.shields.io/github/tag/tybeck/pure-angular-advanced-searchbox.svg)
+![GitHub version](https://img.shields.io/github/tag/tybeck/pure-angular-advanced-searchbox.svg?maxAge=2592000)
 &nbsp;&nbsp;&nbsp;
-![Commits Since](https://img.shields.io/github/commits-since/tybeck/pure-angular-advanced-searchbox/v1.1.1.svg)
+![Commits Since](https://img.shields.io/github/commits-since/tybeck/pure-angular-advanced-searchbox/v1.1.1.svg?maxAge=2592000)
 &nbsp;&nbsp;&nbsp;
 ![NPM Dependencies](https://david-dm.org/tybeck/pure-angular-advanced-searchbox.svg)
 &nbsp;&nbsp;&nbsp;
 ![NPM Dev Dependencies](https://david-dm.org/tybeck/pure-angular-advanced-searchbox/dev-status.svg)
 &nbsp;&nbsp;&nbsp;
-![Total Downloads](https://img.shields.io/github/downloads/pure-angular-advanced-searchbox/pure-angular-advanced-searchbox/total.svg)
+![Total Downloads](https://img.shields.io/github/downloads/pure-angular-advanced-searchbox/pure-angular-advanced-searchbox/total.svg?maxAge=2592000)
 &nbsp;&nbsp;&nbsp;
-![Beerpay](https://img.shields.io/beerpay/tybeck/pure-angular-advanced-searchbox.svg)
+![Beerpay](https://img.shields.io/beerpay/tybeck/pure-angular-advanced-searchbox.svg?maxAge=2592000)
 
 ### [View Demo Here](http://tybeck.github.io/pure-angular-advanced-searchbox/)
 
@@ -81,7 +81,8 @@ $scope.sFilters = [
 ];
 
 $scope.sConfig = {
-    'delay': 1000
+    'delay': 1000, /* How long before paasb fires off a change event */
+    'store': true /* Should we store our query/caching in local storage? */
 };
 ```
 
@@ -115,6 +116,11 @@ $scope.sConfig = {
 	    <td>paasb-search-box-auto-complete</td>
 	    <td>Object for auto complete parameters</td>
 	    <td>object</td>
+    </tr>
+    <tr>
+	    <td>paasb-search-box-cache-filter</td>
+	    <td>Should we enable caching of our filter(s)/query to local storage?</td>
+	    <td>boolean</td>
     </tr>
    <tr>
      <td>placeholder</td>
@@ -195,6 +201,11 @@ $scope.sConfig = {
     </tr>
   </thead>
   <tbody>
+      <tr>
+      <td>store</td>
+      <td>Should we store our query/caching in local storage? Default is <b>false</b></td>
+      <td>boolean</td>
+    </tr>
     <tr>
       <td>delay</td>
       <td>Would you like to provide a delay before the search parameters get updated? Default is <b>0</b></td>
