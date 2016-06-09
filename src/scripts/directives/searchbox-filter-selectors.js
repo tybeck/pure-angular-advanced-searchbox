@@ -103,7 +103,11 @@ angular.module('paasb')
 
                   } else {
 
-                    console.log("IM ALREADY SELECTED");
+                    angular.forEach($scope.availableSelectors, function (availableSelector) {
+
+                      availableSelector.selected = (availableSelector.key === filter.selector.key);
+
+                    });
 
                   }
 

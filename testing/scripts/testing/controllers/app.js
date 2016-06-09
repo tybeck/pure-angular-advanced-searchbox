@@ -34,7 +34,8 @@ angular.module('app')
         {
           'name': 'cpi',
           'displayName': 'CPI',
-          'root': 'Product'
+          'root': 'Product',
+          'validation': 'length=3'
         }, {
           'name': 'vendor_desc',
           'displayName': 'Vendor Description',

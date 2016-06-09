@@ -121,8 +121,6 @@ angular.module('paasb')
 
                   });
 
-                  console.log($scope.active);
-
                   this.position();
 
                 },

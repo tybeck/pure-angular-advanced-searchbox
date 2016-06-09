@@ -735,7 +735,11 @@ angular.module('paasb')
 
                   } else {
 
-                    console.log("IM ALREADY SELECTED");
+                    angular.forEach($scope.availableSelectors, function (availableSelector) {
+
+                      availableSelector.selected = (availableSelector.key === filter.selector.key);
+
+                    });
 
                   }
 
@@ -919,8 +923,6 @@ angular.module('paasb')
                     'active': !$scope.active
 
                   });
-
-                  console.log($scope.active);
 
                   this.position();
 
@@ -1614,8 +1616,9 @@ angular.module('paasb')
 		'$http',
 		'paasbUi',
 		'paasbMemory',
+		'paasbValidation',
 		'FILTERS',
-    function ($q, $compile, $http, paasbUi, paasbMemory, FILTERS) {
+    function ($q, $compile, $http, paasbUi, paasbMemory, paasbValidation, FILTERS) {
 
       var scope = null,
 
@@ -1683,23 +1686,41 @@ angular.module('paasb')
 
 								if(filter.name === type.name) {
 
-									if(!params[filter.name]) {
+									var buildParam = function () {
 
-										params[filter.name] = [];
+										if(!params[filter.name]) {
 
-									}
+											params[filter.name] = [];
 
-									var data = {
+										}
 
-										'condition': filter.selector.key,
+										var data = {
 
-										'value': filter.value
+											'condition': filter.selector.key,
+
+											'value': filter.value
+
+										};
+
+										angular.extend(data, filter.extend || {});
+
+										params[filter.name].push(data);
 
 									};
 
-									angular.extend(data, filter.extend || {});
+									if(paasbValidation.has(filter)) {
 
-									params[filter.name].push(data);
+										if(paasbValidation.validate(filter)) {
+
+											buildParam();
+
+										}
+
+									} else {
+
+										buildParam();
+
+									}
 
 								}
 
@@ -1807,8 +1828,6 @@ angular.module('paasb')
 								if(selector.key === options.condition) {
 
 									clonedFilter.selector = selector;
-
-									console.log(clonedFilter);
 
 								}
 
@@ -2133,6 +2152,83 @@ angular.module('paasb')
   		};
 
   		return paasbUtils;
+
+	}]);
+
+'use strict';
+
+/**
+ * @ngdoc service
+ * @name paasb.service:paasbValidation
+ * @description
+ * # paasbValidation Services
+ */
+
+angular.module('paasb')
+
+	.factory('paasbValidation', [
+		'$window',
+    function ($window) {
+
+      var paasbValidation = {
+
+        length: function (value, len) {
+
+          return (value.length === parseInt(len));
+
+        },
+
+        has: function (filter) {
+
+          return filter.validation ? true : false;
+
+        },
+
+        validate: function (filter) {
+
+          var self = this,
+
+            validation = [],
+
+            passed = [];
+
+          if(filter && filter.validation) {
+
+            validation = filter.validation.split(' ');
+
+            angular.forEach(validation, function (_validation) {
+
+              var validator = _validation.split('='),
+
+                name = validator[0],
+
+                value = validator[1];
+
+              if(self[name](filter.value, value)) {
+
+                passed.push({
+
+                  'name': name,
+
+                  'value': value
+
+                });
+
+              }
+
+            });
+
+            return (validation.length === passed.length);
+
+          }
+
+          return true;
+
+        }
+
+    	};
+
+  		return paasbValidation;
 
 	}]);
 

@@ -15,8 +15,9 @@ angular.module('paasb')
 		'$http',
 		'paasbUi',
 		'paasbMemory',
+		'paasbValidation',
 		'FILTERS',
-    function ($q, $compile, $http, paasbUi, paasbMemory, FILTERS) {
+    function ($q, $compile, $http, paasbUi, paasbMemory, paasbValidation, FILTERS) {
 
       var scope = null,
 
@@ -84,23 +85,41 @@ angular.module('paasb')
 
 								if(filter.name === type.name) {
 
-									if(!params[filter.name]) {
+									var buildParam = function () {
 
-										params[filter.name] = [];
+										if(!params[filter.name]) {
 
-									}
+											params[filter.name] = [];
 
-									var data = {
+										}
 
-										'condition': filter.selector.key,
+										var data = {
 
-										'value': filter.value
+											'condition': filter.selector.key,
+
+											'value': filter.value
+
+										};
+
+										angular.extend(data, filter.extend || {});
+
+										params[filter.name].push(data);
 
 									};
 
-									angular.extend(data, filter.extend || {});
+									if(paasbValidation.has(filter)) {
 
-									params[filter.name].push(data);
+										if(paasbValidation.validate(filter)) {
+
+											buildParam();
+
+										}
+
+									} else {
+
+										buildParam();
+
+									}
 
 								}
 
@@ -208,8 +227,6 @@ angular.module('paasb')
 								if(selector.key === options.condition) {
 
 									clonedFilter.selector = selector;
-
-									console.log(clonedFilter);
 
 								}
 
