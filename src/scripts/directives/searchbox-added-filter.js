@@ -30,7 +30,9 @@ angular.module('paasb')
 
               'filter': '=',
 
-              'filtering': '='
+              'filtering': '=',
+
+              'toValue': '=',
 
             },
 
@@ -57,6 +59,14 @@ angular.module('paasb')
                   filter.suggestedValues = deepValue;
 
                 }
+
+              }
+
+              if($scope.toValue) {
+
+                $scope.value = $scope.toValue;
+
+                $scope.dontOpen = true;
 
               }
 
@@ -154,6 +164,8 @@ angular.module('paasb')
 
                     filter.editing = false;
 
+                    $scope.$broadcast('filter.isEditing', filter.editing);
+
                     $document.unbind('click', self.events.searchboxClick);
 
                     if(!filter.value) {
@@ -184,21 +196,29 @@ angular.module('paasb')
 
                 openFilter: function () {
 
-                  var self = this;
+                  if(!$scope.dontOpen) {
 
-                  if(!filter.editing) {
+                    var self = this;
 
-                    filter.editing = true;
+                    if(!filter.editing) {
 
-                    $timeout(function () {
+                      filter.editing = true;
 
-                      $document.bind('click', self.events.searchboxClick);
+                      $scope.$broadcast('filter.isEditing', filter.editing);
 
-                    }, 25);
+                      $timeout(function () {
 
-                    $scope.setFocus();
+                        $document.bind('click', self.events.searchboxClick);
+
+                      }, 25);
+
+                      $scope.setFocus();
+
+                    }
 
                   }
+
+                  $scope.dontOpen = false;
 
                 },
 

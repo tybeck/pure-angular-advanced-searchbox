@@ -360,3 +360,14 @@ div.paasb-searchbox-filter-selectors ul li.active {
 .paasb-auto-complete-container ul li:hover span.suggestion-value {
   font-weight: bold;
 }
+
+/* line 5, ../../src/styles/directives/searchbox-cache-filters.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.paasb-search-box-cache-filter {
+  right: 38px;
+  color: #585858;
+  cursor: pointer;
+}
+/* line 11, ../../src/styles/directives/searchbox-cache-filters.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.paasb-search-box-cache-filter.active {
+  color: #4A92D0;
+}

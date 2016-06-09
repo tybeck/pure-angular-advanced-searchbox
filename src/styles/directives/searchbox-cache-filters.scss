@@ -1,0 +1,19 @@
+div.paasb-searchbox {
+
+  div.paasb-searchbox-wrapper {
+
+    i.paasb-search-box-cache-filter {
+
+      right: 38px;
+      color: #585858;
+      cursor: pointer;
+
+      &.active {
+        color: #4A92D0;
+      }
+
+    }
+
+  }
+
+}

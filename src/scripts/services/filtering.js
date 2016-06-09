@@ -14,7 +14,9 @@ angular.module('paasb')
     '$compile',
 		'$http',
 		'paasbUi',
-    function ($q, $compile, $http, paasbUi) {
+		'paasbMemory',
+		'FILTERS',
+    function ($q, $compile, $http, paasbUi, paasbMemory, FILTERS) {
 
       var scope = null,
 
@@ -62,7 +64,11 @@ angular.module('paasb')
 
 					update: function (forceRefresh) {
 
-						return this.callback(this.buildParameters(), forceRefresh);
+						if(this.callback) {
+
+							return this.callback(this.buildParameters(), forceRefresh);
+
+						}
 
 					},
 
@@ -84,7 +90,7 @@ angular.module('paasb')
 
 									}
 
-									var data = data = {
+									var data = {
 
 										'condition': filter.selector.key,
 
@@ -133,7 +139,33 @@ angular.module('paasb')
 
 					},
 
-          add: function (filter) {
+					addByMemory: function (options) {
+
+						var opts = options.filters,
+
+							self = this;
+
+						angular.forEach(opts, function (option, name) {
+
+							angular.forEach(option, function (opt) {
+
+								angular.forEach(scope.paasbSearchBoxFiltering, function (filter) {
+
+									if(name === filter.name) {
+
+										self.add(filter, opt);
+
+									}
+
+								});
+
+							});
+
+						});
+
+					},
+
+          add: function (filter, options) {
 
             var childScope = scope.$new(true),
 
@@ -143,13 +175,17 @@ angular.module('paasb')
 
               'filter': clonedFilter,
 
-							'filtering': this
+							'filtering': this,
+
+							'toValue': (options && options.value) ?
+
+								options.value : null
 
             });
 
 						var compiledElement = $compile('<paasb-search-box-added-filter ' +
 
-							'filter="filter" filtering="filtering" />')(childScope);
+							'filter="filter" filtering="filtering" to-value="toValue" />')(childScope);
 
             this
 							.getFilterContainer()
@@ -164,6 +200,22 @@ angular.module('paasb')
 							'uuid': _.uuid()
 
 						});
+
+						if(options && options.condition) {
+
+							angular.forEach(FILTERS.SELECTORS, function (selector) {
+
+								if(selector.key === options.condition) {
+
+									clonedFilter.selector = selector;
+
+									console.log(clonedFilter);
+
+								}
+
+							});
+
+						}
 
 						scope.addedScopes[clonedFilter.uuid] = childScope;
 
@@ -228,6 +280,8 @@ angular.module('paasb')
 								return self.remove(addedFilter);
 
 							});
+
+						paasbMemory.removeAll();
 
           },
 

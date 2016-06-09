@@ -12,6 +12,7 @@ html(ng-app="app")
       paasb-search-box-filtering="sFilters",
       paasb-search-box-config="sConfig",
       paasb-search-box-auto-complete="sConfig",
+      paasb-search-box-cache-filter="true",
       placeholder="Enter your query here..."
     )
     // bower:js
@@ -25,6 +26,7 @@ html(ng-app="app")
     script(src="scripts/directives/searchbox-filtering.js")
     script(src="scripts/directives/searchbox-added-filter.js")
     script(src="scripts/directives/searchbox-filter-selectors.js")
+    script(src="scripts/directives/searchbox-cache-filters.js")
     script(src="scripts/directives/searchbox-auto-complete.js")
     script(src="scripts/directives/auto-size.js")
     
@@ -32,6 +34,7 @@ html(ng-app="app")
     script(src="scripts/services/filtering.js")
     script(src="scripts/services/auto-complete.js")
     script(src="scripts/services/utils.js")
+    script(src="scripts/services/memory.js")
     
     script(src="scripts/filters/suggest.js")
     

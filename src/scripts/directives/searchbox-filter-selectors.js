@@ -77,25 +77,33 @@ angular.module('paasb')
 
                 setDefaultSelector: function () {
 
-                  angular.forEach($scope.availableSelectors, function (availableSelector) {
+                  if(!filter.selector) {
 
-                    if(availableSelector.selected) {
+                    angular.forEach($scope.availableSelectors, function (availableSelector) {
 
-                      filter.selector = availableSelector;
+                      if(availableSelector.selected) {
+
+                        filter.selector = availableSelector;
+
+                      }
+
+                    });
+
+                    if(!filter.selector && $scope.availableSelectors &&
+
+                      $scope.availableSelectors.length) {
+
+                        var selector = $scope.availableSelectors[0];
+
+                        selector.selected = true;
+
+                        filter.selector = selector;
 
                     }
 
-                  });
+                  } else {
 
-                  if(!filter.selector && $scope.availableSelectors &&
-
-                    $scope.availableSelectors.length) {
-
-                      var selector = $scope.availableSelectors[0];
-
-                      selector.selected = true;
-
-                      filter.selector = selector;
+                    console.log("IM ALREADY SELECTED");
 
                   }
 
@@ -132,6 +140,16 @@ angular.module('paasb')
                   $scope.availableSelectors = availableSelectors;
 
                   return $scope;
+
+                }
+
+              });
+
+              $scope.$on('filter.isEditing', function (ev, editing) {
+
+                if(editing) {
+
+                  $scope.reAutoSize();
 
                 }
 

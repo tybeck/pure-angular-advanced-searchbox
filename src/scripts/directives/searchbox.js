@@ -11,9 +11,11 @@ angular.module('paasb')
 
     .directive('paasbSearchBox', [
       '$timeout',
+      '$window',
       'paasbUi',
       'paasbFiltering',
-      function ($timeout, paasbUi, paasbFiltering) {
+      'paasbMemory',
+      function ($timeout, $window, paasbUi, paasbFiltering, paasbMemory) {
 
         return {
 
@@ -32,6 +34,8 @@ angular.module('paasb')
               'paasbSearchBoxConfig': '=?',
 
               'paasbSearchBoxAutoComplete': '=?',
+
+              'paasbSearchBoxCacheFilter': '=?',
 
               'placeholder': '@'
 
@@ -59,7 +63,7 @@ angular.module('paasb')
 
                   },
 
-                  make: function (name, extend, method) {
+                  make: function (name, extend, method, related) {
 
                     var val = $scope[name];
 
@@ -74,6 +78,16 @@ angular.module('paasb')
                         } else {
 
                           val = extend;
+
+                        }
+
+                      } else {
+
+                        if(extend && _.isEmpty(val)) {
+
+                          $scope[name] = extend;
+
+                          $scope[related] = extend[related];
 
                         }
 
@@ -127,19 +141,38 @@ angular.module('paasb')
 
                   },
 
+                  shouldStore: function () {
+
+                    return (paasbMemory.getAndSet('cache') ||
+
+                      $scope.paasbSearchBoxConfig.store) ? true : false;
+
+                  },
+
                   configure: function () {
 
+                    var defaultParams = {
+
+                      'query': '',
+
+                      'filters': {}
+
+                    };
+
                     this
-                      .make('searchParams', {
+                      .make('searchParams', this.shouldStore() ? paasbMemory.getAll() :
 
-                        'query': '',
+                        defaultParams, 'isObject', 'query')
 
-                        'filters': {}
-
-                      }, 'isObject')
                       .make('paasbSearchBoxFiltering', [], 'isArray')
                       .make('paasbSearchBoxConfig', {}, 'isObject')
                       .make('paasbSearchBoxAutoComplete', {}, 'isObject');
+
+                    if(!this.shouldStore()) {
+
+                      paasbMemory.removeAll();
+
+                    }
 
                     params = $scope.searchParams;
 
@@ -164,6 +197,8 @@ angular.module('paasb')
                     angular.extend($scope, this.events);
 
                     Filterer.watch(function (filters, refresh) {
+
+                      paasbMemory.getAndSet('filters', filters);
 
                       if(timer) {
 
@@ -199,31 +234,37 @@ angular.module('paasb')
 
                       if(typeof __new !== 'undefined') {
 
-                        if(config.delay && !$scope.skipDelay) {
+                        if(paasbMemory.getAndSet('query') !== __new) {
 
-                          if(timer) {
+                          paasbMemory.getAndSet('query', __new);
 
-                            $timeout.cancel(timer);
+                          if(config.delay && !$scope.skipDelay) {
 
-                          }
+                            if(timer) {
 
-                          timer = $timeout(function () {
+                              $timeout.cancel(timer);
+
+                            }
+
+                            timer = $timeout(function () {
+
+                              params.query = __new;
+
+                            }, config.delay);
+
+                          } else {
+
+                            if(timer) {
+
+                              $timeout.cancel(timer);
+
+                            }
+
+                            $scope.skipDelay = false;
 
                             params.query = __new;
 
-                          }, config.delay);
-
-                        } else {
-
-                          if(timer) {
-
-                            $timeout.cancel(timer);
-
                           }
-
-                          $scope.skipDelay = false;
-
-                          params.query = __new;
 
                         }
 
@@ -255,6 +296,8 @@ angular.module('paasb')
 
                     });
 
+                    Filterer.addByMemory(params);
+
                     return this;
 
                   },
@@ -285,8 +328,8 @@ angular.module('paasb')
 
                   searchBox
                     .configure()
-                    .register()
                     .dom()
+                    .register()
                     .addEvents();
 
                 });

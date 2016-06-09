@@ -65,7 +65,8 @@ angular.module('app')
           'displayName': 'UPC',
           'child': 'Size',
           'extend': {
-            'match': 'product_id',
+            'match': 'id',
+            'to': 'product_id',
             'core': 'product',
             'columns': ['cpi']
           }
@@ -82,6 +83,8 @@ angular.module('app')
       $scope.sConfig = {
 
         'delay': 1000,
+
+        // 'store': true,
 
         'autoCompleteUrl': 'http://demo0550809.mockable.io/suggestions',
 

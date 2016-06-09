@@ -16,7 +16,8 @@ angular.module('paasb')
       'paasbUi',
       'paasbUtils',
       'paasbAutoComplete',
-      function ($window, $document, $timeout, paasbUi, paasbUtils, paasbAutoComplete) {
+      'paasbMemory',
+      function ($window, $document, $timeout, paasbUi, paasbUtils, paasbAutoComplete, paasbMemory) {
 
         return {
 
@@ -40,7 +41,9 @@ angular.module('paasb')
 
             controller: function ($scope, $element) {
 
-              var config = $scope.config;
+              var config = $scope.config,
+
+                initialQuery = paasbMemory.getAndSet('query');
 
               $scope.$watch('query', function (__new) {
 
@@ -48,7 +51,7 @@ angular.module('paasb')
 
                   $scope.tookSuggestion = null;
 
-                  if(__new) {
+                  if(__new && (initialQuery !== __new)) {
 
                     paasbAutoComplete
                       .load(config.autoCompleteUrl)
