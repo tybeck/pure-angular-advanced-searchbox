@@ -46,8 +46,40 @@ Load the javascript/css and declare your angular dependency:
 ```
 
 ```js
-angular.module('myModule', ['pure-angular-advanced-searchbox']);
+angular.module('myModule', ['paasb']);
 ```
+
+#### **Example Directive Usage**
+
+```html
+<paasb-search-box
+	search-params="sOptions"
+	paasb-search-box-config="sConfig"
+	paasb-search-box-auto-complete="sConfig"
+	paasb-search-box-cache-filter="true"
+</paasb-search-box>
+```
+
+##### **Description**
+
+The searchbox will return data in JSON format and look something like:
+
+```json
+{
+	"query":"Oreo",
+	"filters": {
+		"color": [
+			{
+				"condition": "contains",
+				"value": "Black"
+			}
+		]
+	}
+}
+```
+
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#
 
 Define the available search parameters / filters in your project:
 
@@ -201,6 +233,11 @@ $scope.sConfig = {
     </tr>
   </thead>
   <tbody>
+      <tr>
+      <td>autoCompleteUrl</td>
+      <td>API endpoint to auto suggestor; <b>paasb</b> sends query as plain text via interpolation (<b>{{query}}</b>)</td>
+      <td>string</td>
+    </tr>
       <tr>
       <td>store</td>
       <td>Should we store our query/caching in local storage? Default is <b>false</b></td>
