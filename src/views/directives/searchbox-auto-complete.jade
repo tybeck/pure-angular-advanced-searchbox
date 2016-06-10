@@ -6,11 +6,11 @@ div(
   ul
     li(
       ng-repeat="suggestion in autoSuggestions",
-      ng-click="takeAutoComplete(suggestion.value);"
+      ng-click="takeAutoComplete(suggestion.plainTerm);"
     )
       span(
         class="suggestion-value", 
-        ng-bind="suggestion.value"
+        ng-bind-html="Utils.trust(suggestion.term)"
       )
       span(
         class="suggestion-count",

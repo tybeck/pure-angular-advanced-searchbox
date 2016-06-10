@@ -87,7 +87,7 @@ angular.module('app')
 
         // 'store': true,
 
-        'autoCompleteUrl': 'http://demo0550809.mockable.io/suggestions',
+        'autoCompleteUrl': 'http://192.168.1.8:7010/search/suggestions?q={"query":"{{query}}"}&use=autocomplete',
 
         'GENDER': 'http://demo0993385.mockable.io/gender'
 

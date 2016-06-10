@@ -409,11 +409,12 @@ angular.module('paasb')
       '$window',
       '$document',
       '$timeout',
+      '$interpolate',
       'paasbUi',
       'paasbUtils',
       'paasbAutoComplete',
       'paasbMemory',
-      function ($window, $document, $timeout, paasbUi, paasbUtils, paasbAutoComplete, paasbMemory) {
+      function ($window, $document, $timeout, $interpolate, paasbUi, paasbUtils, paasbAutoComplete, paasbMemory) {
 
         return {
 
@@ -450,12 +451,20 @@ angular.module('paasb')
                   if(__new && (initialQuery !== __new)) {
 
                     paasbAutoComplete
-                      .load(config.autoCompleteUrl)
+                      .load($interpolate(config.autoCompleteUrl)({
+
+                        'query': __new
+
+                      }))
                         .then(function (data) {
 
-                          $scope.autoSuggestions = data;
+                          paasbUi.extend($scope, {
 
-                          $scope.showSuggestions = true;
+                            'autoSuggestions': data,
+
+                            'showSuggestions': true
+
+                          });
 
                           $scope.position();
 
@@ -2254,7 +2263,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
     "<div ng-hide=\"!showSuggestions\" class=\"paasb-auto-complete-container\">\n" +
     "  <p>Most Popular Suggestions</p>\n" +
     "  <ul>\n" +
-    "    <li ng-repeat=\"suggestion in autoSuggestions\" ng-click=\"takeAutoComplete(suggestion.value);\"><span ng-bind=\"suggestion.value\" class=\"suggestion-value\"></span><span ng-bind-html=\"Utils.trust(' - Suggested &lt;b&gt;' + suggestion.suggestedCount + '&lt;/b&gt; times')\" class=\"suggestion-count\"></span></li>\n" +
+    "    <li ng-repeat=\"suggestion in autoSuggestions\" ng-click=\"takeAutoComplete(suggestion.plainTerm);\"><span ng-bind-html=\"Utils.trust(suggestion.term)\" class=\"suggestion-value\"></span><span ng-bind-html=\"Utils.trust(' - Suggested &lt;b&gt;' + suggestion.suggestedCount + '&lt;/b&gt; times')\" class=\"suggestion-count\"></span></li>\n" +
     "  </ul>\n" +
     "</div>"
   );

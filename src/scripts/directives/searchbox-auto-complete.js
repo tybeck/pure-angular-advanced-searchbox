@@ -13,11 +13,12 @@ angular.module('paasb')
       '$window',
       '$document',
       '$timeout',
+      '$interpolate',
       'paasbUi',
       'paasbUtils',
       'paasbAutoComplete',
       'paasbMemory',
-      function ($window, $document, $timeout, paasbUi, paasbUtils, paasbAutoComplete, paasbMemory) {
+      function ($window, $document, $timeout, $interpolate, paasbUi, paasbUtils, paasbAutoComplete, paasbMemory) {
 
         return {
 
@@ -54,12 +55,20 @@ angular.module('paasb')
                   if(__new && (initialQuery !== __new)) {
 
                     paasbAutoComplete
-                      .load(config.autoCompleteUrl)
+                      .load($interpolate(config.autoCompleteUrl)({
+
+                        'query': __new
+
+                      }))
                         .then(function (data) {
 
-                          $scope.autoSuggestions = data;
+                          paasbUi.extend($scope, {
 
-                          $scope.showSuggestions = true;
+                            'autoSuggestions': data,
+
+                            'showSuggestions': true
+
+                          });
 
                           $scope.position();
 
