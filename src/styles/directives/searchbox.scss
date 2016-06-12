@@ -12,6 +12,20 @@ div.paasb-searchbox {
 
     i {
 
+      &.fa-cog {
+
+        opacity: .6;
+        right: 62px;
+        margin-top: -11px;
+        color: #4A92D0;
+
+        &.no-cache-filtering {
+          right: 40px;
+          margin-top: -10px;
+        }
+
+      }
+
       position: absolute;
       margin: -1px 0 0 0;
       top: 50%;

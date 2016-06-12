@@ -16,6 +16,64 @@ angular.module('paasb')
 
 			var paasbUtils = {
 
+				getScrollbarWidth: function () {
+
+					var scrollDiv = document.createElement("div");
+
+					scrollDiv.className = "scrollbar-measure";
+
+					document.body.appendChild(scrollDiv);
+
+					var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+
+					document.body.removeChild(scrollDiv);
+
+					return scrollbarWidth;
+
+				},
+
+	      getParentByAttribute: function (target, nodeName, attrName) {
+
+	        var looping = true,
+
+	          looped = 0,
+
+	          el = null;
+
+	        target = angular.element(target);
+
+	        while(looping) {
+
+	          if(target[0] === document) {
+
+	            break;
+
+	          }
+
+	          var nName = target[0].nodeName.toLowerCase();
+
+	          if(nName === nodeName.toLowerCase()) {
+
+	            if(target.attr(attrName)) {
+
+	              el = target;
+
+	              looping = false;
+
+	              break;
+
+	            }
+
+	          }
+
+	          target = target.parent();
+
+	        };
+
+	        return el;
+
+	      },
+
 				getStyle: function (elem, style) {
 
 					return parseInt($window.getComputedStyle(elem, null).getPropertyValue(style));

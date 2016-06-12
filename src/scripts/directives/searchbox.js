@@ -14,8 +14,10 @@ angular.module('paasb')
       '$window',
       'paasbUi',
       'paasbFiltering',
+      'paasbPlaceholders',
       'paasbMemory',
-      function ($timeout, $window, paasbUi, paasbFiltering, paasbMemory) {
+      'paasbUtils',
+      function ($timeout, $window, paasbUi, paasbFiltering, paasbPlaceholders, paasbMemory, paasbUtils) {
 
         return {
 
@@ -50,6 +52,8 @@ angular.module('paasb')
                 autoComplete = null,
 
                 Filterer = null,
+
+                Placeholding = null,
 
                 timer = null,
 
@@ -278,6 +282,12 @@ angular.module('paasb')
 
                     });
 
+                    $scope.box.on('keyup', function (ev) {
+
+
+
+                    });
+
                     return this;
 
                   },
@@ -286,17 +296,23 @@ angular.module('paasb')
 
                     Filterer = new paasbFiltering($scope, config);
 
+                    Placeholding = new paasbPlaceholders($scope, config);
+
                     angular.extend($scope, {
 
                       'Search': {
 
-                        'Filtering': Filterer
+                        'Filtering': Filterer,
+
+                        'Placeholding': Placeholding
 
                       }
 
                     });
 
                     Filterer.addByMemory(params);
+
+                    Placeholding.setup();
 
                     return this;
 
@@ -306,13 +322,17 @@ angular.module('paasb')
 
                     var searchInput = angular.element(document.getElementById(this.searchInputId)),
 
+                      searchBox = paasbUtils.getParentByAttribute(searchInput[0], 'div', 'data-search-box'),
+
                       searchWrapper = searchInput.parent();
 
                     paasbUi.extend($scope, {
 
                       'input': searchInput,
 
-                      'wrapper': searchWrapper
+                      'wrapper': searchWrapper,
+
+                      'box': searchBox
 
                     });
 

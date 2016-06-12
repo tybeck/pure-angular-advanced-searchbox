@@ -85,9 +85,19 @@ angular.module('app')
 
         'delay': 1000,
 
-        // 'store': true,
+        'store': true,
 
-        'autoCompleteUrl': 'http://192.168.1.8:7010/search/suggestions?q={"query":"{{query}}"}&use=autocomplete',
+        'placeholders': [
+          'Enter your query here...',
+          'Products will be searched via this query',
+          'You can enter any search term you\'d like'
+        ],
+
+        'updateOnlyByEnterKey': true,
+
+        'placeholderInterval': 1500,
+
+        'autoCompleteUrl': 'http://10.61.71.33:7010/search/suggestions?q={"query":"{{query}}"}&use=autocomplete',
 
         'GENDER': 'http://demo0993385.mockable.io/gender'
 

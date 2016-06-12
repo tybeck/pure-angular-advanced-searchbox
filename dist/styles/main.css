@@ -23,6 +23,15 @@
   display: block;
 }
 
+/* line 22, ../../src/styles/global.scss */
+.scrollbar-measure {
+  width: 100px;
+  height: 100px;
+  overflow: scroll;
+  position: absolute;
+  top: -9999px;
+}
+
 /* line 1, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox {
   border: 1px solid rgba(4, 4, 4, 0.3);
@@ -44,16 +53,28 @@ div.paasb-searchbox div.paasb-searchbox-wrapper i {
   font-size: 18px;
   right: 15px;
 }
+/* line 15, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog {
+  opacity: .6;
+  right: 62px;
+  margin-top: -11px;
+  color: #4A92D0;
+}
 /* line 22, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog.no-cache-filtering {
+  right: 40px;
+  margin-top: -10px;
+}
+/* line 36, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-trash {
   cursor: pointer;
   color: #337ab7;
 }
-/* line 27, ../../src/styles/directives/searchbox.scss */
+/* line 41, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-trash:hover {
   color: #000;
 }
-/* line 37, ../../src/styles/directives/searchbox.scss */
+/* line 51, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper > input {
   font-size: 18px;
   border: none;

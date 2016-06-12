@@ -917,7 +917,9 @@ angular.module('paasb')
                         .css('top', (elBoundingBox.height - 5) + 'px')
                         .css('width', (elBoundingBox.width + paasbUtils.getStyle(el[0], 'padding-right') +
 
-                          paasbUtils.getStyle(el[0], 'padding-left')) + 'px');
+                          paasbUtils.getStyle(el[0], 'padding-left') -
+
+                          paasbUtils.getScrollbarWidth() / 2) + 'px');
 
                     }, 25);
 
@@ -949,48 +951,6 @@ angular.module('paasb')
 
                 },
 
-                getParentByAttribute: function (target, nodeName, attrName) {
-
-                  var looping = true,
-
-                    looped = 0,
-
-                    el = null;
-
-                  target = angular.element(target);
-
-                  while(looping) {
-
-                    if(target[0] === document) {
-
-                      break;
-
-                    }
-
-                    var nName = target[0].nodeName.toLowerCase();
-
-                    if(nName === nodeName.toLowerCase()) {
-
-                      if(target.attr(attrName)) {
-
-                        el = target;
-
-                        looping = false;
-
-                        break;
-
-                      }
-
-                    }
-
-                    target = target.parent();
-
-                  };
-
-                  return el;
-
-                },
-
                 registerEvents: function () {
 
                   angular
@@ -1007,7 +967,7 @@ angular.module('paasb')
 
                   var self = this,
 
-                    target = self.getParentByAttribute(ev.target, 'li', 'data-filter-name'),
+                    target = paasbUtils.getParentByAttribute(ev.target, 'li', 'data-filter-name'),
 
                     filterName = target.attr('data-filter-name');
 
@@ -1105,8 +1065,10 @@ angular.module('paasb')
       '$window',
       'paasbUi',
       'paasbFiltering',
+      'paasbPlaceholders',
       'paasbMemory',
-      function ($timeout, $window, paasbUi, paasbFiltering, paasbMemory) {
+      'paasbUtils',
+      function ($timeout, $window, paasbUi, paasbFiltering, paasbPlaceholders, paasbMemory, paasbUtils) {
 
         return {
 
@@ -1141,6 +1103,8 @@ angular.module('paasb')
                 autoComplete = null,
 
                 Filterer = null,
+
+                Placeholding = null,
 
                 timer = null,
 
@@ -1369,6 +1333,12 @@ angular.module('paasb')
 
                     });
 
+                    $scope.box.on('keyup', function (ev) {
+
+
+
+                    });
+
                     return this;
 
                   },
@@ -1377,17 +1347,23 @@ angular.module('paasb')
 
                     Filterer = new paasbFiltering($scope, config);
 
+                    Placeholding = new paasbPlaceholders($scope, config);
+
                     angular.extend($scope, {
 
                       'Search': {
 
-                        'Filtering': Filterer
+                        'Filtering': Filterer,
+
+                        'Placeholding': Placeholding
 
                       }
 
                     });
 
                     Filterer.addByMemory(params);
+
+                    Placeholding.setup();
 
                     return this;
 
@@ -1397,13 +1373,17 @@ angular.module('paasb')
 
                     var searchInput = angular.element(document.getElementById(this.searchInputId)),
 
+                      searchBox = paasbUtils.getParentByAttribute(searchInput[0], 'div', 'data-search-box'),
+
                       searchWrapper = searchInput.parent();
 
                     paasbUi.extend($scope, {
 
                       'input': searchInput,
 
-                      'wrapper': searchWrapper
+                      'wrapper': searchWrapper,
+
+                      'box': searchBox
 
                     });
 
@@ -2035,6 +2015,162 @@ angular.module('paasb')
 
 /**
  * @ngdoc service
+ * @name paasb.service:paasbPlaceholders
+ * @description
+ * # paasbPlaceholders Services
+ */
+
+angular.module('paasb')
+
+	.factory('paasbPlaceholders', [
+    '$timeout',
+    function ($timeout) {
+
+      var scope = null,
+
+        config = null;
+
+      return function (_scope, _config) {
+
+        scope = _scope;
+
+        config = _config;
+
+        angular.extend(this, {
+
+          'index': 0,
+
+          'position': 0,
+
+          'val': '',
+
+          setup: function () {
+
+            if(config && config.placeholders
+
+              && config.placeholders.length) {
+
+                this.start(this.index);
+
+            } else {
+
+              if(scope.placeholder && typeof scope.placeholder === 'string') {
+
+                scope.input.attr('placeholder', scope.placeholder);
+
+              }
+
+            }
+
+          },
+
+          start: function (index) {
+
+            if(typeof index !== 'undefined') {
+
+              this.index = index;
+
+            } else {
+
+              if(typeof this.index !== 'undefined') {
+
+                this.index = 0;
+
+              } else {
+
+                this.index ++;
+
+              }
+
+            }
+
+            this.position = 0;
+
+            this.val = '';
+
+            this.change();
+
+          },
+
+          change: function (reverse) {
+
+            var self = this;
+
+            if(reverse) {
+
+              $timeout(function () {
+
+                self.val = self.val.slice(0, self.val.length - 1);
+
+                scope.input.attr('placeholder', self.val);
+
+                if(self.val.length) {
+
+                  self.change(true);
+
+                } else {
+
+                  self.position = 0;
+
+                  self.index ++;
+
+                  if(self.index > (config.placeholders.length - 1)) {
+
+                    self.index = 0;
+
+                  }
+
+                  self.change();
+
+                }
+
+              }, 25);
+
+            } else {
+
+              $timeout(function () {
+
+                var val = config.placeholders[self.index],
+
+                  len = val.length;
+
+                self.val += val[self.position];
+
+                scope.input.attr('placeholder', self.val);
+
+                self.position ++;
+
+                if(self.position < len) {
+
+                  self.change();
+
+                } else {
+
+                  $timeout(function () {
+
+                    self.change(true);
+
+                  }, 2000);
+
+                }
+
+
+              }, 75);
+
+            }
+
+          }
+
+        });
+
+      };
+
+	}]);
+
+'use strict';
+
+/**
+ * @ngdoc service
  * @name paasb.service:paasbUi
  * @description
  * # paasbUi Services
@@ -2107,6 +2243,64 @@ angular.module('paasb')
     function ($sce, $window) {
 
 			var paasbUtils = {
+
+				getScrollbarWidth: function () {
+
+					var scrollDiv = document.createElement("div");
+
+					scrollDiv.className = "scrollbar-measure";
+
+					document.body.appendChild(scrollDiv);
+
+					var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+
+					document.body.removeChild(scrollDiv);
+
+					return scrollbarWidth;
+
+				},
+
+	      getParentByAttribute: function (target, nodeName, attrName) {
+
+	        var looping = true,
+
+	          looped = 0,
+
+	          el = null;
+
+	        target = angular.element(target);
+
+	        while(looping) {
+
+	          if(target[0] === document) {
+
+	            break;
+
+	          }
+
+	          var nName = target[0].nodeName.toLowerCase();
+
+	          if(nName === nodeName.toLowerCase()) {
+
+	            if(target.attr(attrName)) {
+
+	              el = target;
+
+	              looping = false;
+
+	              break;
+
+	            }
+
+	          }
+
+	          target = target.parent();
+
+	        };
+
+	        return el;
+
+	      },
 
 				getStyle: function (elem, style) {
 
@@ -2296,11 +2490,11 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('views/directives/searchbox.html',
     "\n" +
-    "<div class=\"paasb-searchbox\">\n" +
+    "<div data-search-box=\"true\" class=\"paasb-searchbox\">\n" +
     "  <paasb-search-box-filtering search=\"Search\" filters=\"paasbSearchBoxFiltering\" ng-if=\"paasbSearchBoxFiltering &amp;&amp; paasbSearchBoxFiltering.length\"></paasb-search-box-filtering>\n" +
     "  <div class=\"paasb-searchbox-wrapper\"><i ng-class=\"{ 'fa-search': !searchParams.query.length, 'fa-trash': ((searchParams.query &amp;&amp; searchParams.query.length) || hasFilters) }\" ng-click=\"handleGarbage();\" class=\"fa\"></i>\n" +
-    "    <paasb-search-box-cache-filter ng-if=\"paasbSearchBoxCacheFilter\"></paasb-search-box-cache-filter>\n" +
-    "    <input type=\"text\" ng-model=\"query\" placeholder=\"{{placeholder}}\" id=\"{{searchInputId}}\"/>\n" +
+    "    <paasb-search-box-cache-filter ng-if=\"paasbSearchBoxCacheFilter\"></paasb-search-box-cache-filter><i ng-class=\"{ 'no-cache-filtering': !paasbSearchBoxCacheFilter }\" class=\"fa fa-cog fa-spin\"></i>\n" +
+    "    <input type=\"text\" ng-model=\"query\" id=\"{{searchInputId}}\"/>\n" +
     "    <paasb-search-box-auto-complete query=\"searchParams.query\" config=\"paasbSearchBoxAutoComplete\" input=\"input\" ng-if=\"autoCompleteEnabled\"></paasb-search-box-auto-complete>\n" +
     "  </div>\n" +
     "</div>"

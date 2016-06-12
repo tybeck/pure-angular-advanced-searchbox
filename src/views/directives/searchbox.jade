@@ -1,4 +1,7 @@
-div(class="paasb-searchbox")
+div(
+  class="paasb-searchbox",
+  data-search-box="true"
+)
   paasb-search-box-filtering(
       search="Search",
       filters="paasbSearchBoxFiltering",
@@ -13,10 +16,13 @@ div(class="paasb-searchbox")
     paasb-search-box-cache-filter(
       ng-if="paasbSearchBoxCacheFilter"
     )
+    i(
+      class="fa fa-cog fa-spin",
+      ng-class="{ 'no-cache-filtering': !paasbSearchBoxCacheFilter }"
+    )
     input(
       type="text",
       ng-model="query",
-      placeholder="{{placeholder}}",
       id="{{searchInputId}}"
     )
     paasb-search-box-auto-complete(

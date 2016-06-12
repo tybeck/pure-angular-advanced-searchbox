@@ -105,7 +105,9 @@ angular.module('paasb')
                         .css('top', (elBoundingBox.height - 5) + 'px')
                         .css('width', (elBoundingBox.width + paasbUtils.getStyle(el[0], 'padding-right') +
 
-                          paasbUtils.getStyle(el[0], 'padding-left')) + 'px');
+                          paasbUtils.getStyle(el[0], 'padding-left') -
+
+                          paasbUtils.getScrollbarWidth() / 2) + 'px');
 
                     }, 25);
 
@@ -137,48 +139,6 @@ angular.module('paasb')
 
                 },
 
-                getParentByAttribute: function (target, nodeName, attrName) {
-
-                  var looping = true,
-
-                    looped = 0,
-
-                    el = null;
-
-                  target = angular.element(target);
-
-                  while(looping) {
-
-                    if(target[0] === document) {
-
-                      break;
-
-                    }
-
-                    var nName = target[0].nodeName.toLowerCase();
-
-                    if(nName === nodeName.toLowerCase()) {
-
-                      if(target.attr(attrName)) {
-
-                        el = target;
-
-                        looping = false;
-
-                        break;
-
-                      }
-
-                    }
-
-                    target = target.parent();
-
-                  };
-
-                  return el;
-
-                },
-
                 registerEvents: function () {
 
                   angular
@@ -195,7 +155,7 @@ angular.module('paasb')
 
                   var self = this,
 
-                    target = self.getParentByAttribute(ev.target, 'li', 'data-filter-name'),
+                    target = paasbUtils.getParentByAttribute(ev.target, 'li', 'data-filter-name'),
 
                     filterName = target.attr('data-filter-name');
 
