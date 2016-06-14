@@ -314,7 +314,35 @@ angular.module('paasb')
 
                     Placeholding.setup();
 
+                    $scope.$emit('onRegisterApi', this.getAPI());
+
                     return this;
+
+                  },
+
+                  getAPI: function () {
+
+                    return({
+
+                      'Filtering': Filterer,
+
+                      'Placeholding': Placeholding,
+
+                      'Loading': {
+
+                        set: function (val) {
+
+                          if(typeof val === 'boolean') {
+
+                            $scope.isLoading = val;
+
+                          }
+
+                        }
+
+                      }
+
+                    });
 
                   },
 

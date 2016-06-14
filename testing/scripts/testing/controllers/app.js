@@ -77,9 +77,15 @@ angular.module('app')
 
       $timeout(function () {
 
-        console.log($scope.sFilters);
+        console.log($scope);
 
       }, 2500);
+
+      $scope.$on('onRegisterApi', function (ev, api) {
+
+        api.Loading.set(true);
+
+      });
 
       $scope.sConfig = {
 

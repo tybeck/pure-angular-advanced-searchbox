@@ -18,6 +18,7 @@ div(
     )
     i(
       class="fa fa-cog fa-spin",
+      ng-if="isLoading",
       ng-class="{ 'no-cache-filtering': !paasbSearchBoxCacheFilter }"
     )
     input(

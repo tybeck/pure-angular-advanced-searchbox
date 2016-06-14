@@ -1365,7 +1365,35 @@ angular.module('paasb')
 
                     Placeholding.setup();
 
+                    $scope.$emit('onRegisterApi', this.getAPI());
+
                     return this;
+
+                  },
+
+                  getAPI: function () {
+
+                    return({
+
+                      'Filtering': Filterer,
+
+                      'Placeholding': Placeholding,
+
+                      'Loading': {
+
+                        set: function (val) {
+
+                          if(typeof val === 'boolean') {
+
+                            $scope.isLoading = val;
+
+                          }
+
+                        }
+
+                      }
+
+                    });
 
                   },
 
@@ -2493,7 +2521,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
     "<div data-search-box=\"true\" class=\"paasb-searchbox\">\n" +
     "  <paasb-search-box-filtering search=\"Search\" filters=\"paasbSearchBoxFiltering\" ng-if=\"paasbSearchBoxFiltering &amp;&amp; paasbSearchBoxFiltering.length\"></paasb-search-box-filtering>\n" +
     "  <div class=\"paasb-searchbox-wrapper\"><i ng-class=\"{ 'fa-search': !searchParams.query.length, 'fa-trash': ((searchParams.query &amp;&amp; searchParams.query.length) || hasFilters) }\" ng-click=\"handleGarbage();\" class=\"fa\"></i>\n" +
-    "    <paasb-search-box-cache-filter ng-if=\"paasbSearchBoxCacheFilter\"></paasb-search-box-cache-filter><i ng-class=\"{ 'no-cache-filtering': !paasbSearchBoxCacheFilter }\" class=\"fa fa-cog fa-spin\"></i>\n" +
+    "    <paasb-search-box-cache-filter ng-if=\"paasbSearchBoxCacheFilter\"></paasb-search-box-cache-filter><i ng-if=\"isLoading\" ng-class=\"{ 'no-cache-filtering': !paasbSearchBoxCacheFilter }\" class=\"fa fa-cog fa-spin\"></i>\n" +
     "    <input type=\"text\" ng-model=\"query\" id=\"{{searchInputId}}\"/>\n" +
     "    <paasb-search-box-auto-complete query=\"searchParams.query\" config=\"paasbSearchBoxAutoComplete\" input=\"input\" ng-if=\"autoCompleteEnabled\"></paasb-search-box-auto-complete>\n" +
     "  </div>\n" +
