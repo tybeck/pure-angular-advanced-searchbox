@@ -39,6 +39,18 @@ angular.module('paasb')
 
             }
 
+          },
+
+          destroy: function () {
+
+            if(placeholding) {
+
+              placeholding.stopAll();
+
+            }
+
+            scope.$destroy();
+
           }
 
         });

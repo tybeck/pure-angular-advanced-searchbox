@@ -7,149 +7,156 @@
  * # paasbPlaceholders Services
  */
 
-angular.module('paasb')
+ angular.module('paasb')
 
-	.factory('paasbPlaceholders', [
-    '$timeout',
-    function ($timeout) {
+ 	.factory('paasbPlaceholders', [
+     '$timeout',
+     function ($timeout) {
 
-      var scope = null,
+       var scope = null,
 
-        config = null;
+         config = null,
 
-      return function (_scope, _config) {
+         timer;
 
-        scope = _scope;
+       return function (_scope, _config) {
 
-        config = _config;
+         scope = _scope;
 
-        angular.extend(this, {
+         config = _config;
 
-          'index': 0,
+         angular.extend(this, {
 
-          'position': 0,
+           'index': 0,
 
-          'val': '',
+           'position': 0,
 
-          setup: function () {
+           'val': '',
 
-            if(config && config.placeholders
+           stopAll: function () {
 
-              && config.placeholders.length) {
+             $timeout.cancel(timer);
 
-                this.start(this.index);
+           },
 
-            } else {
+           setup: function () {
 
-              if(scope.placeholder && typeof scope.placeholder === 'string') {
+             if(config && config.placeholders
 
-                scope.input.attr('placeholder', scope.placeholder);
+               && config.placeholders.length) {
 
-              }
+                 this.start(this.index);
 
-            }
+             } else {
 
-          },
+               if(scope.placeholder && typeof scope.placeholder === 'string') {
 
-          start: function (index) {
+                 scope.input.attr('placeholder', scope.placeholder);
 
-            if(typeof index !== 'undefined') {
+               }
 
-              this.index = index;
+             }
 
-            } else {
+           },
 
-              if(typeof this.index !== 'undefined') {
+           start: function (index) {
 
-                this.index = 0;
+             if(typeof index !== 'undefined') {
 
-              } else {
+               this.index = index;
 
-                this.index ++;
+             } else {
 
-              }
+               if(typeof this.index !== 'undefined') {
 
-            }
+                 this.index = 0;
 
-            this.position = 0;
+               } else {
 
-            this.val = '';
+                 this.index ++;
 
-            this.change();
+               }
 
-          },
+             }
 
-          change: function (reverse) {
+             this.position = 0;
 
-            var self = this;
+             this.val = '';
 
-            if(reverse) {
+             this.change();
 
-              $timeout(function () {
+           },
 
-                self.val = self.val.slice(0, self.val.length - 1);
+           change: function (reverse) {
 
-                scope.input.attr('placeholder', self.val);
+             var self = this;
 
-                if(self.val.length) {
+             if(reverse) {
 
-                  self.change(true);
+               timer = $timeout(function () {
 
-                } else {
+                 self.val = self.val.slice(0, self.val.length - 1);
 
-                  self.position = 0;
+                 scope.input.attr('placeholder', self.val);
 
-                  self.index ++;
+                 if(self.val.length) {
 
-                  if(self.index > (config.placeholders.length - 1)) {
+                   self.change(true);
 
-                    self.index = 0;
+                 } else {
 
-                  }
+                   self.position = 0;
 
-                  self.change();
+                   self.index ++;
 
-                }
+                   if(self.index > (config.placeholders.length - 1)) {
 
-              }, config.placeholderSpeedOutInterval || 25);
+                     self.index = 0;
 
-            } else {
+                   }
 
-              $timeout(function () {
+                   self.change();
 
-                var val = config.placeholders[self.index],
+                 }
 
-                  len = val.length;
+               }, config.placeholderSpeedOutInterval || 25);
 
-                self.val += val[self.position];
+             } else {
 
-                scope.input.attr('placeholder', self.val);
+               timer = $timeout(function () {
 
-                self.position ++;
+                 var val = config.placeholders[self.index],
 
-                if(self.position < len) {
+                   len = val.length;
 
-                  self.change();
+                 self.val += val[self.position];
 
-                } else {
+                 scope.input.attr('placeholder', self.val);
 
-                  $timeout(function () {
+                 self.position ++;
 
-                    self.change(true);
+                 if(self.position < len) {
 
-                  }, config.placeholderInterval || 2000);
+                   self.change();
 
-                }
+                 } else {
 
+                   timer = $timeout(function () {
 
-              }, config.placeholderSpeedInInterval || 75);
+                     self.change(true);
 
-            }
+                   }, config.placeholderInterval || 2000);
 
-          }
+                 }
 
-        });
+               }, config.placeholderSpeedInInterval || 75);
 
-      };
+             }
 
-	}]);
+           }
+
+         });
+
+       };
+
+ 	}]);
