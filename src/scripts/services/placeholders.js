@@ -111,7 +111,7 @@ angular.module('paasb')
 
                 }
 
-              }, 25);
+              }, config.placeholderSpeedOutInterval || 25);
 
             } else {
 
@@ -137,12 +137,12 @@ angular.module('paasb')
 
                     self.change(true);
 
-                  }, 2000);
+                  }, config.placeholderInterval || 2000);
 
                 }
 
 
-              }, 75);
+              }, config.placeholderSpeedInInterval || 75);
 
             }
 

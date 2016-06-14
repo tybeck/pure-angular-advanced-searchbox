@@ -19,12 +19,6 @@ angular.module('app')
 
       };
 
-      $scope.$watch('sOptions', function (__new) {
-
-        console.log(__new);
-
-      }, true);
-
       $scope.sFilters = [
         {
           'name': 'example',
@@ -83,7 +77,15 @@ angular.module('app')
 
       $scope.$on('onRegisterApi', function (ev, api) {
 
-        api.Loading.set(true);
+        $scope.$watch('sOptions', function (__new) {
+
+          if(typeof __new !== 'undefined' && !_.isEmpty(__new)) {
+
+            console.log(__new);
+
+          }
+
+        }, true);
 
       });
 
@@ -101,7 +103,11 @@ angular.module('app')
 
         'updateOnlyByEnterKey': true,
 
-        'placeholderInterval': 1500,
+        'placeholderInterval': 3000,
+
+        'placeholderSpeedOutInterval': 15,
+
+        'placeholderSpeedInInterval': 100,
 
         'autoCompleteUrl': 'http://10.61.71.33:7010/search/suggestions?q={"query":"{{query}}"}&use=autocomplete',
 

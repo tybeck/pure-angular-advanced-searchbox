@@ -12,12 +12,13 @@ angular.module('paasb')
     .directive('paasbSearchBox', [
       '$timeout',
       '$window',
+      'paasbApi',
       'paasbUi',
       'paasbFiltering',
       'paasbPlaceholders',
       'paasbMemory',
       'paasbUtils',
-      function ($timeout, $window, paasbUi, paasbFiltering, paasbPlaceholders, paasbMemory, paasbUtils) {
+      function ($timeout, $window, paasbApi, paasbUi, paasbFiltering, paasbPlaceholders, paasbMemory, paasbUtils) {
 
         return {
 
@@ -322,27 +323,7 @@ angular.module('paasb')
 
                   getAPI: function () {
 
-                    return({
-
-                      'Filtering': Filterer,
-
-                      'Placeholding': Placeholding,
-
-                      'Loading': {
-
-                        set: function (val) {
-
-                          if(typeof val === 'boolean') {
-
-                            $scope.isLoading = val;
-
-                          }
-
-                        }
-
-                      }
-
-                    });
+                    return(new paasbApi($scope, Filterer, Placeholding));
 
                   },
 

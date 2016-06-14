@@ -1063,12 +1063,13 @@ angular.module('paasb')
     .directive('paasbSearchBox', [
       '$timeout',
       '$window',
+      'paasbApi',
       'paasbUi',
       'paasbFiltering',
       'paasbPlaceholders',
       'paasbMemory',
       'paasbUtils',
-      function ($timeout, $window, paasbUi, paasbFiltering, paasbPlaceholders, paasbMemory, paasbUtils) {
+      function ($timeout, $window, paasbApi, paasbUi, paasbFiltering, paasbPlaceholders, paasbMemory, paasbUtils) {
 
         return {
 
@@ -1373,27 +1374,7 @@ angular.module('paasb')
 
                   getAPI: function () {
 
-                    return({
-
-                      'Filtering': Filterer,
-
-                      'Placeholding': Placeholding,
-
-                      'Loading': {
-
-                        set: function (val) {
-
-                          if(typeof val === 'boolean') {
-
-                            $scope.isLoading = val;
-
-                          }
-
-                        }
-
-                      }
-
-                    });
+                    return(new paasbApi($scope, Filterer, Placeholding));
 
                   },
 
@@ -1565,6 +1546,55 @@ angular.module('paasb')
     });
 
   }]);
+
+'use strict';
+
+/**
+ * @ngdoc service
+ * @name paasb.service:paasbApi
+ * @description
+ * # paasbApi Services
+ */
+
+angular.module('paasb')
+
+	.factory('paasbApi', [
+    '$q',
+		'$http',
+    'paasbUi',
+    function ($q, $http, paasbUi) {
+
+  		return (function (scope, filtering, placeholding) {
+
+        return({
+
+          'Filtering': filtering,
+
+          'Placeholding': placeholding,
+
+          'Loading': {
+
+            set: function (val) {
+
+              if(typeof val === 'boolean') {
+
+                paasbUi.extend(scope, {
+
+                  'isLoading': val
+
+                });
+
+              }
+
+            }
+
+          }
+
+        });
+
+      });
+
+	}]);
 
 'use strict';
 
@@ -2152,7 +2182,7 @@ angular.module('paasb')
 
                 }
 
-              }, 25);
+              }, config.placeholderSpeedOutInterval || 25);
 
             } else {
 
@@ -2178,12 +2208,12 @@ angular.module('paasb')
 
                     self.change(true);
 
-                  }, 2000);
+                  }, config.placeholderInterval || 2000);
 
                 }
 
 
-              }, 75);
+              }, config.placeholderSpeedInInterval || 75);
 
             }
 
