@@ -33,7 +33,8 @@ angular.module('app')
         }, {
           'name': 'vendor_desc',
           'displayName': 'Vendor Description',
-          'root': 'Product'
+          'root': 'Product',
+          'validation': 'blah'
         }, {
           'name': 'vendor_abbr',
           'displayName': 'Vendor Abbreviation',

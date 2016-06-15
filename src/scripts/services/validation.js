@@ -47,17 +47,29 @@ angular.module('paasb')
 
                 value = validator[1];
 
-              if(self[name](filter.value, value)) {
+							if(!self[name]) {
 
-                passed.push({
+								passed.push({
 
-                  'name': name,
+									'name': name
 
-                  'value': value
+								});
 
-                });
+							} else {
 
-              }
+								if(self[name](filter.value, value)) {
+
+	                passed.push({
+
+	                  'name': name,
+
+	                  'value': value
+
+	                });
+
+	              }
+
+							}
 
             });
 
