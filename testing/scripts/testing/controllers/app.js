@@ -42,6 +42,7 @@ angular.module('app')
         }, {
           'name': 'vendor_sku',
           'displayName': 'Vendor SKU',
+          'multi': true,
           'root': 'Product'
         }, {
           'name': 'color',

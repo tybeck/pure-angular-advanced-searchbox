@@ -10,6 +10,13 @@
         ]
       },
       {
+        "name": "Does not contain",
+        "key": "doesNotContain",
+        "notAllowed": [
+          "restrictedSuggestedValues"
+        ]
+      },
+      {
         "name": "Is Equal To",
         "key": "isEqualTo"
       },
@@ -24,6 +31,10 @@
       {
         "name": "Ends with",
         "key": "endsWith"
+      },
+      {
+        "name": "Similiarity",
+        "key": "similiarity"
       }
     ]
   }
