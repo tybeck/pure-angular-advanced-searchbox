@@ -80,11 +80,7 @@ angular.module('app')
 
         $scope.$watch('sOptions', function (__new) {
 
-          if(typeof __new !== 'undefined' && !_.isEmpty(__new)) {
-
-            console.log(__new);
-
-          }
+          console.log(__new);
 
         }, true);
 
@@ -110,9 +106,9 @@ angular.module('app')
 
         'placeholderSpeedInInterval': 100,
 
-        'autoCompleteUrl': 'http://10.61.71.33:7010/search/suggestions?q={"query":"{{query}}"}&use=autocomplete',
+        'autoCompleteUrl': 'http://localhost:7010/search/suggestions?q={"query":"{{query}}"}&use=autocomplete&save=true',
 
-        'GENDER': 'http://demo0993385.mockable.io/gender'
+        'GENDER': 'http://localhost:7010/gender'
 
       };
 
