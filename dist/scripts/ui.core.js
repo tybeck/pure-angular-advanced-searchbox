@@ -458,17 +458,13 @@ angular.module('paasb')
                       }))
                         .then(function (data) {
 
-                          if(data && data.length) {
+                          paasbUi.extend($scope, {
 
-                            paasbUi.extend($scope, {
+                            'autoSuggestions': data,
 
-                              'autoSuggestions': data,
+                            'showSuggestions': (data && data.length) ? true : false
 
-                              'showSuggestions': true
-
-                            });
-
-                          }
+                          });
 
                           $scope.position();
 
