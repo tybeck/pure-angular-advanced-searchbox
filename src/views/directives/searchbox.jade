@@ -10,7 +10,7 @@ div(
   div(class="paasb-searchbox-wrapper")
     i(
       class="fa",
-      ng-class="{ 'fa-search': !searchParams.query.length, 'fa-trash': ((searchParams.query && searchParams.query.length) || hasFilters) }",
+      ng-class="{ 'fa-search': !query.length, 'fa-trash': ((query && query.length) || hasFilters) }",
       ng-click="handleGarbage();"
     )
     paasb-search-box-cache-filter(
