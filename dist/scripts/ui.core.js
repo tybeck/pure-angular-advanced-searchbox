@@ -981,9 +981,17 @@ angular.module('paasb')
 
                       } else {
 
-                        filter.notFiltered = !filter.notFiltered;
+                        if(!filter.multi) {
 
-                        if(!filter.notFiltered) {
+                          filter.notFiltered = !filter.notFiltered;
+
+                          if(!filter.notFiltered) {
+                            
+                            self.addFilterAndClose(filter);
+
+                          }
+
+                        } else {
 
                           self.addFilterAndClose(filter);
 

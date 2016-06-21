@@ -38,7 +38,8 @@ angular.module('app')
         }, {
           'name': 'vendor_abbr',
           'displayName': 'Vendor Abbreviation',
-          'root': 'Product'
+          'root': 'Product',
+          'multi': true
         }, {
           'name': 'vendor_sku',
           'displayName': 'Vendor SKU',
