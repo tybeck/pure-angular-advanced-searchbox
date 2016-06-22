@@ -10,6 +10,55 @@ div.paasb-searchbox {
 
   div.paasb-searchbox-added-filter {
 
+    float: left;
+
+    div.paasb-searchbox-added-filter-contents {
+      background: #FFF;
+      padding: 5px 6px 5px 6px;
+      border-radius: 6px;
+      margin-right: 10px;
+      margin-top: 8px;
+      float: left;
+    }
+
+    div.paasb-searchbox-added-filter-operator {
+
+      background: #FFF;
+      padding: 5px 6px 5px 6px;
+      border-radius: 6px;
+      margin-right: 10px;
+      margin-top: 8px;
+      float: left;
+
+      span {
+
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.5);
+        font-weight: bold;
+        padding-top: 1px;
+        padding-bottom: 1px;
+        padding-left: 2px;
+        padding-right: 2px;
+        display: block;
+
+        i {
+
+          &.fa-arrow-left {
+            margin-right: 5px;
+            color: rgba(0, 0, 0, 0.75);
+          }
+
+          &.fa-arrow-right {
+            margin-left: 5px;
+            color: rgba(0, 0, 0, 0.75);
+          }
+
+        }
+
+      }
+
+    }
+
     &.child {
 
       span {
@@ -21,13 +70,6 @@ div.paasb-searchbox {
       }
 
     }
-
-    float: left;
-    background: #FFF;
-    padding: 5px 6px 5px 6px;
-    border-radius: 6px;
-    margin-right: 10px;
-    margin-top: 8px;
 
     span {
 

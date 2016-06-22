@@ -40,6 +40,8 @@ angular.module('paasb')
 
               'paasbSearchBoxCacheFilter': '=?',
 
+              'paasbSearchBoxEnableFilteringOperators': '=?',
+
               'placeholder': '@'
 
             },

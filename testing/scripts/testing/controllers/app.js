@@ -59,6 +59,10 @@ angular.module('app')
           'multi': true,
           'root': 'Product'
         }, {
+          'name': 'product_type',
+          'displayName': 'Product Type',
+          'root': 'Product'
+        }, {
           'name': 'upc',
           'displayName': 'UPC',
           'child': 'Size',

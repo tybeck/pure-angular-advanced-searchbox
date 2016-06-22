@@ -34,6 +34,8 @@ angular.module('paasb')
 
               'toValue': '=',
 
+              'operators': '='
+
             },
 
             controller: function ($scope, $element, $attrs) {
@@ -42,11 +44,25 @@ angular.module('paasb')
 
                 filter = $scope.filter,
 
+                operators = $scope.operators,
+
                 config = null,
 
                 input;
 
               filter.loading = false;
+
+              if(operators) {
+
+                if(Filtering.getFilterCount() > 1) {
+
+                  $scope.hasOperator = true;
+
+                  console.log('Need\'s Operator');
+
+                }
+
+              }
 
               if(typeof filter.suggestedValues === 'string') {
 

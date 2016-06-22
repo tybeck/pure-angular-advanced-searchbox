@@ -36,6 +36,14 @@
         "name": "Similiarity",
         "key": "similiarity"
       }
+    ],
+    "OPERATORS": [
+      {
+        "name": "AND",
+        "selected": true
+      }, {
+        "name": "OR"
+      }
     ]
   }
 }

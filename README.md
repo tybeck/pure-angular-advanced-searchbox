@@ -14,6 +14,12 @@
 &nbsp;&nbsp;&nbsp;
 ![Beerpay](https://img.shields.io/beerpay/tybeck/pure-angular-advanced-searchbox.svg?maxAge=2592000)
 
+### TODOs
+
+- [ ] Add grouping around conditionals
+- [ ] Add operators (In Progress)
+- [ ] Build query (SOLR, SQL)
+
 ### [View Demo Here](http://tybeck.github.io/pure-angular-advanced-searchbox/)
 
 ### Usage

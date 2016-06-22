@@ -1,44 +1,53 @@
-div(
-  class="paasb-searchbox-added-filter",
-  ng-click="openFilter();",
-  ng-class="{ 'child': filter.child, 'root': filter.root }"
-)
-  span(
-    class="filter-name",
-    ng-bind="filter.displayName + ':'"
+div(class="paasb-searchbox-added-filter")
+  div(
+    ng-if="hasOperator",
+    class="paasb-searchbox-added-filter-operator"
   )
-  span(
-    class="selector-type",
-    ng-bind="filter.selector.name",
-    ng-if="filter.selector"
+    span
+      i(class="fa fa-arrow-left")
+      | AND
+      i(class="fa fa-arrow-right")
+  div(
+    class="paasb-searchbox-added-filter-contents"
+    ng-click="openFilter();",
+    ng-class="{ 'child': filter.child, 'root': filter.root }"
   )
-  span(
-    ng-bind="filter.value",
-    ng-hide="filter.editing",
-    class="filter-value"
-  )
-  input(
-    type="text", 
-    ng-model="value",
-    ng-hide="!filter.editing"
-  )
-  span(ng-hide="!filter.loading") Loading...
-  paasb-search-box-filter-selectors(
-    filtering="filtering",
-    filter="filter"
-  )
-  div(ng-if="filter.suggestedValues")
-    ul(
-      ng-hide="!filter.editing",
-      paasb-auto-size="filter",
-      ng-if="!filter.loading"
+    span(
+      class="filter-name",
+      ng-bind="filter.displayName + ':'"
     )
-      li(
-        ng-repeat="suggestion in filter.suggestedValues | suggest: filter.value:filter"
-        ng-click="takeSuggestion(suggestion.value)"
+    span(
+      class="selector-type",
+      ng-bind="filter.selector.name",
+      ng-if="filter.selector"
+    )
+    span(
+      ng-bind="filter.value",
+      ng-hide="filter.editing",
+      class="filter-value"
+    )
+    input(
+      type="text", 
+      ng-model="value",
+      ng-hide="!filter.editing"
+    )
+    span(ng-hide="!filter.loading") Loading...
+    paasb-search-box-filter-selectors(
+      filtering="filtering",
+      filter="filter"
+    )
+    div(ng-if="filter.suggestedValues")
+      ul(
+        ng-hide="!filter.editing",
+        paasb-auto-size="filter",
+        ng-if="!filter.loading"
       )
-        span(ng-bind-html="Utils.trust(suggestion.modified)")
-  i(
-    class="fa fa-times",
-    ng-click="destroy();"
-  )
+        li(
+          ng-repeat="suggestion in filter.suggestedValues | suggest: filter.value:filter"
+          ng-click="takeSuggestion(suggestion.value)"
+        )
+          span(ng-bind-html="Utils.trust(suggestion.modified)")
+    i(
+      class="fa fa-times",
+      ng-click="destroy();"
+    )

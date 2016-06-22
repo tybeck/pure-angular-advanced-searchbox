@@ -57,6 +57,12 @@ angular.module('paasb')
 
 					},
 
+					getFilterCount: function () {
+
+						return scope.addedFilters.length;
+
+					},
+
 					watch: function (fn) {
 
 						this.callback = fn;
@@ -188,13 +194,17 @@ angular.module('paasb')
 
             var childScope = scope.$new(true),
 
-							clonedFilter = _.clone(filter);
+							clonedFilter = _.clone(filter),
+
+							operators = scope.paasbSearchBoxEnableFilteringOperators;
 
 						angular.extend(childScope, {
 
               'filter': clonedFilter,
 
 							'filtering': this,
+
+							'operators': operators,
 
 							'toValue': (options && options.value) ?
 
@@ -204,7 +214,9 @@ angular.module('paasb')
 
 						var compiledElement = $compile('<paasb-search-box-added-filter ' +
 
-							'filter="filter" filtering="filtering" to-value="toValue" />')(childScope);
+							'filter="filter" filtering="filtering" ' +
+
+							'operators="operators" to-value="toValue" />')(childScope);
 
             this
 							.getFilterContainer()

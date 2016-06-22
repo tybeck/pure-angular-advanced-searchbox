@@ -10,7 +10,7 @@ angular.module('paasb', [
 
 angular.module('paasb.config', [])
 
-.constant('FILTERS', {SELECTORS:[{name:'Contains',key:'contains',selected:true,notAllowed:['restrictedSuggestedValues']},{name:'Does not contain',key:'doesNotContain',notAllowed:['restrictedSuggestedValues']},{name:'Is Equal To',key:'isEqualTo'},{name:'Is Not Equal To',key:'isNotEqualTo'},{name:'Starts with',key:'startsWith'},{name:'Ends with',key:'endsWith'},{name:'Similiarity',key:'similiarity'}]})
+.constant('FILTERS', {SELECTORS:[{name:'Contains',key:'contains',selected:true,notAllowed:['restrictedSuggestedValues']},{name:'Does not contain',key:'doesNotContain',notAllowed:['restrictedSuggestedValues']},{name:'Is Equal To',key:'isEqualTo'},{name:'Is Not Equal To',key:'isNotEqualTo'},{name:'Starts with',key:'startsWith'},{name:'Ends with',key:'endsWith'},{name:'Similiarity',key:'similiarity'}],OPERATORS:[{name:'AND',selected:true},{name:'OR'}]})
 
 ;
 'use strict';
@@ -136,6 +136,8 @@ angular.module('paasb')
 
               'toValue': '=',
 
+              'operators': '='
+
             },
 
             controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
@@ -144,11 +146,25 @@ angular.module('paasb')
 
                 filter = $scope.filter,
 
+                operators = $scope.operators,
+
                 config = null,
 
                 input;
 
               filter.loading = false;
+
+              if(operators) {
+
+                if(Filtering.getFilterCount() > 1) {
+
+                  $scope.hasOperator = true;
+
+                  console.log('Need\'s Operator');
+
+                }
+
+              }
 
               if(typeof filter.suggestedValues === 'string') {
 
@@ -1099,6 +1115,8 @@ angular.module('paasb')
 
               'paasbSearchBoxCacheFilter': '=?',
 
+              'paasbSearchBoxEnableFilteringOperators': '=?',
+
               'placeholder': '@'
 
             },
@@ -1725,6 +1743,12 @@ angular.module('paasb')
 
 					},
 
+					getFilterCount: function () {
+
+						return scope.addedFilters.length;
+
+					},
+
 					watch: function (fn) {
 
 						this.callback = fn;
@@ -1856,13 +1880,17 @@ angular.module('paasb')
 
             var childScope = scope.$new(true),
 
-							clonedFilter = _.clone(filter);
+							clonedFilter = _.clone(filter),
+
+							operators = scope.paasbSearchBoxEnableFilteringOperators;
 
 						angular.extend(childScope, {
 
               'filter': clonedFilter,
 
 							'filtering': this,
+
+							'operators': operators,
 
 							'toValue': (options && options.value) ?
 
@@ -1872,7 +1900,9 @@ angular.module('paasb')
 
 						var compiledElement = $compile('<paasb-search-box-added-filter ' +
 
-							'filter="filter" filtering="filtering" to-value="toValue" />')(childScope);
+							'filter="filter" filtering="filtering" ' +
+
+							'operators="operators" to-value="toValue" />')(childScope);
 
             this
 							.getFilterContainer()
@@ -2537,14 +2567,17 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('views/directives/searchbox-added-filter.html',
     "\n" +
-    "<div ng-click=\"openFilter();\" ng-class=\"{ 'child': filter.child, 'root': filter.root }\" class=\"paasb-searchbox-added-filter\"><span ng-bind=\"filter.displayName + ':'\" class=\"filter-name\"></span><span ng-bind=\"filter.selector.name\" ng-if=\"filter.selector\" class=\"selector-type\"></span><span ng-bind=\"filter.value\" ng-hide=\"filter.editing\" class=\"filter-value\"></span>\n" +
-    "  <input type=\"text\" ng-model=\"value\" ng-hide=\"!filter.editing\"/><span ng-hide=\"!filter.loading\">Loading...</span>\n" +
-    "  <paasb-search-box-filter-selectors filtering=\"filtering\" filter=\"filter\"></paasb-search-box-filter-selectors>\n" +
-    "  <div ng-if=\"filter.suggestedValues\">\n" +
-    "    <ul ng-hide=\"!filter.editing\" paasb-auto-size=\"filter\" ng-if=\"!filter.loading\">\n" +
-    "      <li ng-repeat=\"suggestion in filter.suggestedValues | suggest: filter.value:filter\" ng-click=\"takeSuggestion(suggestion.value)\"><span ng-bind-html=\"Utils.trust(suggestion.modified)\"></span></li>\n" +
-    "    </ul>\n" +
-    "  </div><i ng-click=\"destroy();\" class=\"fa fa-times\"></i>\n" +
+    "<div class=\"paasb-searchbox-added-filter\">\n" +
+    "  <div ng-if=\"hasOperator\" class=\"paasb-searchbox-added-filter-operator\"><span><i class=\"fa fa-arrow-left\"></i>AND<i class=\"fa fa-arrow-right\"></i></span></div>\n" +
+    "  <div ng-click=\"openFilter();\" ng-class=\"{ 'child': filter.child, 'root': filter.root }\" class=\"paasb-searchbox-added-filter-contents\"><span ng-bind=\"filter.displayName + ':'\" class=\"filter-name\"></span><span ng-bind=\"filter.selector.name\" ng-if=\"filter.selector\" class=\"selector-type\"></span><span ng-bind=\"filter.value\" ng-hide=\"filter.editing\" class=\"filter-value\"></span>\n" +
+    "    <input type=\"text\" ng-model=\"value\" ng-hide=\"!filter.editing\"/><span ng-hide=\"!filter.loading\">Loading...</span>\n" +
+    "    <paasb-search-box-filter-selectors filtering=\"filtering\" filter=\"filter\"></paasb-search-box-filter-selectors>\n" +
+    "    <div ng-if=\"filter.suggestedValues\">\n" +
+    "      <ul ng-hide=\"!filter.editing\" paasb-auto-size=\"filter\" ng-if=\"!filter.loading\">\n" +
+    "        <li ng-repeat=\"suggestion in filter.suggestedValues | suggest: filter.value:filter\" ng-click=\"takeSuggestion(suggestion.value)\"><span ng-bind-html=\"Utils.trust(suggestion.modified)\"></span></li>\n" +
+    "      </ul>\n" +
+    "    </div><i ng-click=\"destroy();\" class=\"fa fa-times\"></i>\n" +
+    "  </div>\n" +
     "</div>"
   );
 
