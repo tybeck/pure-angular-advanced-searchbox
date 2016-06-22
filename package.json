@@ -1,6 +1,6 @@
 {
   "name": "pure-angular-advanced-searchbox",
-  "version": "1.1.31",
+  "version": "1.1.32",
   "description": "Pure angular-based advanced search",
   "main": "Gruntfile.js",
   "scripts": {

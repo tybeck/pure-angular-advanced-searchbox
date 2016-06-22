@@ -194,6 +194,11 @@ $scope.sConfig = {
       <td>Should multiple search filters of the same key allowed? Default is <b>false</b></td>
       <td>boolean</td>
     </tr>
+        <tr>
+      <td>validation</td>
+      <td>Provides validation to filters; only allowing updates to searchbox when correct inputs are entered.</td>
+      <td>string</td>
+    </tr>
     <tr>
       <td>suggestedValues</td>
       <td>An array of suggested search values, e.g. ['A', 'B', 'C', 'D'], can take a config from search configuration, url, or an array</td>
@@ -227,6 +232,23 @@ $scope.sConfig = {
   </tbody>
 </table>
 
+### Available Search Validations
+
+- Validation providers are separated with a space between them (`min=3 email`).  If a validation provider is given that is unknown to `paasb`; it will be ignored.  Custom validator's can be written.
+
+```json
+{
+	"validation": "length=12 email"
+}
+```
+
+- [x] Length `length=3` String Length must be exactly **X** characters.
+- [x] Min `min=3` String Length must be at least **X** characters.
+- [x] Max `max=6` String Length must be under **X** characters.
+- [x] Email `email` Must match a valid e-mail address format.
+- [x] Phone `phone` Must match a valid phone number format.
+- [x] Between `between(3,6)`duplicates min and max functionality.
+- [x] Numeric `numeric` Is this a numeric value?
 
 ### Available Search Configuration Properties
 
