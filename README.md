@@ -20,6 +20,10 @@
 - [ ] Add operators (In Progress)
 - [ ] Build query (SOLR, SQL)
 
+### Screenshots
+
+<img src="img/example1.png" alt="Example 1" />
+
 ### [View Demo Here](http://tybeck.github.io/pure-angular-advanced-searchbox/)
 
 ### Usage
