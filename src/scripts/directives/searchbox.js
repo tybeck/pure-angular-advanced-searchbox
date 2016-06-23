@@ -181,6 +181,14 @@ angular.module('paasb')
 
                     }
 
+                    if($scope.paasbSearchBoxConfig
+
+                      && $scope.paasbSearchBoxConfig.store) {
+
+                        $scope.paasbSearchBoxCacheFilter = true;
+
+                    }
+
                     params = $scope.searchParams;
 
                     config = $scope.paasbSearchBoxConfig;

@@ -32,9 +32,13 @@ angular.module('paasb')
 
                 handleCache: function () {
 
-                  $scope.cacheActive = !$scope.cacheActive;
+                  if(!$scope.paasbSearchBoxCacheFilterPermanent) {
 
-                  paasbMemory.getAndSet('cache', $scope.cacheActive);
+                    $scope.cacheActive = !$scope.cacheActive;
+
+                    paasbMemory.getAndSet('cache', $scope.cacheActive);
+
+                  }
 
                 }
 

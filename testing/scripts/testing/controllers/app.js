@@ -96,7 +96,7 @@ angular.module('app')
 
         'delay': 1000,
 
-        'store': true,
+        // 'store': true,
 
         'placeholders': [
           'Enter your query here...',

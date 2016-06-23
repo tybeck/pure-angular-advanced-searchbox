@@ -641,9 +641,13 @@ angular.module('paasb')
 
                 handleCache: function () {
 
-                  $scope.cacheActive = !$scope.cacheActive;
+                  if(!$scope.paasbSearchBoxCacheFilterPermanent) {
 
-                  paasbMemory.getAndSet('cache', $scope.cacheActive);
+                    $scope.cacheActive = !$scope.cacheActive;
+
+                    paasbMemory.getAndSet('cache', $scope.cacheActive);
+
+                  }
 
                 }
 
@@ -1253,6 +1257,14 @@ angular.module('paasb')
                     if(!this.shouldStore()) {
 
                       paasbMemory.removeAll();
+
+                    }
+
+                    if($scope.paasbSearchBoxConfig
+
+                      && $scope.paasbSearchBoxConfig.store) {
+
+                        $scope.paasbSearchBoxCacheFilter = true;
 
                     }
 
