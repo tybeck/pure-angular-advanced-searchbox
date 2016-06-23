@@ -22,7 +22,7 @@
 
 ### Screenshots
 
-<img src="img/example1.png" alt="Example 1" />
+<img src="img/example1-animation.gif" alt="Example 1" />
 
 ### [View Demo Here](http://tybeck.github.io/pure-angular-advanced-searchbox/)
 
