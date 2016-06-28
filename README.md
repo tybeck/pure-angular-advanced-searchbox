@@ -19,6 +19,8 @@
 - [ ] Add grouping around conditionals
 - [x] Add operators (In Progress)
 - [ ] Build query (SOLR, SQL)
+- [ ] Drag and drop filters into different positions.
+- [ ] Maybe drag and drop fitlers into trash can?
 
 ### Screenshots
 
