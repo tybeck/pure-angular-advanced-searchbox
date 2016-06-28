@@ -14,13 +14,15 @@
 &nbsp;&nbsp;&nbsp;
 ![Beerpay](https://img.shields.io/beerpay/tybeck/pure-angular-advanced-searchbox.svg?maxAge=2592000)
 
+##### Pure Angular Advanced Search Box is an implementation to add advanced searching capabilities into a reusable UI to help build parameters based off of filters, queries and operators to send off to a search API.
+
 ### TODOs
 
 - [ ] Add grouping around conditionals
 - [x] Add operators (In Progress)
 - [ ] Build query (SOLR, SQL)
 - [ ] Drag and drop filters into different positions.
-- [ ] Maybe drag and drop fitlers into trash can?
+- [ ] Maybe drag and drop filters into trash can?
 
 ### Screenshots
 
