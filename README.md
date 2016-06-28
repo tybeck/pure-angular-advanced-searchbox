@@ -17,7 +17,7 @@
 ### TODOs
 
 - [ ] Add grouping around conditionals
-- [ ] Add operators (In Progress)
+- [x] Add operators (In Progress)
 - [ ] Build query (SOLR, SQL)
 
 ### Screenshots
