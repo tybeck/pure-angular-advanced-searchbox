@@ -1,0 +1,181 @@
+'use strict';
+
+/**
+ * @ngdoc directive
+ * @name paasb.directive:paasbSearchBoxFilterOperators
+ * @description
+ * # Implementation of paasbSearchBoxFilterOperators
+ */
+
+angular.module('paasb')
+
+    .directive('paasbSearchBoxFilterOperators', [
+      'FILTERS',
+      function (FILTERS) {
+
+        return {
+
+            'restrict': 'E',
+
+            'replace': true,
+
+            'templateUrl': 'views/directives/searchbox-filter-operators.html',
+
+            'require': '^paasbSearchBoxAddedFilter',
+
+            'scope': {
+
+              'filtering': '=',
+
+              'filter': '='
+
+            },
+
+            controller: function ($scope, $element, $attrs) {
+
+              var Filtering = $scope.filtering,
+
+                operators = _.cloneDeep(FILTERS.OPERATORS),
+
+                filter = $scope.filter;
+
+              if(Filtering.getFilterCount() > 1) {
+
+                $scope.hasOperator = true;
+
+                $scope.autoSizeElement = $element;
+
+                angular.extend($scope, {
+
+                  'availableOperators': operators,
+
+                  'showOperators': false,
+
+                  openOperators: function () {
+
+                    $scope.showOperators = !$scope.showOperators;
+
+                    $scope.reAutoSize();
+
+                  },
+
+                  takeOperator: function (operator) {
+
+                    angular.forEach(operators, function (availableOperator) {
+
+                      availableOperator.selected = false;
+
+                    });
+
+                    $scope.operator = operator;
+
+                    Filtering.addOperatorToFilter(operator, filter);
+
+                    operator.selected = true;
+
+                  },
+
+                  takeOperatorByName: function (operatorName) {
+
+                    angular.forEach(operators, function (availableOperator) {
+
+                      if(availableOperator.name !== operatorName) {
+
+                        availableOperator.selected = false;
+
+                      } else {
+
+                        availableOperator.selected = true;
+
+                        $scope.operator = availableOperator;
+
+                      }
+
+                    });
+
+                  },
+
+                  setDefaultOperator: function () {
+
+                    var operatorByFilter = Filtering.getOperatorByFilterIndex(filter);
+
+                    if(operatorByFilter === null) {
+
+                      if(!filter.operator) {
+
+                        angular.forEach(operators, function (availableOperator) {
+
+                          if(availableOperator.selected) {
+
+                            $scope.operator = availableOperator;
+
+                          }
+
+                        });
+
+                        if(!filter.selector && operators &&
+
+                          operators.length) {
+
+                            var operator = operators[0];
+
+                            operator.selected = true;
+
+                            $scope.operator = operator;
+
+                        }
+
+                      } else {
+
+                        angular.forEach(operators, function (availableOperator) {
+
+                          availableOperator.selected = (availableOperator.key === filter.selector.key);
+
+                        });
+
+                      }
+
+                    } else {
+
+                      this.takeOperatorByName(operatorByFilter);
+
+                    }
+
+                    return $scope;
+
+                  },
+
+                  registerOperator: function () {
+
+                    Filtering.registerOperator($scope);
+
+                    return $scope;
+
+                  },
+
+                  addOperatorToFilter: function () {
+
+                    if(!Filtering.hasOperatorAlready(filter)) {
+
+                      Filtering.addOperatorToFilter($scope.operator, filter, true);
+
+                    }
+
+                    return $scope;
+
+                  }
+
+                });
+
+                $scope
+                  .setDefaultOperator()
+                  .registerOperator()
+                  .addOperatorToFilter();
+
+              }
+
+            }
+
+        };
+
+    }]);

@@ -22,25 +22,37 @@ angular.module('paasb')
 
             controller: function ($scope, $element, $attrs) {
 
-              var filter = null;
+              var filter = null,
+
+                autoSizeElement = $parse($attrs.paasbAutoSizeElement)($scope),
+
+                autoSizeBoundingBox = $parse($attrs.paasbAutoSizeBoundingBox)($scope);
 
               $scope.reAutoSize = function () {
 
                 var filterSelectorsHeight = 0;
 
+                if(autoSizeBoundingBox && autoSizeBoundingBox.length) {
+
+                  autoSizeBoundingBox = autoSizeBoundingBox[0];
+
+                }
+
                 $timeout(function () {
 
                   var searchInput = filter.element.find('input')[0],
 
-                    bounding = searchInput.getBoundingClientRect(),
+                    boundingElement = autoSizeBoundingBox || searchInput,
+
+                    bounding = boundingElement.getBoundingClientRect(),
 
                     boundingParent = filter.element[0].getBoundingClientRect(),
 
                     left = bounding.left;
 
-                  if(filter.hasFilterSelectors) {
+                  if(autoSizeElement) {
 
-                    var selectorElem = filter.hasFilterSelectors,
+                    var selectorElem = angular.element(autoSizeElement),
 
                       elem = $element[0];
 

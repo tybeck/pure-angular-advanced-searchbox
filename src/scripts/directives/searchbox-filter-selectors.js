@@ -39,6 +39,8 @@ angular.module('paasb')
 
                 filter = $scope.filter;
 
+              $scope.autoSizeElement = $element;
+
               angular.extend($scope, {
 
                 'availableSelectors': null,
@@ -51,9 +53,11 @@ angular.module('paasb')
 
                 takeSelector: function (selector) {
 
-                  angular.forEach($scope.availableSelectors, function (availableSelector) {
+                  angular.forEach($scope.availableSelectors,
 
-                    availableSelector.selected = false;
+                    function (availableSelector) {
+
+                      availableSelector.selected = false;
 
                   });
 

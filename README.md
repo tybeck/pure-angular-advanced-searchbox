@@ -89,6 +89,7 @@ The searchbox will return data in JSON format and look something like:
 ```
 
 \#\#\#\#\#\#\#\#\#\#\#\#\#\#
+
 \#\#\#\#\#\#\#\#\#\#\#\#\#\#
 
 Define the available search parameters / filters in your project:
@@ -164,6 +165,11 @@ $scope.sConfig = {
 	    <td>Should we enable caching of our filter(s)/query to local storage?</td>
 	    <td>boolean</td>
     </tr>
+    <tr>
+	    <td>paasb-search-box-enable-filtering-operators</td>
+	    <td>Should we enable filter operators (<strong>AND</strong>/<strong>OR</strong>)? By default <strong>paasb</strong> selects <strong>OR</strong> without this enabled.</td>
+	    <td>boolean</td>
+    </tr>
    <tr>
      <td>placeholder</td>
      <td>Placeholder text for searchbox</td>
@@ -171,6 +177,34 @@ $scope.sConfig = {
    </tr>
   </tbody>
 </table>
+
+### Available Events
+<table>
+  <thead>
+    <tr>
+      <th>Event Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>onRegisterApi</td>
+      <td>Gain access to internal APIs exposed by <strong>paasb</strong> such as Filtering, Placeholding, Loader, etc.</td>
+    </tr>
+  </tbody>
+</table>
+
+Example:
+
+```js
+$scope.$on('onRegisterApi', function(ev, api) {
+
+	console.log('api!', api);
+
+});
+```
+
+
 
 ### Available Search Filter Properties
 
@@ -269,6 +303,26 @@ $scope.sConfig = {
       <td>autoCompleteUrl</td>
       <td>API endpoint to auto suggestor; <b>paasb</b> sends query as plain text via interpolation (<b>{{query}}</b>)</td>
       <td>string</td>
+    </tr>
+          <tr>
+      <td>placeholders</td>
+      <td>Used for scrolling animated placeholders for search input; will basically type out your placeholder, then replace it with another.</td>
+      <td>array</td>
+    </tr>
+                  <tr>
+      <td>placeholderInterval</td>
+      <td>How long should the placeholder stay on the screen once it's fully written out?. (Default is <strong>2000</strong>ms)</td>
+      <td>number</td>
+    </tr>
+              <tr>
+      <td>placeholderSpeedOutInterval</td>
+      <td>How fast placeholder text should be deleted per character. (Default is <strong>25</strong>ms)</td>
+      <td>number</td>
+    </tr>
+                  <tr>
+      <td>placeholderSpeedInInterval</td>
+      <td>How fast placeholder text should be inserted per character. (Default is <strong>75</strong>ms)</td>
+      <td>number</td>
     </tr>
       <tr>
       <td>store</td>

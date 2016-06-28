@@ -368,6 +368,19 @@ div.paasb-searchbox-filter-selectors ul li.active {
   font-weight: bold;
 }
 
+/* line 5, ../../src/styles/directives/searchbox-filter-operators.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-filter-operators {
+  display: inline-block;
+}
+/* line 13, ../../src/styles/directives/searchbox-filter-operators.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-filter-operators ul li span {
+  font-weight: normal;
+}
+/* line 21, ../../src/styles/directives/searchbox-filter-operators.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-filter-operators ul li.active span {
+  font-weight: bold;
+}
+
 /* line 1, ../../src/styles/directives/searchbox-auto-complete.scss */
 .paasb-auto-complete-container {
   position: absolute;

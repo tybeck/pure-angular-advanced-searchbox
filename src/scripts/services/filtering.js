@@ -45,15 +45,159 @@ angular.module('paasb')
 
 					'addedFilters': [],
 
+					'addedOperators': [],
+
+					'registeredOperators': [],
+
 					'addedScopes': {}
 
 				});
 
         angular.extend(this, {
 
+					getOperatorByFilterIndex: function (filter) {
+
+						var index = null,
+
+							oIndex = 0,
+
+							op = null;
+
+						angular.forEach(scope.addedFilters, function (addedFilter, addedIndex) {
+
+							if(filter.uuid === addedFilter.uuid) {
+
+								index = addedIndex;
+
+							}
+
+						});
+
+						oIndex = (index - 1);
+
+						if(Math.sign(oIndex) !== -1) {
+
+							op = scope.addedOperators[oIndex];
+
+						}
+
+						return op;
+
+					},
+
+					addOperatorToFilter: function (operator, filter, dontUpdate) {
+
+						if(filter) {
+
+							var index = null;
+
+							angular.forEach(scope.addedFilters, function (addedFilter, addedIndex) {
+
+								if(filter.uuid === addedFilter.uuid) {
+
+									index = addedIndex;
+
+								}
+
+							});
+
+							if(index !== null) {
+
+								var filterIndex = (index - 1);
+
+								if(!scope.addedOperators[filterIndex]) {
+
+									scope.addedOperators.push(operator.name);
+
+								} else {
+
+									scope.addedOperators[filterIndex] = operator.name;
+
+								}
+
+							}
+
+						} else {
+
+							scope.addedOperators.push(operator.name);
+
+						}
+
+						if(!dontUpdate) {
+
+							this.update(true);
+
+						}
+
+						paasbMemory.getAndSet('operators', scope.addedOperators);
+
+					},
+
+					getOperatorsInMemory: function () {
+
+						return paasbMemory.getAndSet('operators') || [];
+
+					},
+
+					getOperators: function () {
+
+						return scope.addedOperators;
+
+					},
+
+					hasOperatorAlready: function (filter) {
+
+						var ops = this.getOperators(),
+
+							filters = this.getFilters(),
+
+							hasOperator = false;
+
+						angular.forEach(ops, function (op, opIndex) {
+
+							angular.forEach(filters, function (_filter, _filterIndex) {
+
+								if(_filter.uuid === filter.uuid) {
+
+									if((_filterIndex - 1) === opIndex) {
+
+										hasOperator = true;
+
+									}
+
+								}
+
+							});
+
+						});
+
+						return hasOperator;
+
+					},
+
+					addMemoryOperators: function () {
+
+						var ops = this.getOperatorsInMemory();
+
+						if(ops && ops.length) {
+
+							scope.addedOperators = ops;
+
+						}
+
+						return this;
+
+					},
+
 					getConfig: function () {
 
 						return config;
+
+					},
+
+					getFilters: function () {
+
+						return scope.addedFilters;
 
 					},
 
@@ -73,7 +217,7 @@ angular.module('paasb')
 
 						if(this.callback) {
 
-							return this.callback(this.buildParameters(), forceRefresh);
+							return this.callback(this.buildParameters(), scope.addedOperators || [], forceRefresh);
 
 						}
 
@@ -188,6 +332,14 @@ angular.module('paasb')
 
 						});
 
+						return this;
+
+					},
+
+					registerOperator: function (op) {
+
+						scope.registeredOperators.push(op);
+
 					},
 
           add: function (filter, options) {
@@ -260,12 +412,65 @@ angular.module('paasb')
 
           remove: function (filter) {
 
+						var fIndex = null,
+
+							self = this,
+
+							operators = self.getOperators();
+
+						scope.addedFilters
+							.forEach(function (sAddedFilter, sAddedIndex) {
+
+								if(sAddedFilter.uuid === filter.uuid) {
+
+									fIndex = sAddedIndex;
+
+								}
+
+							});
+
 						scope.addedFilters
 							.slice()
 							.reverse()
 							.forEach(function (addedFilter, addedIndex, addedObject) {
 
 								if(addedFilter.uuid === filter.uuid) {
+
+									if(operators && operators.length) {
+
+										var oIndex = (fIndex - 1);
+
+										if(Math.sign(oIndex) === -1) {
+
+											var ffIndex = (fIndex + 1),
+
+												nextFilter = scope.addedFilters[ffIndex],
+
+												nextScope = null;
+
+											if(nextFilter) {
+
+												nextScope = scope.addedScopes[nextFilter.uuid];
+
+												paasbUi.extend(nextScope, {
+
+													'operators': false
+
+												});
+
+											}
+
+										} else {
+
+											oIndex = 0;
+
+										}
+
+										scope.registeredOperators.splice(oIndex, 1);
+
+										scope.addedOperators.splice(oIndex, 1);
+
+									}
 
 									addedFilter.element.remove();
 

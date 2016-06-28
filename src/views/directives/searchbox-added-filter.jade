@@ -1,12 +1,9 @@
 div(class="paasb-searchbox-added-filter")
-  div(
-    ng-if="hasOperator",
-    class="paasb-searchbox-added-filter-operator"
+  paasb-search-box-filter-operators(
+    ng-if="operators",
+    filtering="filtering",
+    filter="filter"
   )
-    span
-      i(class="fa fa-arrow-left")
-      | AND
-      i(class="fa fa-arrow-right")
   div(
     class="paasb-searchbox-added-filter-contents"
     ng-click="openFilter();",

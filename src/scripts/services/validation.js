@@ -21,6 +21,58 @@ angular.module('paasb')
 
         },
 
+				min: function (value, len) {
+
+					return(value.length >= parseInt(len));
+
+				},
+
+				max: function (value, len) {
+
+					return(value.length <= parseInt(len));
+
+				},
+
+				between: function (value, param) {
+
+					var params = param.split(',');
+
+					if(params && params.length === 2) {
+
+						var min = this.min(value, params[0]),
+
+							max = this.max(value, params[1]);
+
+						return min && max;
+
+					}
+
+					return false;
+
+				},
+
+				numeric: function (value) {
+
+					return !isNaN(value);
+
+				},
+
+				email: function (value) {
+
+					var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+					return regex.test(value);
+
+				},
+
+				phone: function (value) {
+
+					var regex = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
+
+					return regex.test(value);
+
+				},
+
         has: function (filter) {
 
           return filter.validation ? true : false;
@@ -45,7 +97,7 @@ angular.module('paasb')
 
                 name = validator[0],
 
-                value = validator[1];
+                value = validator[1] || null;
 
 							if(!self[name]) {
 

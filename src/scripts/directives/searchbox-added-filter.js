@@ -52,18 +52,6 @@ angular.module('paasb')
 
               filter.loading = false;
 
-              if(operators) {
-
-                if(Filtering.getFilterCount() > 1) {
-
-                  $scope.hasOperator = true;
-
-                  console.log('Need\'s Operator');
-
-                }
-
-              }
-
               if(typeof filter.suggestedValues === 'string') {
 
                 config = Filtering.getConfig();
@@ -132,7 +120,7 @@ angular.module('paasb')
 
               }
 
-              angular.extend($scope, {
+              paasbUi.extend($scope, {
 
                 'Utils': paasbUtils,
 

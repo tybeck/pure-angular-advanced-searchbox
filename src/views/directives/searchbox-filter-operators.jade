@@ -1,0 +1,24 @@
+div(
+  ng-hide="!hasOperator",
+  class="paasb-searchbox-added-filter-operator",
+  ng-click="openOperators();"
+)
+  span
+    i(class="fa fa-arrow-left")
+    i(ng-bind="operator.name")
+    i(class="fa fa-arrow-right")
+  div(
+    class="paasb-searchbox-filter-operators",
+    ng-hide="!showOperators"
+  )
+    ul(
+      paasb-auto-size="filter",
+      paasb-auto-size-element="autoSizeElement",
+      paasb-auto-size-bounding-box="autoSizeElement"
+    )
+      li(
+        ng-repeat="operator in availableOperators",
+        ng-class="{ 'active': operator.selected }",
+        ng-click="takeOperator(operator);"
+      )
+        span(ng-bind="operator.name")

@@ -34,7 +34,7 @@ angular.module('app')
           'name': 'vendor_desc',
           'displayName': 'Vendor Description',
           'root': 'Product',
-          'validation': 'blah'
+          'validation': 'between=3,6 numeric'
         }, {
           'name': 'vendor_abbr',
           'displayName': 'Vendor Abbreviation',
@@ -83,6 +83,8 @@ angular.module('app')
       }, 2500);
 
       $scope.$on('onRegisterApi', function (ev, api) {
+
+        console.log('api', api);
 
         $scope.$watch('sOptions', function (__new) {
 

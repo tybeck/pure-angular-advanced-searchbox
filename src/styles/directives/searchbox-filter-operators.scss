@@ -1,0 +1,37 @@
+div.paasb-searchbox {
+
+  div.paasb-searchbox-added-filter {
+
+    div.paasb-searchbox-filter-operators {
+
+      display: inline-block;
+
+      ul {
+
+        li {
+
+          span {
+
+            font-weight: normal;
+
+          }
+
+          &.active {
+
+            span {
+
+              font-weight: bold;
+
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+}

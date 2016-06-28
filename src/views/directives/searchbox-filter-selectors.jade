@@ -4,7 +4,8 @@ div(
   ng-hide="!filter.editing"
 )
   ul(
-    paasb-auto-size="filter"
+    paasb-auto-size="filter",
+    paasb-auto-size-element="autoSizeElement"
   )
     li(
       ng-repeat="selector in availableSelectors",
