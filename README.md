@@ -23,6 +23,7 @@
 - [ ] Build query (SOLR, SQL)
 - [ ] Drag and drop filters into different positions.
 - [ ] Maybe drag and drop filters into trash can?
+- [ ] Add UI for validation
 
 ### Screenshots
 
@@ -276,7 +277,7 @@ $scope.$on('onRegisterApi', function(ev, api) {
 
 ### Available Search Validations
 
-- Validation providers are separated with a space between them (`min=3 email`).  If a validation provider is given that is unknown to `paasb`; it will be ignored.  Custom validator's can be written.
+- Validation providers are separated with a space between them (`min=3 email`).  If a validation provider is given that is unknown to `paasb`; it will be ignored.  Custom validator's can be written. ** NOTE ** There is currently no UI that tell's you whether something was / or was not validated; it just works - this is currently in the process of being developed.
 
 ```json
 {
