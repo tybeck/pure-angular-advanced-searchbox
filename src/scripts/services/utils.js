@@ -16,11 +16,25 @@ angular.module('paasb')
 
 			var paasbUtils = {
 
+				removeObjectProperties: function(obj, props) {
+
+					for(var i = 0; i < props.length; i++) {
+
+						if(obj.hasOwnProperty(props[i])) {
+
+							delete obj[props[i]];
+
+						}
+
+					}
+
+				},
+
 				getScrollbarWidth: function () {
 
-					var scrollDiv = document.createElement("div");
+					var scrollDiv = document.createElement('div');
 
-					scrollDiv.className = "scrollbar-measure";
+					scrollDiv.className = 'scrollbar-measure';
 
 					document.body.appendChild(scrollDiv);
 

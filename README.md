@@ -19,11 +19,12 @@
 ### TODOs
 
 - [ ] Add grouping around conditionals
-- [x] Add operators (In Progress)
+- [x] Add operators (**DONE**)
 - [ ] Build query (SOLR, SQL)
 - [ ] Drag and drop filters into different positions.
 - [ ] Maybe drag and drop filters into trash can?
-- [ ] Add UI for validation
+- [ ] Add UI for validation (In Progress)
+- [ ]
 
 ### Screenshots
 
@@ -234,7 +235,7 @@ $scope.$on('onRegisterApi', function(ev, api) {
     </tr>
     <tr>
       <td>multi</td>
-      <td>Should multiple search filters of the same key allowed? Default is <b>false</b></td>
+      <td>Should multiple search filters of the same key be allowed? Default is <b>false</b></td>
       <td>boolean</td>
     </tr>
         <tr>

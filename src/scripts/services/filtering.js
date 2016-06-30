@@ -14,10 +14,11 @@ angular.module('paasb')
     '$compile',
 		'$http',
 		'paasbUi',
+		'paasbUtils',
 		'paasbMemory',
 		'paasbValidation',
 		'FILTERS',
-    function ($q, $compile, $http, paasbUi, paasbMemory, paasbValidation, FILTERS) {
+    function ($q, $compile, $http, paasbUi, paasbUtils, paasbMemory, paasbValidation, FILTERS) {
 
       var scope = null,
 
@@ -55,6 +56,78 @@ angular.module('paasb')
 
         angular.extend(this, {
 
+					removeClassAllFilters: function (cls) {
+
+						angular.forEach(scope.addedFilters, function (addedFilter) {
+
+							if(addedFilter && addedFilter.element) {
+
+								var el = addedFilter.element;
+
+								el.removeClass(cls);
+
+							}
+
+						});
+
+						return this;
+
+					},
+
+					getFilterByElement: function (element) {
+
+						var data = null;
+
+						angular.forEach(scope.addedFilters, function (filter, index) {
+
+							var filterElement = filter.element[0];
+
+							if(filter && (filterElement === element)) {
+
+								data = {
+
+									'index': index,
+
+									'filter': filter
+
+								};
+
+							}
+
+						});
+
+						return data;
+
+					},
+
+					moveFilter: function (source, dest) {
+
+						var sourceFilter = this.getFilterByElement(source),
+
+							destFilter = this.getFilterByElement(dest);
+
+						if(sourceFilter && destFilter) {
+
+							var clonedFilters = _.cloneDeep(scope.addedFilters),
+
+								sFilter = sourceFilter.filter,
+
+								dFilter = destFilter.filter;
+
+							clonedFilters[sourceFilter.index] = dFilter;
+
+							clonedFilters[destFilter.index] = sFilter;
+
+							sFilter.recentlyMoved = true;
+
+							this.removeAll(true);
+
+							this.addByMemory(clonedFilters, true);
+
+						}
+
+					},
+
 					getOperatorByFilterIndex: function (filter) {
 
 						var index = null,
@@ -78,6 +151,12 @@ angular.module('paasb')
 						if(Math.sign(oIndex) !== -1) {
 
 							op = scope.addedOperators[oIndex];
+
+							if(typeof op === 'undefined') {
+
+								op = null;
+
+							}
 
 						}
 
@@ -225,55 +304,37 @@ angular.module('paasb')
 
 					buildParameters: function () {
 
-						var params = {
+						var params = [];
 
-						};
+						angular.forEach(scope.addedFilters, function (filter) {
 
-						angular.forEach(scope.paasbSearchBoxFiltering, function (type) {
+							var buildParam = function (filter) {
 
-							angular.forEach(scope.addedFilters, function (filter) {
+								params.push(angular.extend({
 
-								if(filter.name === type.name) {
+									'condition': filter.selector.key,
 
-									var buildParam = function () {
+									'value': filter.value,
 
-										if(!params[filter.name]) {
+									'$$name': filter.name
 
-											params[filter.name] = [];
+								}, filter.extend || {}));
 
-										}
+							};
 
-										var data = {
+							if(paasbValidation.has(filter)) {
 
-											'condition': filter.selector.key,
+								if(paasbValidation.validate(filter)) {
 
-											'value': filter.value
-
-										};
-
-										angular.extend(data, filter.extend || {});
-
-										params[filter.name].push(data);
-
-									};
-
-									if(paasbValidation.has(filter)) {
-
-										if(paasbValidation.validate(filter)) {
-
-											buildParam();
-
-										}
-
-									} else {
-
-										buildParam();
-
-									}
+									buildParam(filter);
 
 								}
 
-							});
+							} else {
+
+								buildParam(filter);
+
+							}
 
 						});
 
@@ -308,25 +369,37 @@ angular.module('paasb')
 
 					},
 
-					addByMemory: function (options) {
+					addByMemory: function (options, erased) {
 
-						var opts = options.filters,
+						var opts = options.filters || options,
 
 							self = this;
 
-						angular.forEach(opts, function (option, name) {
+						angular.forEach(opts, function (option) {
 
-							angular.forEach(option, function (opt) {
+							if(erased) {
 
-								angular.forEach(scope.paasbSearchBoxFiltering, function (filter) {
+								paasbUtils.removeObjectProperties(option, [
+									'$filter',
+									'editing',
+									'element',
+									'filteredFrom',
+									'hasFilterSelectors',
+									'loading',
+									'notFiltered',
+									'selector',
+									'uuid'
+								]);
 
-									if(name === filter.name) {
+							}
 
-										self.add(filter, opt);
+							angular.forEach(scope.paasbSearchBoxFiltering, function (filter) {
 
-									}
+								if(option.$$name === filter.name || option.name === filter.name) {
 
-								});
+									self.add(filter, option);
+
+								}
 
 							});
 
@@ -346,9 +419,15 @@ angular.module('paasb')
 
             var childScope = scope.$new(true),
 
-							clonedFilter = _.clone(filter),
+							clonedFilter = _.cloneDeep(filter),
 
 							operators = scope.paasbSearchBoxEnableFilteringOperators;
+
+						if(options && options.recentlyMoved) {
+
+							clonedFilter.recentlyMoved = true;
+
+						}
 
 						angular.extend(childScope, {
 
@@ -410,7 +489,7 @@ angular.module('paasb')
 
           },
 
-          remove: function (filter) {
+          remove: function (filter, dontUpdate) {
 
 						var fIndex = null,
 
@@ -498,11 +577,15 @@ angular.module('paasb')
 
 							}
 
-							this.update(true);
+							if(!dontUpdate) {
+
+								this.update(true);
+
+							}
 
           },
 
-          removeAll: function () {
+          removeAll: function (dontErase) {
 
 						var self = this;
 
@@ -511,11 +594,15 @@ angular.module('paasb')
 							.reverse()
 							.forEach(function (addedFilter) {
 
-								return self.remove(addedFilter);
+								return self.remove(addedFilter, dontErase);
 
 							});
 
-						paasbMemory.removeAll();
+						if(!dontErase) {
+
+							paasbMemory.removeAll();
+
+						}
 
           },
 

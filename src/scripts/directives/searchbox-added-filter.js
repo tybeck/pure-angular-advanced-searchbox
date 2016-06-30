@@ -48,9 +48,15 @@ angular.module('paasb')
 
                 config = null,
 
-                input;
+                input,
+
+                dragSourceElem = null,
+
+                dragSourceCount = 0;
 
               filter.loading = false;
+
+              $element.attr('id', _.uuid());
 
               if(typeof filter.suggestedValues === 'string') {
 
@@ -150,6 +156,99 @@ angular.module('paasb')
 
                     }
 
+                  },
+
+                  dragEvents: function (ev) {
+
+                    switch(ev.type) {
+
+                      case 'dragstart':
+
+                        dragSourceElem = angular.element(this);
+
+                        ev.dataTransfer.effectAllowed = 'move';
+
+                        ev.dataTransfer.setData('text', dragSourceElem.attr('id'));
+
+                        dragSourceElem.addClass('dragged-item');
+
+                      break;
+
+                      case 'dragenter':
+
+                        ev.preventDefault();
+
+                        Filtering
+                          .removeClassAllFilters('over');
+
+                        angular.element(this).addClass('over');
+
+                        dragSourceCount ++;
+
+                      break;
+
+                      case 'dragleave':
+
+                        dragSourceCount --;
+
+                        if(dragSourceCount === 0) {
+
+                          angular.element(this).removeClass('over');
+
+                        }
+
+                      break;
+
+                      case 'dragover':
+
+                        if(ev.preventDefault) {
+
+                          ev.preventDefault();
+
+                        }
+
+                        ev.dataTransfer.dropEffect = 'move';
+
+                        return false;
+
+                      break;
+
+                      case 'drop':
+
+                        if(ev.stopPropagation) {
+
+                          ev.stopPropagation();
+
+                        }
+
+                        var id = ev.dataTransfer.getData('text');
+
+                        if(id) {
+
+                          var elem = document.getElementById(id);
+
+                          if(elem !== this) {
+
+                            Filtering.moveFilter(elem, this);
+
+                          }
+
+                        }
+
+                        return false;
+
+                      break;
+
+                      case 'dragend':
+
+                        Filtering
+                          .removeClassAllFilters('over')
+                          .removeClassAllFilters('dragged-item');
+
+                      break;
+
+                    }
+
                   }
 
                 },
@@ -243,6 +342,8 @@ angular.module('paasb')
                 registerEvents: function (events) {
 
                   input.on('keyup', events.inputKeyEvents);
+
+                  $element.on('dragstart dragenter dragover dragleave drop dragend', events.dragEvents);
 
                   return $scope;
 

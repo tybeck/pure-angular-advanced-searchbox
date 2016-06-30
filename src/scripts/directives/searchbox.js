@@ -223,7 +223,11 @@ angular.module('paasb')
 
                     Filterer.watch(function (filters, operators, refresh) {
 
-                      paasbMemory.getAndSet('operators', operators);
+                      if($scope.paasbSearchBoxEnableFilteringOperators) {
+
+                        paasbMemory.getAndSet('operators', operators);
+
+                      }
 
                       paasbMemory.getAndSet('filters', filters);
 
@@ -239,7 +243,11 @@ angular.module('paasb')
 
                           params.filters = filters;
 
-                          params.operators = operators;
+                          if($scope.paasbSearchBoxEnableFilteringOperators) {
+
+                            params.operators = operators;
+
+                          }
 
                         }, config.delay);
 
@@ -247,7 +255,11 @@ angular.module('paasb')
 
                         params.filters = filters;
 
-                        params.operators = operators;
+                        if($scope.paasbSearchBoxEnableFilteringOperators) {
+
+                          params.operators = operators;
+
+                        }
 
                       }
 

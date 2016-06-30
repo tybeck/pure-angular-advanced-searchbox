@@ -11,14 +11,42 @@ div.paasb-searchbox {
   div.paasb-searchbox-added-filter {
 
     float: left;
+    transition: opacity .50s ease-in-out;
+    -moz-transition: opacity .50s ease-in-out;
+    -webkit-transition: opacity .50s ease-in-out;
+
+    &.over {
+
+      div.paasb-searchbox-added-filter-operator,
+      div.paasb-searchbox-added-filter-contents {
+        border: 1px dashed #000;
+      }
+
+    }
+
+    &.dragged-item {
+
+      opacity: 0.40;
+
+    }
 
     div.paasb-searchbox-added-filter-contents {
+
       background: #FFF;
       padding: 5px 6px 5px 6px;
+      position: relative;
       border-radius: 6px;
       margin-right: 10px;
       margin-top: 8px;
       float: left;
+
+      div.animator {
+        background: transparent;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
     }
 
     div.paasb-searchbox-added-filter-operator {

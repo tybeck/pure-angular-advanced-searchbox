@@ -1,0 +1,18 @@
+div.paasb-searchbox-filter-moved-animation {
+
+  border-color: rgba(225,240,253,0.75);
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  border-style: solid;
+  background: transparent;
+  height: 0;
+  width: 0;
+
+  &.transition {
+    transition: border-width .5s ease-out, width .5s ease-out, height .5s ease-out;
+    -moz-transition: border-width .5s ease-out, width .5s ease-out, height .5s ease-out;
+    -webkit-transition: border-width .5s ease-out, width .5s ease-out, height .5s ease-out;
+  }
+
+}

@@ -1,4 +1,7 @@
-div(class="paasb-searchbox-added-filter")
+div(
+  class="paasb-searchbox-added-filter", 
+  draggable="true"
+)
   paasb-search-box-filter-operators(
     ng-if="operators",
     filtering="filtering",
@@ -8,6 +11,7 @@ div(class="paasb-searchbox-added-filter")
     class="paasb-searchbox-added-filter-contents"
     ng-click="openFilter();",
     ng-class="{ 'child': filter.child, 'root': filter.root }"
+    paasb-search-box-filter-moved="filter"
   )
     span(
       class="filter-name",

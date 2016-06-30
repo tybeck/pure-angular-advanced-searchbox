@@ -50,6 +50,16 @@ angular.module('paasb')
 
                     left = bounding.left;
 
+                  if(searchInput === boundingElement) {
+
+                    var boundingElementLeft = filter.element
+                      .find('div')[2]
+                      .getBoundingClientRect().left;
+
+                    left -= boundingElementLeft;
+
+                  }
+
                   if(autoSizeElement) {
 
                     var selectorElem = angular.element(autoSizeElement),
