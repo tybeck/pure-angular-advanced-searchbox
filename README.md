@@ -35,7 +35,7 @@
 
 ### Usage
 1. Install with `bower`:
-    - `bower install angular-advanced-searchbox`
+    - `bower install pure-angular-advanced-searchbox`
 
 The bower package contains files in the `dist/` directory with the following includes:
 
