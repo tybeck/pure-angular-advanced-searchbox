@@ -1,18 +1,18 @@
 <img src="img/angular.png" alt="Angular" align="right" />
 ## Pure Angular Advanced Searchbox
-![Bower version](https://img.shields.io/bower/v/pure-angular-advanced-searchbox.svg?maxAge=2592000)
+![Bower version](https://img.shields.io/bower/v/pure-angular-advanced-searchbox.svg?maxAge=900000)
 &nbsp;&nbsp;&nbsp;
-![GitHub version](https://img.shields.io/github/tag/tybeck/pure-angular-advanced-searchbox.svg?maxAge=2592000)
+![GitHub version](https://img.shields.io/github/tag/tybeck/pure-angular-advanced-searchbox.svg?maxAge=900000)
 &nbsp;&nbsp;&nbsp;
-![Commits Since](https://img.shields.io/github/commits-since/tybeck/pure-angular-advanced-searchbox/v1.1.1.svg?maxAge=2592000)
+![Commits Since](https://img.shields.io/github/commits-since/tybeck/pure-angular-advanced-searchbox/v1.1.1.svg?maxAge=900000)
 &nbsp;&nbsp;&nbsp;
 ![NPM Dependencies](https://david-dm.org/tybeck/pure-angular-advanced-searchbox.svg)
 &nbsp;&nbsp;&nbsp;
 ![NPM Dev Dependencies](https://david-dm.org/tybeck/pure-angular-advanced-searchbox/dev-status.svg)
 &nbsp;&nbsp;&nbsp;
-![Total Downloads](https://img.shields.io/github/downloads/pure-angular-advanced-searchbox/pure-angular-advanced-searchbox/total.svg?maxAge=2592000)
+![Total Downloads](https://img.shields.io/github/downloads/pure-angular-advanced-searchbox/pure-angular-advanced-searchbox/total.svg?maxAge=900000)
 &nbsp;&nbsp;&nbsp;
-![Beerpay](https://img.shields.io/beerpay/tybeck/pure-angular-advanced-searchbox.svg?maxAge=2592000)
+![Beerpay](https://img.shields.io/beerpay/tybeck/pure-angular-advanced-searchbox.svg?maxAge=900000)
 
 ##### Pure Angular Advanced Search Box is an implementation to add advanced searching capabilities into a reusable UI to help build parameters based off of filters, queries and operators to send off to a search API.
 
@@ -24,7 +24,6 @@
 - [ ] Drag and drop filters into different positions.
 - [ ] Maybe drag and drop filters into trash can?
 - [ ] Add UI for validation (In Progress)
-- [ ]
 
 ### Screenshots
 
@@ -69,10 +68,13 @@ angular.module('myModule', ['paasb']);
 
 ```html
 <paasb-search-box
-	search-params="sOptions"
-	paasb-search-box-config="sConfig"
-	paasb-search-box-auto-complete="sConfig"
-	paasb-search-box-cache-filter="true"
+  search-params="sOptions"
+  paasb-search-box-filtering="sFilters"
+  paasb-search-box-enable-filtering-operators="true"
+  paasb-search-box-config="sConfig"
+  paasb-search-box-auto-complete="sConfig"
+  paasb-search-box-cache-filter="true"
+  placeholder="Enter your query here..."
 </paasb-search-box>
 ```
 
