@@ -24,6 +24,8 @@
 - [ ] Drag and drop filters into different positions.
 - [ ] Maybe drag and drop filters into trash can?
 - [ ] Add UI for validation (In Progress)
+- [ ] Swap Drag N Drop (**DONE**)
+- [ ] Insert At Drag N Drop (In Progress)
 
 ### Screenshots
 

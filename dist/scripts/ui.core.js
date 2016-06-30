@@ -3498,7 +3498,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
     "\n" +
     "<div data-search-box=\"true\" class=\"paasb-searchbox\">\n" +
     "  <paasb-search-box-filtering search=\"Search\" filters=\"paasbSearchBoxFiltering\" ng-if=\"paasbSearchBoxFiltering &amp;&amp; paasbSearchBoxFiltering.length\"></paasb-search-box-filtering>\n" +
-    "  <div class=\"paasb-searchbox-wrapper\"><i ng-class=\"{ 'fa-search': !query.length, 'fa-trash': ((query &amp;&amp; query.length) || hasFilters) }\" ng-click=\"handleGarbage();\" class=\"fa\"></i>\n" +
+    "  <div class=\"paasb-searchbox-wrapper\"><i ng-class=\"{ 'fa-search': !query.length, 'fa-trash': ((query &amp;&amp; query.length) || hasFilters) }\" ng-click=\"handleGarbage();\" draggable=\"true\" class=\"fa\"></i>\n" +
     "    <paasb-search-box-cache-filter ng-if=\"paasbSearchBoxCacheFilter\"></paasb-search-box-cache-filter><i ng-if=\"isLoading\" ng-class=\"{ 'no-cache-filtering': !paasbSearchBoxCacheFilter }\" class=\"fa fa-cog fa-spin\"></i>\n" +
     "    <input type=\"text\" ng-model=\"query\" id=\"{{searchInputId}}\"/>\n" +
     "    <paasb-search-box-auto-complete query=\"searchParams.query\" config=\"paasbSearchBoxAutoComplete\" input=\"input\" ng-if=\"autoCompleteEnabled\"></paasb-search-box-auto-complete>\n" +
