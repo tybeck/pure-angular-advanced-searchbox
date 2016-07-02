@@ -254,6 +254,42 @@ angular.module('paasb')
 
                 'Utils': paasbUtils,
 
+                getDirection: function (placement) {
+
+                  var dir = null;
+
+                  if(typeof placement === 'undefined' || placement === null) {
+
+                    return dir;
+
+                  }
+
+                  if(typeof placement === 'string') {
+
+                    placement = parseInt(placement);
+
+                  }
+
+                  switch(placement) {
+
+                    case 1:
+
+                      dir = 'before';
+
+                    break;
+
+                    case 3:
+
+                      dir = 'after';
+
+                    break;
+
+                  }
+
+                  return dir;
+
+                },
+
                 'events': {
 
                   searchboxClick: function (ev) {
@@ -302,11 +338,6 @@ angular.module('paasb')
 
                         ev.preventDefault();
 
-                        Filtering
-                          .removeClassAllFilters('over');
-
-                        angular.element(this).addClass('over');
-
                         dragSourceCount ++;
 
                       break;
@@ -324,6 +355,22 @@ angular.module('paasb')
                       break;
 
                       case 'dragover':
+
+                        var bounding = this.getBoundingClientRect(),
+
+                          w = (bounding.width / 3);
+
+                        var placement = Math.abs(Math.ceil((ev.pageX - bounding.left) / w)) || 1;
+
+                        Filtering
+                          .removeClassAllFilters('over-placement-1')
+                          .removeClassAllFilters('over-placement-2')
+                          .removeClassAllFilters('over-placement-3');
+
+                        angular
+                          .element(this)
+                          .addClass('over-placement-' + placement)
+                          .attr('data-placement', placement);
 
                         if(ev.preventDefault) {
 
@@ -353,7 +400,13 @@ angular.module('paasb')
 
                           if(elem !== this) {
 
-                            Filtering.moveFilter(elem, this);
+                            var placement = parseInt(angular
+                              .element(this)
+                              .attr('data-placement') || null),
+
+                              direction = $scope.getDirection(placement);
+
+                            Filtering[placement === 2 ? 'swapFilter' : 'moveFilter'](elem, this, direction);
 
                           }
 
@@ -366,7 +419,9 @@ angular.module('paasb')
                       case 'dragend':
 
                         Filtering
-                          .removeClassAllFilters('over')
+                          .removeClassAllFilters('over-placement-1')
+                          .removeClassAllFilters('over-placement-2')
+                          .removeClassAllFilters('over-placement-3')
                           .removeClassAllFilters('dragged-item');
 
                       break;
@@ -2286,7 +2341,64 @@ angular.module('paasb')
 
 					},
 
-					moveFilter: function (source, dest) {
+					moveFilter: function (source, dest, direction) {
+
+						var sourceFilter = this.getFilterByElement(source),
+
+							clonedFilters = _.cloneDeep(scope.addedFilters);
+
+						if(sourceFilter) {
+
+							clonedFilters.splice(sourceFilter.index, 1);
+
+							var destFilter = this.getFilterByElement(dest),
+
+								index = null;
+
+
+							switch(direction) {
+
+								case 'before':
+
+									index = destFilter.index;
+
+								break;
+
+								case 'after':
+
+								index = (destFilter.index + 1);
+
+								break;
+
+							}
+
+							if(index !== null) {
+
+								if(index > clonedFilters.length) {
+
+									clonedFilters.push(sourceFilter.filter);
+
+								} else {
+
+									clonedFilters.splice(index, 0, sourceFilter.filter);
+
+								}
+
+							}
+
+							sourceFilter.recentlyMoved = true;
+
+							this.removeAll(true);
+
+							this.addByMemory(clonedFilters, true);
+
+						}
+
+					},
+
+					swapFilter: function (source, dest) {
+
+						console.log('swapppp');
 
 						var sourceFilter = this.getFilterByElement(source),
 

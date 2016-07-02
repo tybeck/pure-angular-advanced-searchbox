@@ -100,7 +100,64 @@ angular.module('paasb')
 
 					},
 
-					moveFilter: function (source, dest) {
+					moveFilter: function (source, dest, direction) {
+
+						var sourceFilter = this.getFilterByElement(source),
+
+							clonedFilters = _.cloneDeep(scope.addedFilters);
+
+						if(sourceFilter) {
+
+							clonedFilters.splice(sourceFilter.index, 1);
+
+							var destFilter = this.getFilterByElement(dest),
+
+								index = null;
+
+
+							switch(direction) {
+
+								case 'before':
+
+									index = destFilter.index;
+
+								break;
+
+								case 'after':
+
+								index = (destFilter.index + 1);
+
+								break;
+
+							}
+
+							if(index !== null) {
+
+								if(index > clonedFilters.length) {
+
+									clonedFilters.push(sourceFilter.filter);
+
+								} else {
+
+									clonedFilters.splice(index, 0, sourceFilter.filter);
+
+								}
+
+							}
+
+							sourceFilter.recentlyMoved = true;
+
+							this.removeAll(true);
+
+							this.addByMemory(clonedFilters, true);
+
+						}
+
+					},
+
+					swapFilter: function (source, dest) {
+
+						console.log('swapppp');
 
 						var sourceFilter = this.getFilterByElement(source),
 

@@ -235,15 +235,25 @@ div.paasb-searchbox div.paasb-searchbox-added-filter {
   -webkit-transition: opacity .50s ease-in-out;
 }
 /* line 20, ../../src/styles/directives/searchbox-added-filter.scss */
-div.paasb-searchbox div.paasb-searchbox-added-filter.over div.paasb-searchbox-added-filter-operator,
-div.paasb-searchbox div.paasb-searchbox-added-filter.over div.paasb-searchbox-added-filter-contents {
+div.paasb-searchbox div.paasb-searchbox-added-filter.over-placement-1 div.paasb-searchbox-added-filter-operator,
+div.paasb-searchbox div.paasb-searchbox-added-filter.over-placement-1 div.paasb-searchbox-added-filter-contents {
+  border-left: 1px dashed #000;
+}
+/* line 29, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter.over-placement-2 div.paasb-searchbox-added-filter-operator,
+div.paasb-searchbox div.paasb-searchbox-added-filter.over-placement-2 div.paasb-searchbox-added-filter-contents {
   border: 1px dashed #000;
 }
-/* line 27, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 38, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter.over-placement-3 div.paasb-searchbox-added-filter-operator,
+div.paasb-searchbox div.paasb-searchbox-added-filter.over-placement-3 div.paasb-searchbox-added-filter-contents {
+  border-right: 1px dashed #000;
+}
+/* line 45, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter.dragged-item {
   opacity: 0.40;
 }
-/* line 33, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 51, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-filter-contents {
   background: #FFF;
   padding: 5px 6px 5px 6px;
@@ -253,14 +263,14 @@ div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-f
   margin-top: 8px;
   float: left;
 }
-/* line 43, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 61, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-filter-contents div.animator {
   background: transparent;
   position: absolute;
   left: 0;
   top: 0;
 }
-/* line 52, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 70, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-filter-operator {
   background: #FFF;
   padding: 5px 6px 5px 6px;
@@ -269,7 +279,7 @@ div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-f
   margin-top: 8px;
   float: left;
 }
-/* line 61, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 79, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-filter-operator span {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.5);
@@ -280,21 +290,21 @@ div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-f
   padding-right: 2px;
   display: block;
 }
-/* line 74, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 92, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-filter-operator span i.fa-arrow-left {
   margin-right: 5px;
   color: rgba(0, 0, 0, 0.75);
 }
-/* line 79, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 97, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-filter-operator span i.fa-arrow-right {
   margin-left: 5px;
   color: rgba(0, 0, 0, 0.75);
 }
-/* line 94, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 112, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter.child span.selector-type {
   background: #FFDFDF;
 }
-/* line 104, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 122, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter span.filter-name {
   font-size: 13px;
   text-transform: uppercase;
@@ -302,14 +312,14 @@ div.paasb-searchbox div.paasb-searchbox-added-filter span.filter-name {
   font-weight: bold;
   letter-spacing: 1px;
 }
-/* line 112, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 130, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter span.filter-value {
   display: inline-block;
   padding-bottom: 2px;
   font-size: 15px;
   color: rgba(0, 0, 0, 0.82);
 }
-/* line 119, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 137, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter span.selector-type {
   font-size: 13px;
   text-transform: uppercase;
@@ -323,7 +333,7 @@ div.paasb-searchbox div.paasb-searchbox-added-filter span.selector-type {
   border-radius: 4px;
   margin-right: 7px;
 }
-/* line 135, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 153, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter ul {
   list-style-type: none;
   padding: 0;
@@ -337,36 +347,36 @@ div.paasb-searchbox div.paasb-searchbox-added-filter ul {
   max-height: 130px;
   overflow-y: scroll;
 }
-/* line 149, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 167, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter ul li {
   cursor: pointer;
 }
-/* line 153, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 171, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter ul li:nth-child(odd) {
   background: #ecf5ff;
 }
-/* line 159, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 177, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter ul li:nth-child(even) {
   background: #FFF;
 }
-/* line 165, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 183, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter ul li:hover {
   font-style: italic;
 }
-/* line 169, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 187, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter ul li span {
   display: block;
   padding: 6px;
   font-size: 14px;
 }
-/* line 179, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 197, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter i {
   position: inherit;
   top: 0;
   margin: 0;
   right: 0;
 }
-/* line 186, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 204, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter i.fa-times {
   display: inline-block;
   margin-left: 5px;
@@ -374,7 +384,7 @@ div.paasb-searchbox div.paasb-searchbox-added-filter i.fa-times {
   font-size: 18px;
   margin-right: 5px;
 }
-/* line 196, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 214, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter input {
   outline: none;
   border-top-left-radius: 4px;

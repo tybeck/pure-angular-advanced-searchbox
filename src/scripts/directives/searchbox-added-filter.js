@@ -130,6 +130,42 @@ angular.module('paasb')
 
                 'Utils': paasbUtils,
 
+                getDirection: function (placement) {
+
+                  var dir = null;
+
+                  if(typeof placement === 'undefined' || placement === null) {
+
+                    return dir;
+
+                  }
+
+                  if(typeof placement === 'string') {
+
+                    placement = parseInt(placement);
+
+                  }
+
+                  switch(placement) {
+
+                    case 1:
+
+                      dir = 'before';
+
+                    break;
+
+                    case 3:
+
+                      dir = 'after';
+
+                    break;
+
+                  }
+
+                  return dir;
+
+                },
+
                 'events': {
 
                   searchboxClick: function (ev) {
@@ -178,11 +214,6 @@ angular.module('paasb')
 
                         ev.preventDefault();
 
-                        Filtering
-                          .removeClassAllFilters('over');
-
-                        angular.element(this).addClass('over');
-
                         dragSourceCount ++;
 
                       break;
@@ -200,6 +231,22 @@ angular.module('paasb')
                       break;
 
                       case 'dragover':
+
+                        var bounding = this.getBoundingClientRect(),
+
+                          w = (bounding.width / 3);
+
+                        var placement = Math.abs(Math.ceil((ev.pageX - bounding.left) / w)) || 1;
+
+                        Filtering
+                          .removeClassAllFilters('over-placement-1')
+                          .removeClassAllFilters('over-placement-2')
+                          .removeClassAllFilters('over-placement-3');
+
+                        angular
+                          .element(this)
+                          .addClass('over-placement-' + placement)
+                          .attr('data-placement', placement);
 
                         if(ev.preventDefault) {
 
@@ -229,7 +276,13 @@ angular.module('paasb')
 
                           if(elem !== this) {
 
-                            Filtering.moveFilter(elem, this);
+                            var placement = parseInt(angular
+                              .element(this)
+                              .attr('data-placement') || null),
+
+                              direction = $scope.getDirection(placement);
+
+                            Filtering[placement === 2 ? 'swapFilter' : 'moveFilter'](elem, this, direction);
 
                           }
 
@@ -242,7 +295,9 @@ angular.module('paasb')
                       case 'dragend':
 
                         Filtering
-                          .removeClassAllFilters('over')
+                          .removeClassAllFilters('over-placement-1')
+                          .removeClassAllFilters('over-placement-2')
+                          .removeClassAllFilters('over-placement-3')
                           .removeClassAllFilters('dragged-item');
 
                       break;

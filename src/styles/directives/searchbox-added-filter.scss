@@ -15,11 +15,29 @@ div.paasb-searchbox {
     -moz-transition: opacity .50s ease-in-out;
     -webkit-transition: opacity .50s ease-in-out;
 
-    &.over {
+    &.over-placement-1 {
+
+      div.paasb-searchbox-added-filter-operator,
+      div.paasb-searchbox-added-filter-contents {
+        border-left: 1px dashed #000;
+      }
+
+    }
+
+    &.over-placement-2 {
 
       div.paasb-searchbox-added-filter-operator,
       div.paasb-searchbox-added-filter-contents {
         border: 1px dashed #000;
+      }
+
+    }
+
+    &.over-placement-3 {
+
+      div.paasb-searchbox-added-filter-operator,
+      div.paasb-searchbox-added-filter-contents {
+        border-right: 1px dashed #000;
       }
 
     }
