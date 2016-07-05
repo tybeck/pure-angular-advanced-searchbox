@@ -202,7 +202,13 @@ angular.module('paasb')
 
                         dragSourceElem = angular.element(this);
 
-                        ev.dataTransfer.effectAllowed = 'move';
+                        ev.dataTransfer.effectAllowed = 'copyMove';
+
+                        if(!dragSourceElem.attr('id')) {
+
+                          dragSourceElem.attr('id', _.uuid());
+
+                        }
 
                         ev.dataTransfer.setData('text', dragSourceElem.attr('id'));
 
@@ -254,7 +260,7 @@ angular.module('paasb')
 
                         }
 
-                        ev.dataTransfer.dropEffect = 'move';
+                        ev.dataTransfer.dropEffect = 'copyMove';
 
                         return false;
 
@@ -268,21 +274,51 @@ angular.module('paasb')
 
                         }
 
-                        var id = ev.dataTransfer.getData('text');
+                        var data = ev.dataTransfer.getData('text'),
 
-                        if(id) {
+                          isJSON = false;
+
+                        if(paasbUtils.isJson(data)) {
+
+                          data = JSON.parse(data);
+
+                          isJSON = true;
+
+                        }
+
+                        if(data) {
+
+                          var id = data;
+
+                          if(isJSON) {
+
+                            id = data.id;
+
+                          }
 
                           var elem = document.getElementById(id);
 
-                          if(elem !== this) {
+                          if(isJSON && data.draggable) {
 
-                            var placement = parseInt(angular
-                              .element(this)
-                              .attr('data-placement') || null),
+                            if(data.trash) {
 
-                              direction = $scope.getDirection(placement);
+                                Filtering.removeByElement(this);
 
-                            Filtering[placement === 2 ? 'swapFilter' : 'moveFilter'](elem, this, direction);
+                            }
+
+                          } else {
+
+                            if(elem !== this) {
+
+                              var placement = parseInt(angular
+                                .element(this)
+                                .attr('data-placement') || null),
+
+                                direction = $scope.getDirection(placement);
+
+                              Filtering[placement === 2 ? 'swapFilter' : 'moveFilter'](elem, this, direction);
+
+                            }
 
                           }
 

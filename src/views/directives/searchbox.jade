@@ -12,6 +12,7 @@ div(
       class="fa",
       ng-class="{ 'fa-search': !query.length, 'fa-trash': ((query && query.length) || hasFilters) }",
       ng-click="handleGarbage();",
+      paasb-draggable="",
       draggable="true"
     )
     paasb-search-box-cache-filter(

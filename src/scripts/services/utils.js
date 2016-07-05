@@ -16,6 +16,22 @@ angular.module('paasb')
 
 			var paasbUtils = {
 
+				isJson: function (str) {
+
+					try {
+
+						JSON.parse(str);
+
+					} catch (e) {
+
+						return false;
+
+					}
+
+					return true;
+					
+				},
+
 				removeObjectProperties: function(obj, props) {
 
 					for(var i = 0; i < props.length; i++) {

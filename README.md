@@ -21,11 +21,11 @@
 - [ ] Add grouping around conditionals
 - [x] Add operators (**DONE**)
 - [ ] Build query (SOLR, SQL)
-- [x] Drag and drop filters into different positions. (In progress)
-- [ ] Maybe drag and drop filters into trash can?
+- [x] Drag and drop filters into different positions. (**DONE**)
+- [x] Drag and drop filters into trash can? (**DONE**)
 - [ ] Add UI for validation (In Progress)
 - [x] Swap Drag N Drop (**DONE**)
-- [x] Insert At Drag N Drop (In Progress)
+- [x] Insert At Drag N Drop (**DONE**)
 
 ### Screenshots
 

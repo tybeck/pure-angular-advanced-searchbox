@@ -126,6 +126,66 @@ angular.module('paasb')
 
 /**
  * @ngdoc directive
+ * @name paasb.directive:paasbDraggable
+ * @description
+ * # Implementation of paasbDraggable
+ */
+
+angular.module('paasb')
+
+    .directive('paasbDraggable', [
+      function () {
+
+        return {
+
+            'restrict': 'A',
+
+            controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+
+              $element.on('dragstart', function (ev) {
+
+                switch(ev.type) {
+
+                  case 'dragstart':
+
+                    var elem = angular.element(this),
+
+                      id = _.uuid(),
+
+                      data = {
+
+                        'id': id,
+
+                        'draggable': true,
+
+                        'trash': true
+
+                      };
+
+                    if(!elem.attr('id')) {
+
+                      elem.attr('id', id);
+
+                    }
+
+                    ev.dataTransfer.setData('text', JSON.stringify(data));
+
+                  break;
+
+                }
+
+              });
+
+            }]
+
+        };
+
+    }]);
+
+'use strict';
+
+/**
+ * @ngdoc directive
  * @name paasb.directive:paasbSearchBoxAddedFilter
  * @description
  * # Implementation of paasbSearchBoxAddedFilter
@@ -326,7 +386,13 @@ angular.module('paasb')
 
                         dragSourceElem = angular.element(this);
 
-                        ev.dataTransfer.effectAllowed = 'move';
+                        ev.dataTransfer.effectAllowed = 'copyMove';
+
+                        if(!dragSourceElem.attr('id')) {
+
+                          dragSourceElem.attr('id', _.uuid());
+
+                        }
 
                         ev.dataTransfer.setData('text', dragSourceElem.attr('id'));
 
@@ -378,7 +444,7 @@ angular.module('paasb')
 
                         }
 
-                        ev.dataTransfer.dropEffect = 'move';
+                        ev.dataTransfer.dropEffect = 'copyMove';
 
                         return false;
 
@@ -392,21 +458,51 @@ angular.module('paasb')
 
                         }
 
-                        var id = ev.dataTransfer.getData('text');
+                        var data = ev.dataTransfer.getData('text'),
 
-                        if(id) {
+                          isJSON = false;
+
+                        if(paasbUtils.isJson(data)) {
+
+                          data = JSON.parse(data);
+
+                          isJSON = true;
+
+                        }
+
+                        if(data) {
+
+                          var id = data;
+
+                          if(isJSON) {
+
+                            id = data.id;
+
+                          }
 
                           var elem = document.getElementById(id);
 
-                          if(elem !== this) {
+                          if(isJSON && data.draggable) {
 
-                            var placement = parseInt(angular
-                              .element(this)
-                              .attr('data-placement') || null),
+                            if(data.trash) {
 
-                              direction = $scope.getDirection(placement);
+                                Filtering.removeByElement(this);
 
-                            Filtering[placement === 2 ? 'swapFilter' : 'moveFilter'](elem, this, direction);
+                            }
+
+                          } else {
+
+                            if(elem !== this) {
+
+                              var placement = parseInt(angular
+                                .element(this)
+                                .attr('data-placement') || null),
+
+                                direction = $scope.getDirection(placement);
+
+                              Filtering[placement === 2 ? 'swapFilter' : 'moveFilter'](elem, this, direction);
+
+                            }
 
                           }
 
@@ -2297,6 +2393,24 @@ angular.module('paasb')
 
         angular.extend(this, {
 
+					removeByElement: function (elem) {
+
+						var self = this;
+
+						angular.forEach(scope.addedFilters, function (addedFilter) {
+
+							if(addedFilter && (addedFilter.element[0] === elem)) {
+
+								self.remove(addedFilter);
+
+							}
+
+						});
+
+						return this;
+
+					},
+
 					removeClassAllFilters: function (cls) {
 
 						angular.forEach(scope.addedFilters, function (addedFilter) {
@@ -2397,8 +2511,6 @@ angular.module('paasb')
 					},
 
 					swapFilter: function (source, dest) {
-
-						console.log('swapppp');
 
 						var sourceFilter = this.getFilterByElement(source),
 
@@ -3263,6 +3375,22 @@ angular.module('paasb')
 
 			var paasbUtils = {
 
+				isJson: function (str) {
+
+					try {
+
+						JSON.parse(str);
+
+					} catch (e) {
+
+						return false;
+
+					}
+
+					return true;
+					
+				},
+
 				removeObjectProperties: function(obj, props) {
 
 					for(var i = 0; i < props.length; i++) {
@@ -3610,7 +3738,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
     "\n" +
     "<div data-search-box=\"true\" class=\"paasb-searchbox\">\n" +
     "  <paasb-search-box-filtering search=\"Search\" filters=\"paasbSearchBoxFiltering\" ng-if=\"paasbSearchBoxFiltering &amp;&amp; paasbSearchBoxFiltering.length\"></paasb-search-box-filtering>\n" +
-    "  <div class=\"paasb-searchbox-wrapper\"><i ng-class=\"{ 'fa-search': !query.length, 'fa-trash': ((query &amp;&amp; query.length) || hasFilters) }\" ng-click=\"handleGarbage();\" draggable=\"true\" class=\"fa\"></i>\n" +
+    "  <div class=\"paasb-searchbox-wrapper\"><i ng-class=\"{ 'fa-search': !query.length, 'fa-trash': ((query &amp;&amp; query.length) || hasFilters) }\" ng-click=\"handleGarbage();\" paasb-draggable=\"\" draggable=\"true\" class=\"fa\"></i>\n" +
     "    <paasb-search-box-cache-filter ng-if=\"paasbSearchBoxCacheFilter\"></paasb-search-box-cache-filter><i ng-if=\"isLoading\" ng-class=\"{ 'no-cache-filtering': !paasbSearchBoxCacheFilter }\" class=\"fa fa-cog fa-spin\"></i>\n" +
     "    <input type=\"text\" ng-model=\"query\" id=\"{{searchInputId}}\"/>\n" +
     "    <paasb-search-box-auto-complete query=\"searchParams.query\" config=\"paasbSearchBoxAutoComplete\" input=\"input\" ng-if=\"autoCompleteEnabled\"></paasb-search-box-auto-complete>\n" +

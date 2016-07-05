@@ -6,7 +6,7 @@ html(ng-app="app")
     link(rel="stylesheet", href="styles/main.css")
   body(ng-controller="AppCtrl")
     h1 Pure Angular Advanced Searchbox
-    span Content Here
+    
     paasb-search-box(
       search-params="sOptions",
       paasb-search-box-filtering="sFilters",
@@ -16,6 +16,7 @@ html(ng-app="app")
       paasb-search-box-cache-filter="true",
       placeholder="Enter your query here..."
     )
+    
     // bower:js
     // endbower
     
@@ -33,6 +34,7 @@ html(ng-app="app")
     script(src="scripts/directives/searchbox-filter-moved.js")
     script(src="scripts/directives/searchbox-filter-moved-animation.js")
     script(src="scripts/directives/auto-size.js")
+    script(src="scripts/directives/draggable.js")
     
     script(src="scripts/services/ui.js")
     script(src="scripts/services/filtering.js")

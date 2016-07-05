@@ -56,6 +56,24 @@ angular.module('paasb')
 
         angular.extend(this, {
 
+					removeByElement: function (elem) {
+
+						var self = this;
+
+						angular.forEach(scope.addedFilters, function (addedFilter) {
+
+							if(addedFilter && (addedFilter.element[0] === elem)) {
+
+								self.remove(addedFilter);
+
+							}
+
+						});
+
+						return this;
+
+					},
+
 					removeClassAllFilters: function (cls) {
 
 						angular.forEach(scope.addedFilters, function (addedFilter) {
@@ -156,8 +174,6 @@ angular.module('paasb')
 					},
 
 					swapFilter: function (source, dest) {
-
-						console.log('swapppp');
 
 						var sourceFilter = this.getFilterByElement(source),
 
