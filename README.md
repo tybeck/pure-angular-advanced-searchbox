@@ -29,8 +29,8 @@
 
 ### Known Bugs
 
-- [ ] Operator get's reset on drag n drop (In Progress)
-- [ ] Paasb reports changes multiple times when drag n drop occurs
+- [x] Operator gets reset on drag n drop (**DONE**)
+- [ ] Paasb reports changes multiple times when drag n drop occurs (In Progress)
 
 ### Screenshots
 
