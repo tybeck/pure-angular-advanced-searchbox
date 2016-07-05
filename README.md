@@ -27,6 +27,11 @@
 - [x] Swap Drag N Drop (**DONE**)
 - [x] Insert At Drag N Drop (**DONE**)
 
+### Known Bugs
+
+- [ ] Operator get's reset on drag n drop (In Progress)
+- [ ] Paasb reports changes multiple times when drag n drop occurs
+
 ### Screenshots
 
 <img src="img/example1-animation.gif" alt="Example 1" />

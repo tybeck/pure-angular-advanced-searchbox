@@ -122,7 +122,9 @@ angular.module('paasb')
 
 						var sourceFilter = this.getFilterByElement(source),
 
-							clonedFilters = _.cloneDeep(scope.addedFilters);
+							clonedFilters = _.cloneDeep(scope.addedFilters),
+
+							operators = this.getOperators();
 
 						if(sourceFilter) {
 
@@ -131,7 +133,6 @@ angular.module('paasb')
 							var destFilter = this.getFilterByElement(dest),
 
 								index = null;
-
 
 							switch(direction) {
 
@@ -163,11 +164,43 @@ angular.module('paasb')
 
 							}
 
+							this.rearrangeOperators(sourceFilter, destFilter);
+
 							sourceFilter.recentlyMoved = true;
 
 							this.removeAll(true);
 
 							this.addByMemory(clonedFilters, true);
+
+						}
+
+					},
+
+					rearrangeOperators: function (source, dest) {
+
+						var operators = this.getOperators();
+
+						if(operators && operators.length) {
+
+							var sFilterIndex = (source.index - 1),
+
+								dFilterIndex = (dest.index - 1),
+
+								sFilterOperator = scope.addedOperators[sFilterIndex],
+
+								dFilterOperator = scope.addedOperators[dFilterIndex];
+
+							if(sFilterIndex !== -1 && dFilterOperator) {
+
+								scope.addedOperators[source.index - 1] = dFilterOperator;
+
+							}
+
+							if(dFilterIndex !== -1 && sFilterOperator) {
+
+								scope.addedOperators[dest.index - 1] = sFilterOperator;
+
+							}
 
 						}
 
@@ -185,11 +218,15 @@ angular.module('paasb')
 
 								sFilter = sourceFilter.filter,
 
-								dFilter = destFilter.filter;
+								dFilter = destFilter.filter,
+
+								operators = this.getOperators();
 
 							clonedFilters[sourceFilter.index] = dFilter;
 
 							clonedFilters[destFilter.index] = sFilter;
+
+							this.rearrangeOperators(sourceFilter, destFilter);
 
 							sFilter.recentlyMoved = true;
 
@@ -620,7 +657,11 @@ angular.module('paasb')
 
 										scope.registeredOperators.splice(oIndex, 1);
 
-										scope.addedOperators.splice(oIndex, 1);
+										if(!dontUpdate) {
+
+											scope.addedOperators.splice(oIndex, 1);
+
+										}
 
 									}
 
