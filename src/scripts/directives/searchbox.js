@@ -229,8 +229,6 @@ angular.module('paasb')
 
                       }
 
-                      paasbMemory.getAndSet('filters', filters);
-
                       if(timer) {
 
                         $timeout.cancel(timer);
