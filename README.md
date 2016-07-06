@@ -16,6 +16,18 @@
 
 ##### Pure Angular Advanced Search Box is an implementation to add advanced searching capabilities into a reusable UI to help build parameters based off of filters, queries and operators to send off to a search API.
 
+### Features
+
+- Basic Search Query Input Box
+- Filters
+- Filter Selectors - Selectors for filters *(Contains, Is Equal To, etc)*.
+- Operators - OR/AND support between filters to give more advanced searchbox functionality.
+- Grouping (**In Progress**)
+- Drag and Drop - Swap / Insert Before and After functionality for filters to change arrangement.
+- Validation - Validators on filters allows control over when search get's updated based on valid entries.
+- Middlewares - to modify values within filters after user input.
+- Externalized Configuration / HTML (**In Progress**)
+
 ### TODOs
 
 - [ ] Add grouping around conditionals
@@ -23,11 +35,12 @@
 - [ ] Build query (SOLR, SQL)
 - [x] Drag and drop filters into different positions. (**DONE**)
 - [x] Drag and drop filters into trash can? (**DONE**)
-- [ ] Add UI for validation (In Progress)
+- [ ] Add UI for validation
 - [x] Swap Drag N Drop (**DONE**)
 - [x] Insert At Drag N Drop (**DONE**)
 - [ ] Externalizing templates
 - [ ] Externalizing operators / filter selectors
+- [ ] Modifiers to filters through middleware
 
 ### Known Bugs
 

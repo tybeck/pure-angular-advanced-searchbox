@@ -2136,19 +2136,37 @@ angular.module('paasb')
 
   .filter('paasbClean', [function () {
 
-      return function (_data) {
+      return function (_data, middleware) {
 
-        angular.forEach(_data, function (point) {
+        if(_data && !_data.$$timestamp) {
 
-          if(point && !point.$$timestamp) {
+          _data.$$timestamp = new Date().getTime();
 
-            point.$$timestamp = new Date().getTime();
+        }
+
+        _data.$$modified = new Date().getTime();
+
+        if(middleware) {
+
+          if(typeof middleware === 'function') {
+
+            _data.modifiedValue = middleware(_data.value);
+
+          } else if (angular.isArray(middleware)) {
+
+            var modifiedValue = _data.value;
+
+            angular.forEach(middleware, function (m) {
+
+              modifiedValue = m(modifiedValue);
+
+            });
+
+            _data.modifiedValue = modifiedValue;
 
           }
 
-          point.$$modified = new Date().getTime();
-
-        });
+        }
 
         return _data;
 
@@ -2549,6 +2567,8 @@ angular.module('paasb')
 
 							}
 
+							sourceFilter.filter.recentlyMoved = true;
+
 							if(index !== null) {
 
 								if(index > clonedFilters.length) {
@@ -2564,8 +2584,6 @@ angular.module('paasb')
 							}
 
 							this.rearrangeOperators(sourceFilter, destFilter);
-
-							sourceFilter.recentlyMoved = true;
 
 							this.removeAll(true);
 
@@ -2805,7 +2823,7 @@ angular.module('paasb')
 
 						if(this.callback) {
 
-							var filters = this.clean(this.buildParameters());
+							var filters = this.buildParameters();
 
 							paasbMemory.getAndSet('filters', filters);
 
@@ -2817,13 +2835,15 @@ angular.module('paasb')
 
 					buildParameters: function () {
 
-						var params = [];
+						var params = [],
+
+							self = this;
 
 						angular.forEach(scope.addedFilters, function (filter) {
 
 							var buildParam = function (filter) {
 
-								params.push(angular.extend({
+								var _params = angular.extend({
 
 									'condition': filter.selector.key,
 
@@ -2833,9 +2853,11 @@ angular.module('paasb')
 
 									'$$timestamp': filter.$$timestamp || null,
 
-									'$$modified': filter.$$timestamp || null,
+									'$$modified': filter.$$timestamp || null
 
-								}, filter.extend || {}));
+								}, filter.extend || {});
+
+								params.push(self.clean(_params, filter.middleware));
 
 							};
 

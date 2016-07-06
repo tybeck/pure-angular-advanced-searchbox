@@ -44,7 +44,16 @@ angular.module('app')
           'name': 'vendor_sku',
           'displayName': 'Vendor SKU',
           'multi': true,
-          'root': 'Product'
+          'root': 'Product',
+          'middleware': [function (val) {
+
+            return val + ' test';
+
+          }, function (val) {
+
+            return val + ' test 2';
+
+          }]
         }, {
           'name': 'color',
           'displayName': 'Vendor Color',
