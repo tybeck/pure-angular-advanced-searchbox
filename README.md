@@ -26,6 +26,8 @@
 - [ ] Add UI for validation (In Progress)
 - [x] Swap Drag N Drop (**DONE**)
 - [x] Insert At Drag N Drop (**DONE**)
+- [ ] Make search box placeholders configurable
+- [ ] Add themes and/or customizable styles
 
 ### Known Bugs
 
