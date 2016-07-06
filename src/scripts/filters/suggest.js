@@ -2,14 +2,14 @@
 
 /**
  * @ngdoc filter
- * @name paasb.filter:suggest
+ * @name paasb.filter:paasbSuggest
  * @description
- * # suggest filter
+ * # paasbSuggest filter
  */
 
 angular.module('paasb')
 
-  .filter('suggest', [function () {
+  .filter('paasbSuggest', [function () {
 
     return _.memoize(function (suggestions, value, filter, suggested) {
 

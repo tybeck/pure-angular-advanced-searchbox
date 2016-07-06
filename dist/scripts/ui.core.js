@@ -1933,8 +1933,6 @@ angular.module('paasb')
 
                       }
 
-                      paasbMemory.getAndSet('filters', filters);
-
                       if(timer) {
 
                         $timeout.cancel(timer);
@@ -2117,14 +2115,47 @@ angular.module('paasb')
 
 /**
  * @ngdoc filter
- * @name paasb.filter:suggest
+ * @name paasb.filter:paasbClean
  * @description
- * # suggest filter
+ * # paasbClean
  */
 
 angular.module('paasb')
 
-  .filter('suggest', [function () {
+  .filter('paasbClean', [function () {
+
+      return function (_data) {
+
+        angular.forEach(_data, function (point) {
+
+          if(point && !point.$$timestamp) {
+
+            point.$$timestamp = new Date().getTime();
+
+          }
+
+          point.$$modified = new Date().getTime();
+
+        });
+
+        return _data;
+
+      };
+
+  }]);
+
+'use strict';
+
+/**
+ * @ngdoc filter
+ * @name paasb.filter:paasbSuggest
+ * @description
+ * # paasbSuggest filter
+ */
+
+angular.module('paasb')
+
+  .filter('paasbSuggest', [function () {
 
     return _.memoize(function (suggestions, value, filter, suggested) {
 
@@ -2364,6 +2395,7 @@ angular.module('paasb')
 
 	.factory('paasbFiltering', [
 		'$q',
+		'$filter',
     '$compile',
 		'$http',
 		'paasbUi',
@@ -2371,7 +2403,7 @@ angular.module('paasb')
 		'paasbMemory',
 		'paasbValidation',
 		'FILTERS',
-    function ($q, $compile, $http, paasbUi, paasbUtils, paasbMemory, paasbValidation, FILTERS) {
+    function ($q, $filter, $compile, $http, paasbUi, paasbUtils, paasbMemory, paasbValidation, FILTERS) {
 
       var scope = null,
 
@@ -2408,6 +2440,8 @@ angular.module('paasb')
 				});
 
         angular.extend(this, {
+
+					'clean': $filter('paasbClean'),
 
 					removeByElement: function (elem) {
 
@@ -2759,7 +2793,11 @@ angular.module('paasb')
 
 						if(this.callback) {
 
-							return this.callback(this.buildParameters(), scope.addedOperators || [], forceRefresh);
+							var filters = this.clean(this.buildParameters());
+
+							paasbMemory.getAndSet('filters', filters);
+
+							return this.callback(filters, scope.addedOperators || [], forceRefresh);
 
 						}
 
@@ -2779,7 +2817,11 @@ angular.module('paasb')
 
 									'value': filter.value,
 
-									'$$name': filter.name
+									'$$name': filter.name,
+
+									'$$timestamp': filter.$$timestamp || null,
+
+									'$$modified': filter.$$timestamp || null,
 
 								}, filter.extend || {}));
 
@@ -2878,6 +2920,18 @@ angular.module('paasb')
 
 					},
 
+					addProperty: function (filter, opts, key) {
+
+						if(opts && opts[key]) {
+
+							filter[key] = opts[key];
+
+						}
+
+						return this;
+
+					},
+
           add: function (filter, options) {
 
             var childScope = scope.$new(true),
@@ -2886,11 +2940,9 @@ angular.module('paasb')
 
 							operators = scope.paasbSearchBoxEnableFilteringOperators;
 
-						if(options && options.recentlyMoved) {
-
-							clonedFilter.recentlyMoved = true;
-
-						}
+						this
+							.addProperty(clonedFilter, options, '$$timestamp')
+							.addProperty(clonedFilter, options, '$$modified')
 
 						angular.extend(childScope, {
 
