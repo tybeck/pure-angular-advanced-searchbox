@@ -76,15 +76,21 @@ div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog.no-cache-filtering {
   margin-top: -10px;
 }
 /* line 36, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-eraser {
+  right: 65px;
+  color: #4A92D0;
+  cursor: pointer;
+}
+/* line 44, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-trash {
   cursor: pointer;
   color: #337ab7;
 }
-/* line 41, ../../src/styles/directives/searchbox.scss */
+/* line 49, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-trash:hover {
   color: #000;
 }
-/* line 51, ../../src/styles/directives/searchbox.scss */
+/* line 59, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper > input {
   font-size: 18px;
   border: none;
