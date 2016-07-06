@@ -116,6 +116,18 @@ angular.module('paasb')
 
                   'events': {
 
+                    handleEraser: function () {
+
+                      angular.extend(params, {
+
+                        'query': '',
+
+                      });
+
+                      $scope.query = '';
+
+                    },
+
                     handleGarbage: function () {
 
                       if((params.query && params.query.length) || $scope.hasFilters) {

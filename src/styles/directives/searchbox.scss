@@ -33,6 +33,14 @@ div.paasb-searchbox {
       font-size: 18px;
       right: 15px;
 
+      &.fa-eraser {
+
+        right: 65px;
+        color: #4A92D0;
+        cursor: pointer;
+
+      }
+
       &.fa-trash {
 
         cursor: pointer;

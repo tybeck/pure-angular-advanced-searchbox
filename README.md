@@ -90,16 +90,27 @@ angular.module('myModule', ['paasb']);
 The searchbox will return data in JSON format and look something like:
 
 ```json
-{
-	"query":"Oreo",
-	"filters": {
-		"color": [
-			{
-				"condition": "contains",
-				"value": "Black"
-			}
-		]
-	}
+{  
+   "query":"",
+   "filters":[  
+      {  
+         "condition":"contains",
+         "value":"0011",
+         "$$name":"vendor_sku",
+         "$$timestamp":1467811597739,
+         "$$modified":1467813638989
+      },
+      {  
+         "condition":"contains",
+         "value":"RE",
+         "$$name":"vendor_abbr",
+         "$$timestamp":1467747849382,
+         "$$modified":1467813638989
+      }
+   ],
+   "operators":[  
+      "AND"
+   ]
 }
 ```
 

@@ -28,6 +28,10 @@ div(
       ng-model="query",
       id="{{searchInputId}}"
     )
+    i(
+      class="fa fa-eraser",
+      ng-click="handleEraser();"
+    )
     paasb-search-box-auto-complete(
       query="searchParams.query",
       config="paasbSearchBoxAutoComplete",
