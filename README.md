@@ -26,6 +26,8 @@
 - [ ] Add UI for validation (In Progress)
 - [x] Swap Drag N Drop (**DONE**)
 - [x] Insert At Drag N Drop (**DONE**)
+- [ ] Externalizing templates
+- [ ] Externalizing operators / filter selectors
 
 ### Known Bugs
 
