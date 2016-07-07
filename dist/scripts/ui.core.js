@@ -1722,7 +1722,8 @@ angular.module('paasb')
       'paasbPlaceholders',
       'paasbMemory',
       'paasbUtils',
-      function ($timeout, $window, paasbApi, paasbUi, paasbFiltering, paasbPlaceholders, paasbMemory, paasbUtils) {
+      'FILTERS',
+      function ($timeout, $window, paasbApi, paasbUi, paasbFiltering, paasbPlaceholders, paasbMemory, paasbUtils, FILTERS) {
 
         return {
 
@@ -1745,6 +1746,10 @@ angular.module('paasb')
               'paasbSearchBoxCacheFilter': '=?',
 
               'paasbSearchBoxEnableFilteringOperators': '=?',
+
+              'paasbSearchBoxFilterSelectors': '=?',
+
+              'paasbSearchBoxFilterOperators': '=?',
 
               'placeholder': '@'
 
@@ -1822,12 +1827,6 @@ angular.module('paasb')
 
                     handleEraser: function () {
 
-                      angular.extend(params, {
-
-                        'query': '',
-
-                      });
-
                       $scope.query = '';
 
                     },
@@ -1889,6 +1888,18 @@ angular.module('paasb')
                         'operators': []
 
                       });
+
+                    }
+
+                    if(FILTERS && FILTERS.SELECTORS && $scope.paasbSearchBoxFilterSelectors) {
+
+                      FILTERS.SELECTORS = $scope.paasbSearchBoxFilterSelectors;
+
+                    }
+
+                    if(FILTERS && FILTERS.OPERATORS && $scope.paasbSearchBoxFilterOperators) {
+
+                      FILTERS.OPERATORS = $scope.paasbSearchBoxFilterOperators;
 
                     }
 
@@ -1994,6 +2005,12 @@ angular.module('paasb')
                         if(paasbMemory.getAndSet('query') !== __new) {
 
                           paasbMemory.getAndSet('query', __new);
+
+                          paasbUi.extend($scope, {
+
+                            'hasQuery': (__new && __new.length) ? true : false
+
+                          });
 
                           if(config.delay && !$scope.skipDelay) {
 
@@ -3883,7 +3900,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
     "  <paasb-search-box-filtering search=\"Search\" filters=\"paasbSearchBoxFiltering\" ng-if=\"paasbSearchBoxFiltering &amp;&amp; paasbSearchBoxFiltering.length\"></paasb-search-box-filtering>\n" +
     "  <div class=\"paasb-searchbox-wrapper\"><i ng-class=\"{ 'fa-search': !query.length, 'fa-trash': ((query &amp;&amp; query.length) || hasFilters) }\" ng-click=\"handleGarbage();\" paasb-draggable=\"\" draggable=\"true\" class=\"fa\"></i>\n" +
     "    <paasb-search-box-cache-filter ng-if=\"paasbSearchBoxCacheFilter\"></paasb-search-box-cache-filter><i ng-if=\"isLoading\" ng-class=\"{ 'no-cache-filtering': !paasbSearchBoxCacheFilter }\" class=\"fa fa-cog fa-spin\"></i>\n" +
-    "    <input type=\"text\" ng-model=\"query\" id=\"{{searchInputId}}\"/><i ng-click=\"handleEraser();\" class=\"fa fa-eraser\"></i>\n" +
+    "    <input type=\"text\" ng-model=\"query\" id=\"{{searchInputId}}\"/><i ng-if=\"hasQuery\" ng-click=\"handleEraser();\" class=\"fa fa-eraser\"></i>\n" +
     "    <paasb-search-box-auto-complete query=\"searchParams.query\" config=\"paasbSearchBoxAutoComplete\" input=\"input\" ng-if=\"autoCompleteEnabled\"></paasb-search-box-auto-complete>\n" +
     "  </div>\n" +
     "</div>"

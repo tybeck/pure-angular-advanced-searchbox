@@ -48,6 +48,7 @@
 
 - [x] Operator gets reset on drag n drop (**DONE**)
 - [ ] Paasb reports changes multiple times when drag n drop occurs (In Progress)
+- [ ] Trash can button doesn't respect delay
 
 ### Screenshots
 

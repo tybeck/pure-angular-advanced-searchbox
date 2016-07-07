@@ -18,7 +18,8 @@ angular.module('paasb')
       'paasbPlaceholders',
       'paasbMemory',
       'paasbUtils',
-      function ($timeout, $window, paasbApi, paasbUi, paasbFiltering, paasbPlaceholders, paasbMemory, paasbUtils) {
+      'FILTERS',
+      function ($timeout, $window, paasbApi, paasbUi, paasbFiltering, paasbPlaceholders, paasbMemory, paasbUtils, FILTERS) {
 
         return {
 
@@ -41,6 +42,10 @@ angular.module('paasb')
               'paasbSearchBoxCacheFilter': '=?',
 
               'paasbSearchBoxEnableFilteringOperators': '=?',
+
+              'paasbSearchBoxFilterSelectors': '=?',
+
+              'paasbSearchBoxFilterOperators': '=?',
 
               'placeholder': '@'
 
@@ -118,12 +123,6 @@ angular.module('paasb')
 
                     handleEraser: function () {
 
-                      angular.extend(params, {
-
-                        'query': '',
-
-                      });
-
                       $scope.query = '';
 
                     },
@@ -185,6 +184,18 @@ angular.module('paasb')
                         'operators': []
 
                       });
+
+                    }
+
+                    if(FILTERS && FILTERS.SELECTORS && $scope.paasbSearchBoxFilterSelectors) {
+
+                      FILTERS.SELECTORS = $scope.paasbSearchBoxFilterSelectors;
+
+                    }
+
+                    if(FILTERS && FILTERS.OPERATORS && $scope.paasbSearchBoxFilterOperators) {
+
+                      FILTERS.OPERATORS = $scope.paasbSearchBoxFilterOperators;
 
                     }
 
@@ -290,6 +301,12 @@ angular.module('paasb')
                         if(paasbMemory.getAndSet('query') !== __new) {
 
                           paasbMemory.getAndSet('query', __new);
+
+                          paasbUi.extend($scope, {
+
+                            'hasQuery': (__new && __new.length) ? true : false
+
+                          });
 
                           if(config.delay && !$scope.skipDelay) {
 
