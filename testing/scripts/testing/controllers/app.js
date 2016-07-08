@@ -149,11 +149,11 @@ angular.module('app')
 
         console.log('api', api);
 
-        $scope.$watch('sOptions', function (__new) {
+        $scope.$on('onChange', function (ev, params) {
 
-          console.log(__new);
+          console.log(params);
 
-        }, true);
+        });
 
       });
 

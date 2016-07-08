@@ -1,18 +1,18 @@
 <img src="img/angular.png" alt="Angular" align="right" />
 ## Pure Angular Advanced Searchbox
-![Bower version](https://img.shields.io/bower/v/pure-angular-advanced-searchbox.svg?maxAge=900000)
+![Bower version](https://img.shields.io/bower/v/pure-angular-advanced-searchbox.svg?maxAge=180000)
 &nbsp;&nbsp;&nbsp;
-![GitHub version](https://img.shields.io/github/tag/tybeck/pure-angular-advanced-searchbox.svg?maxAge=900000)
+![GitHub version](https://img.shields.io/github/tag/tybeck/pure-angular-advanced-searchbox.svg?maxAge=180000)
 &nbsp;&nbsp;&nbsp;
-![Commits Since](https://img.shields.io/github/commits-since/tybeck/pure-angular-advanced-searchbox/v1.1.1.svg?maxAge=900000)
+![Commits Since](https://img.shields.io/github/commits-since/tybeck/pure-angular-advanced-searchbox/v1.1.1.svg?maxAge=180000)
 &nbsp;&nbsp;&nbsp;
 ![NPM Dependencies](https://david-dm.org/tybeck/pure-angular-advanced-searchbox.svg)
 &nbsp;&nbsp;&nbsp;
 ![NPM Dev Dependencies](https://david-dm.org/tybeck/pure-angular-advanced-searchbox/dev-status.svg)
 &nbsp;&nbsp;&nbsp;
-![Total Downloads](https://img.shields.io/github/downloads/pure-angular-advanced-searchbox/pure-angular-advanced-searchbox/total.svg?maxAge=900000)
+![Total Downloads](https://img.shields.io/github/downloads/pure-angular-advanced-searchbox/pure-angular-advanced-searchbox/total.svg?maxAge=180000)
 &nbsp;&nbsp;&nbsp;
-![Beerpay](https://img.shields.io/beerpay/tybeck/pure-angular-advanced-searchbox.svg?maxAge=900000)
+![Beerpay](https://img.shields.io/beerpay/tybeck/pure-angular-advanced-searchbox.svg?maxAge=180000)
 
 ##### Pure Angular Advanced Search Box is an implementation to add advanced searching capabilities into a reusable UI to help build parameters based off of filters, queries and operators to send off to a search API.
 
@@ -99,6 +99,8 @@ angular.module('myModule', ['paasb']);
   paasb-search-box-config="sConfig"
   paasb-search-box-auto-complete="sConfig"
   paasb-search-box-cache-filter="true"
+  paasb-search-box-filter-selectors="sFilterSelectors",
+  paasb-search-box-filter-operators="sFilterOperators",
   placeholder="Enter your query here..."
 </paasb-search-box>
 ```
@@ -109,26 +111,27 @@ The searchbox will return data in JSON format and look something like:
 
 ```json
 {  
-   "query":"",
    "filters":[  
       {  
          "condition":"contains",
-         "value":"0011",
-         "$$name":"vendor_sku",
-         "$$timestamp":1467811597739,
-         "$$modified":1467813638989
+         "value":"Yellow",
+         "$$name":"color",
+         "$$timestamp":1467920691448,
+         "$$modified":1467920912192
       },
       {  
          "condition":"contains",
-         "value":"RE",
+         "value":"NK",
          "$$name":"vendor_abbr",
-         "$$timestamp":1467747849382,
-         "$$modified":1467813638989
+         "$$timestamp":1467920912192,
+         "$$modified":1467920912192
       }
    ],
    "operators":[  
       "AND"
-   ]
+   ],
+   "$$lastChange":1467920919738,
+   "query":"Shoe"
 }
 ```
 
@@ -171,6 +174,60 @@ $scope.sConfig = {
     'delay': 1000, /* How long before paasb fires off a change event */
     'store': true /* Should we store our query/caching in local storage? */
 };
+
+$scope.sFilterOperators = [
+  {
+    "name": "NOT"
+  },
+  {
+    "name": "AND",
+    "selected": true
+  }, {
+    "name": "OR"
+  }
+];
+
+$scope.sFilterSelectors = [
+  {
+    "name": "Test",
+    "key": "test"
+  },
+  {
+    "name": "Contains",
+    "key": "contains",
+    "selected": true,
+    "notAllowed": [
+      "restrictedSuggestedValues"
+    ]
+  },
+  {
+    "name": "Does not contain",
+    "key": "doesNotContain",
+    "notAllowed": [
+      "restrictedSuggestedValues"
+    ]
+  },
+  {
+    "name": "Is Equal To",
+    "key": "isEqualTo"
+  },
+  {
+    "name": "Is Not Equal To",
+    "key": "isNotEqualTo"
+  },
+  {
+    "name": "Starts with",
+    "key": "startsWith"
+  },
+  {
+    "name": "Ends with",
+    "key": "endsWith"
+  },
+  {
+    "name": "Similiarity",
+    "key": "similiarity"
+  }
+];
 ```
 
 ### Available Directive Attributes
@@ -213,6 +270,16 @@ $scope.sConfig = {
 	    <td>paasb-search-box-enable-filtering-operators</td>
 	    <td>Should we enable filter operators (<strong>AND</strong>/<strong>OR</strong>)? By default <strong>paasb</strong> selects <strong>OR</strong> without this enabled.</td>
 	    <td>boolean</td>
+    </tr>
+     <tr>
+	    <td>paasb-search-box-filter-selectors</td>
+	    <td>Allows you to define your own filter selectors outside of <strong>paasb</strong>'s predefined selectors.</td>
+	    <td>array[object]</td>
+    </tr>
+      <tr>
+	    <td>paasb-search-box-filter-operators</td>
+	    <td>Allows you to define your own filter operators outside of <strong>paasb</strong>'s predefined operators.</td>
+	    <td>array[object]</td>
     </tr>
    <tr>
      <td>placeholder</td>

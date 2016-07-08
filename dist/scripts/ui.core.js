@@ -618,7 +618,7 @@ angular.module('paasb')
 
                 destroy: function () {
 
-                  return Filtering.remove($scope.filter);
+                  return Filtering.remove($scope.filter, null, false);
 
                 },
 
@@ -1110,8 +1110,10 @@ angular.module('paasb')
 angular.module('paasb')
 
     .directive('paasbSearchBoxFilterOperators', [
+      '$document',
+      'paasbUi',
       'FILTERS',
-      function (FILTERS) {
+      function ($document, paasbUi, FILTERS) {
 
         return {
 
@@ -1151,9 +1153,37 @@ angular.module('paasb')
 
                   'showOperators': false,
 
+                  'events': {
+
+                    docClick: function (ev) {
+
+                      var isChild = $element[0].contains(ev.target);
+
+                      var isSelf = $element[0] == ev.target;
+
+                      var isInside = isChild || isSelf;
+
+                      if(!isInside) {
+
+                        $document.unbind('click', $scope.events.docClick);
+
+                        paasbUi.extend($scope, {
+
+                          'showOperators': false
+
+                        });
+
+                      }
+
+                    }
+
+                  },
+
                   openOperators: function () {
 
                     $scope.showOperators = !$scope.showOperators;
+
+                    $document[$scope.showOperators ? 'bind': 'unbind']('click', $scope.events.docClick);
 
                     $scope.reAutoSize();
 
@@ -1835,27 +1865,11 @@ angular.module('paasb')
 
                       if((params.query && params.query.length) || $scope.hasFilters) {
 
-                        angular.extend(params, {
+                        $scope.garbageCollected = true;
 
-                          'query': '',
-
-                          'filters': {}
-
-                        });
+                        Filterer.removeAll(true, true);
 
                         $scope.query = '';
-
-                        angular.forEach(params, function (param) {
-
-                          if(param !== 'query') {
-
-                            delete params[param];
-
-                          }
-
-                        });
-
-                        Filterer.removeAll();
 
                       }
 
@@ -1912,6 +1926,12 @@ angular.module('paasb')
                       .make('paasbSearchBoxConfig', {}, 'isObject')
                       .make('paasbSearchBoxAutoComplete', {}, 'isObject');
 
+                    if($scope.query) {
+
+                      $scope.hasQuery = true;
+
+                    }
+
                     if(!this.shouldStore()) {
 
                       paasbMemory.removeAll();
@@ -1944,7 +1964,23 @@ angular.module('paasb')
 
                   },
 
+                  send: function (params) {
+
+                    angular.extend(params, {
+
+                      '$$lastChange': new Date().getTime()
+
+                    });
+
+                    $scope.$emit('onChange', params);
+
+                    return this;
+
+                  },
+
                   addEvents: function () {
+
+                    var self = this;
 
                     angular.extend($scope, this.events);
 
@@ -1964,15 +2000,17 @@ angular.module('paasb')
 
                       if(config.delay && !refresh) {
 
+                        params.filters = filters;
+
+                        if($scope.paasbSearchBoxEnableFilteringOperators) {
+
+                          params.operators = operators;
+
+                        }
+
                         timer = $timeout(function () {
 
-                          params.filters = filters;
-
-                          if($scope.paasbSearchBoxEnableFilteringOperators) {
-
-                            params.operators = operators;
-
-                          }
+                          self.send(params);
 
                         }, config.delay);
 
@@ -1985,6 +2023,8 @@ angular.module('paasb')
                           params.operators = operators;
 
                         }
+
+                        self.send(params);
 
                       }
 
@@ -2024,6 +2064,8 @@ angular.module('paasb')
 
                               params.query = __new;
 
+                              self.send(params);
+
                             }, config.delay);
 
                           } else {
@@ -2038,6 +2080,8 @@ angular.module('paasb')
 
                             params.query = __new;
 
+                            self.send(params);
+
                           }
 
                         }
@@ -2049,12 +2093,6 @@ angular.module('paasb')
                     $scope.input.on('focus', function () {
 
                       $scope.$broadcast('input.focused');
-
-                    });
-
-                    $scope.box.on('keyup', function (ev) {
-
-
 
                     });
 
@@ -2130,7 +2168,8 @@ angular.module('paasb')
                     .configure()
                     .dom()
                     .register()
-                    .addEvents();
+                    .addEvents()
+                    .send(params);
 
                 });
 
@@ -3055,7 +3094,7 @@ angular.module('paasb')
 
           },
 
-          remove: function (filter, dontUpdate) {
+          remove: function (filter, dontUpdate, overrideUpdate) {
 
 						var fIndex = null,
 
@@ -3113,11 +3152,7 @@ angular.module('paasb')
 
 										scope.registeredOperators.splice(oIndex, 1);
 
-										if(!dontUpdate) {
-
-											scope.addedOperators.splice(oIndex, 1);
-
-										}
+										scope.addedOperators.splice(oIndex, 1);
 
 									}
 
@@ -3149,13 +3184,19 @@ angular.module('paasb')
 
 							if(!dontUpdate) {
 
-								this.update(true);
+								if(typeof overrideUpdate !== 'boolean') {
+
+									overrideUpdate = true;
+
+								}
+
+								this.update(overrideUpdate);
 
 							}
 
           },
 
-          removeAll: function (dontErase) {
+          removeAll: function (dontUpdate, removeMemory) {
 
 						var self = this;
 
@@ -3164,13 +3205,19 @@ angular.module('paasb')
 							.reverse()
 							.forEach(function (addedFilter) {
 
-								return self.remove(addedFilter, dontErase);
+								return self.remove(addedFilter, dontUpdate);
 
 							});
 
-						if(!dontErase) {
+						if(!dontUpdate || removeMemory) {
 
 							paasbMemory.removeAll();
+
+						}
+
+						if(removeMemory) {
+
+							this.update();
 
 						}
 

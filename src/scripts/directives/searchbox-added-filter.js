@@ -418,7 +418,7 @@ angular.module('paasb')
 
                 destroy: function () {
 
-                  return Filtering.remove($scope.filter);
+                  return Filtering.remove($scope.filter, null, false);
 
                 },
 

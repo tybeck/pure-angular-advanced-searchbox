@@ -624,7 +624,7 @@ angular.module('paasb')
 
           },
 
-          remove: function (filter, dontUpdate) {
+          remove: function (filter, dontUpdate, overrideUpdate) {
 
 						var fIndex = null,
 
@@ -682,11 +682,7 @@ angular.module('paasb')
 
 										scope.registeredOperators.splice(oIndex, 1);
 
-										if(!dontUpdate) {
-
-											scope.addedOperators.splice(oIndex, 1);
-
-										}
+										scope.addedOperators.splice(oIndex, 1);
 
 									}
 
@@ -718,13 +714,19 @@ angular.module('paasb')
 
 							if(!dontUpdate) {
 
-								this.update(true);
+								if(typeof overrideUpdate !== 'boolean') {
+
+									overrideUpdate = true;
+
+								}
+
+								this.update(overrideUpdate);
 
 							}
 
           },
 
-          removeAll: function (dontErase) {
+          removeAll: function (dontUpdate, removeMemory) {
 
 						var self = this;
 
@@ -733,13 +735,19 @@ angular.module('paasb')
 							.reverse()
 							.forEach(function (addedFilter) {
 
-								return self.remove(addedFilter, dontErase);
+								return self.remove(addedFilter, dontUpdate);
 
 							});
 
-						if(!dontErase) {
+						if(!dontUpdate || removeMemory) {
 
 							paasbMemory.removeAll();
+
+						}
+
+						if(removeMemory) {
+
+							this.update();
 
 						}
 

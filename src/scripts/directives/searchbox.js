@@ -131,27 +131,11 @@ angular.module('paasb')
 
                       if((params.query && params.query.length) || $scope.hasFilters) {
 
-                        angular.extend(params, {
+                        $scope.garbageCollected = true;
 
-                          'query': '',
-
-                          'filters': {}
-
-                        });
+                        Filterer.removeAll(true, true);
 
                         $scope.query = '';
-
-                        angular.forEach(params, function (param) {
-
-                          if(param !== 'query') {
-
-                            delete params[param];
-
-                          }
-
-                        });
-
-                        Filterer.removeAll();
 
                       }
 
@@ -208,6 +192,12 @@ angular.module('paasb')
                       .make('paasbSearchBoxConfig', {}, 'isObject')
                       .make('paasbSearchBoxAutoComplete', {}, 'isObject');
 
+                    if($scope.query) {
+
+                      $scope.hasQuery = true;
+
+                    }
+
                     if(!this.shouldStore()) {
 
                       paasbMemory.removeAll();
@@ -240,7 +230,23 @@ angular.module('paasb')
 
                   },
 
+                  send: function (params) {
+
+                    angular.extend(params, {
+
+                      '$$lastChange': new Date().getTime()
+
+                    });
+
+                    $scope.$emit('onChange', params);
+
+                    return this;
+
+                  },
+
                   addEvents: function () {
+
+                    var self = this;
 
                     angular.extend($scope, this.events);
 
@@ -260,15 +266,17 @@ angular.module('paasb')
 
                       if(config.delay && !refresh) {
 
+                        params.filters = filters;
+
+                        if($scope.paasbSearchBoxEnableFilteringOperators) {
+
+                          params.operators = operators;
+
+                        }
+
                         timer = $timeout(function () {
 
-                          params.filters = filters;
-
-                          if($scope.paasbSearchBoxEnableFilteringOperators) {
-
-                            params.operators = operators;
-
-                          }
+                          self.send(params);
 
                         }, config.delay);
 
@@ -281,6 +289,8 @@ angular.module('paasb')
                           params.operators = operators;
 
                         }
+
+                        self.send(params);
 
                       }
 
@@ -320,6 +330,8 @@ angular.module('paasb')
 
                               params.query = __new;
 
+                              self.send(params);
+
                             }, config.delay);
 
                           } else {
@@ -334,6 +346,8 @@ angular.module('paasb')
 
                             params.query = __new;
 
+                            self.send(params);
+
                           }
 
                         }
@@ -345,12 +359,6 @@ angular.module('paasb')
                     $scope.input.on('focus', function () {
 
                       $scope.$broadcast('input.focused');
-
-                    });
-
-                    $scope.box.on('keyup', function (ev) {
-
-
 
                     });
 
@@ -426,7 +434,8 @@ angular.module('paasb')
                     .configure()
                     .dom()
                     .register()
-                    .addEvents();
+                    .addEvents()
+                    .send(params);
 
                 });
 

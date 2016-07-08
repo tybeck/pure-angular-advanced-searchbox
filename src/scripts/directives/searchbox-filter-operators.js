@@ -10,8 +10,10 @@
 angular.module('paasb')
 
     .directive('paasbSearchBoxFilterOperators', [
+      '$document',
+      'paasbUi',
       'FILTERS',
-      function (FILTERS) {
+      function ($document, paasbUi, FILTERS) {
 
         return {
 
@@ -51,9 +53,37 @@ angular.module('paasb')
 
                   'showOperators': false,
 
+                  'events': {
+
+                    docClick: function (ev) {
+
+                      var isChild = $element[0].contains(ev.target);
+
+                      var isSelf = $element[0] == ev.target;
+
+                      var isInside = isChild || isSelf;
+
+                      if(!isInside) {
+
+                        $document.unbind('click', $scope.events.docClick);
+
+                        paasbUi.extend($scope, {
+
+                          'showOperators': false
+
+                        });
+
+                      }
+
+                    }
+
+                  },
+
                   openOperators: function () {
 
                     $scope.showOperators = !$scope.showOperators;
+
+                    $document[$scope.showOperators ? 'bind': 'unbind']('click', $scope.events.docClick);
 
                     $scope.reAutoSize();
 
