@@ -41,14 +41,14 @@
 - [ ] Make search box placeholders configurable
 - [ ] Add themes and/or customizable styles
 - [ ] Externalizing templates
-- [ ] Externalizing operators / filter selectors
+- [x] Externalizing operators / filter selectors (**DONE**)
 - [ ] Modifiers to filters through middleware
 
 ### Known Bugs
 
 - [x] Operator gets reset on drag n drop (**DONE**)
-- [ ] Paasb reports changes multiple times when drag n drop occurs (In Progress)
-- [ ] Trash can button doesn't respect delay
+- [x] Paasb reports changes multiple times when drag n drop occurs (**DONE**)
+- [x] Trash can button doesn't respect delay (**DONE**)
 
 ### Screenshots
 
