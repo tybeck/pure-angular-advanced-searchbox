@@ -302,6 +302,10 @@ $scope.sFilterSelectors = [
       <td>onRegisterApi</td>
       <td>Gain access to internal APIs exposed by <strong>paasb</strong> such as Filtering, Placeholding, Loader, etc.</td>
     </tr>
+        <tr>
+      <td>onChange</td>
+      <td>Fired every time a change occurs on search box.</td>
+    </tr>
   </tbody>
 </table>
 
@@ -311,6 +315,12 @@ Example:
 $scope.$on('onRegisterApi', function(ev, api) {
 
 	console.log('api!', api);
+
+	$scope.$on('onChange', function (changeEv, parameters) {
+
+		console.log('parameters!', parameters);
+
+	});
 
 });
 ```
