@@ -323,7 +323,11 @@ angular.module('paasb')
 
 						}
 
-						this.update();
+            if(!dontUpdate) {
+
+              this.update();
+
+            }
 
 					},
 

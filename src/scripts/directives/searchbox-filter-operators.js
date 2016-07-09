@@ -189,6 +189,8 @@ angular.module('paasb')
 
                       Filtering.addOperatorToFilter($scope.operator, filter, true);
 
+                      console.log('okay');
+
                     }
 
                     return $scope;
