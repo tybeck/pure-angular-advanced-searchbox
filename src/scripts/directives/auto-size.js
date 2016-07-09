@@ -52,11 +52,25 @@ angular.module('paasb')
 
                   if(searchInput === boundingElement) {
 
-                    var boundingElementLeft = filter.element
-                      .find('div')[2]
-                      .getBoundingClientRect().left;
+                    var boundingElem = filter.element
+                      .find('div')[2],
 
-                    left -= boundingElementLeft;
+                        boundingElementLeft;
+
+                    if(!boundingElem) {
+
+                      boundingElem = filter.element
+                        .find('ul')[0];
+
+                    }
+
+                    if(boundingElem) {
+
+                      boundingElementLeft = boundingElem.getBoundingClientRect().left;
+
+                      left -= boundingElementLeft;
+
+                    }
 
                   }
 
