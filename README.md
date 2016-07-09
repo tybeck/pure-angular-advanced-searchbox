@@ -38,11 +38,11 @@
 - [ ] Add UI for validation
 - [x] Swap Drag N Drop (**DONE**)
 - [x] Insert At Drag N Drop (**DONE**)
-- [ ] Make search box placeholders configurable
+- [ ] Make search box placeholders configurable (**DONE**)
 - [ ] Add themes and/or customizable styles
 - [ ] Externalizing templates
 - [x] Externalizing operators / filter selectors (**DONE**)
-- [ ] Modifiers to filters through middleware
+- [ ] Modifiers to filters through middleware (**DONE**)
 
 ### Known Bugs
 
@@ -99,8 +99,8 @@ angular.module('myModule', ['paasb']);
   paasb-search-box-config="sConfig"
   paasb-search-box-auto-complete="sConfig"
   paasb-search-box-cache-filter="true"
-  paasb-search-box-filter-selectors="sFilterSelectors",
-  paasb-search-box-filter-operators="sFilterOperators",
+  paasb-search-box-filter-selectors="sFilterSelectors"
+  paasb-search-box-filter-operators="sFilterOperators"
   placeholder="Enter your query here..."
 </paasb-search-box>
 ```
@@ -153,7 +153,22 @@ $scope.sFilters = [
     {
       'name': 'cpi',
       'displayName': 'CPI',
-      'root': 'Product'
+      'root': 'Product',
+      'middleware': [function (val) {
+
+        if(!isNaN(val)) {
+
+          return (val * 2);
+
+        }
+
+        return val;
+
+      }, function (val) {
+
+        return 'value:' + val;
+
+      }]
     }, {
       'name': 'gender',
       'displayName': 'Vendor Gender',

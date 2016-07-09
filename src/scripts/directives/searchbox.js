@@ -131,9 +131,11 @@ angular.module('paasb')
 
                       if((params.query && params.query.length) || $scope.hasFilters) {
 
-                        $scope.garbageCollected = true;
+                        Filterer.removeAll(true, true, {
 
-                        Filterer.removeAll(true, true);
+                          'deleteOperators': true
+
+                        });
 
                         $scope.query = '';
 

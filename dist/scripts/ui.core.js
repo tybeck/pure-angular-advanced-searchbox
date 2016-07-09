@@ -1865,9 +1865,11 @@ angular.module('paasb')
 
                       if((params.query && params.query.length) || $scope.hasFilters) {
 
-                        $scope.garbageCollected = true;
+                        Filterer.removeAll(true, true, {
 
-                        Filterer.removeAll(true, true);
+                          'deleteOperators': true
+
+                        });
 
                         $scope.query = '';
 
@@ -2641,7 +2643,11 @@ angular.module('paasb')
 
 							this.rearrangeOperators(sourceFilter, destFilter);
 
-							this.removeAll(true);
+							this.removeAll(true, false, {
+
+								'drag': true
+
+							});
 
 							this.addByMemory(clonedFilters, true);
 
@@ -2703,7 +2709,11 @@ angular.module('paasb')
 
 							sFilter.recentlyMoved = true;
 
-							this.removeAll(true);
+							this.removeAll(true, false, {
+
+								'drag': true
+
+							});
 
 							this.addByMemory(clonedFilters, true);
 
@@ -2785,13 +2795,7 @@ angular.module('paasb')
 
 						}
 
-						if(!dontUpdate) {
-
-							this.update(true);
-
-						}
-
-						paasbMemory.getAndSet('operators', scope.addedOperators);
+						this.update();
 
 					},
 
@@ -3094,7 +3098,7 @@ angular.module('paasb')
 
           },
 
-          remove: function (filter, dontUpdate, overrideUpdate) {
+          remove: function (filter, dontUpdate, overrideUpdate, options) {
 
 						var fIndex = null,
 
@@ -3152,7 +3156,15 @@ angular.module('paasb')
 
 										scope.registeredOperators.splice(oIndex, 1);
 
-										scope.addedOperators.splice(oIndex, 1);
+										console.log(scope.addedOperators);
+
+										if(!dontUpdate || (options && options.deleteOperators)) {
+
+											scope.addedOperators.splice(oIndex, 1);
+
+										}
+
+										console.log(scope.addedOperators);
 
 									}
 
@@ -3196,7 +3208,7 @@ angular.module('paasb')
 
           },
 
-          removeAll: function (dontUpdate, removeMemory) {
+          removeAll: function (dontUpdate, removeMemory, options) {
 
 						var self = this;
 
@@ -3205,7 +3217,19 @@ angular.module('paasb')
 							.reverse()
 							.forEach(function (addedFilter) {
 
-								return self.remove(addedFilter, dontUpdate);
+								var opts = {
+
+									'deleteOperators': true
+
+								};
+
+								if(options && options.drag) {
+
+									delete opts.deleteOperators;
+
+								}
+
+								return self.remove(addedFilter, dontUpdate, undefined, opts);
 
 							});
 
