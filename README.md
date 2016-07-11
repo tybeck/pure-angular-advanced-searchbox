@@ -43,6 +43,7 @@
 - [ ] Externalizing templates
 - [x] Externalizing operators / filter selectors (**DONE**)
 - [ ] Modifiers to filters through middleware (**DONE**)
+- [ ] Update Live DEMO (In Progress)
 
 ### Known Bugs
 

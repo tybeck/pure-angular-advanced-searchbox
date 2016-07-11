@@ -1,0 +1,25 @@
+div.paasb-search-box-grouping {
+
+  position: absolute;
+  right: 13px;
+  background: white;
+  cursor: pointer;
+  padding: 3px 6px 3px 6px;
+  border-top-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-left: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: #FFF;
+  -webkit-transition: background-color 600ms linear;
+  -moz-transition: background-color 600ms linear;
+  -o-transition: background-color 600ms linear;
+  -ms-transition: background-color 600ms linear;
+  transition: background-color 600ms linear;
+
+  &:hover {
+
+    background: #f0f7fd;
+
+  }
+
+}

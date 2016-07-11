@@ -435,6 +435,16 @@ angular.module('paasb')
 
 							var buildParam = function (filter) {
 
+								var opts = {},
+
+									filterOperator = self.getOperatorByFilterIndex(filter);
+
+								if(filterOperator) {
+
+									opts.$$operator = filterOperator;
+
+								}
+
 								var _params = angular.extend({
 
 									'condition': filter.selector.key,
@@ -447,7 +457,7 @@ angular.module('paasb')
 
 									'$$modified': filter.$$timestamp || null
 
-								}, filter.extend || {});
+								}, opts, filter.extend || {});
 
 								params.push(self.clean(_params, filter.middleware));
 
@@ -487,6 +497,14 @@ angular.module('paasb')
 								.element(div)
 								.attr('ng-hide', '!addedFilters.length')
 								.addClass('paasb-added-filters-wrapper paasb-clearfix');
+
+							if(scope.paasbSearchBoxEnableGrouping) {
+
+								angular
+									.element(div)
+									.prepend('<paasb-search-box-grouping />');
+
+							}
 
 							scope.wrapper
 								.parent()

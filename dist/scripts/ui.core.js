@@ -1752,6 +1752,38 @@ angular.module('paasb')
 
 /**
  * @ngdoc directive
+ * @name paasb.directive:paasbSearchBoxGrouping
+ * @description
+ * # Implementation of paasbSearchBoxGrouping
+ */
+
+angular.module('paasb')
+
+    .directive('paasbSearchBoxGrouping', [
+      function () {
+
+        return {
+
+            'restrict': 'E',
+
+            'replace': true,
+
+            'templateUrl': 'views/directives/searchbox-grouping.html',
+
+            'require': '^paasbSearchBox',
+
+            controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+
+            }]
+
+        };
+
+    }]);
+
+'use strict';
+
+/**
+ * @ngdoc directive
  * @name paasb.directive:paasbSearchBox
  * @description
  * # Implementation of paasbSearchBox
@@ -1796,6 +1828,8 @@ angular.module('paasb')
               'paasbSearchBoxFilterSelectors': '=?',
 
               'paasbSearchBoxFilterOperators': '=?',
+
+              'paasbSearchBoxEnableGrouping': '=?',
 
               'placeholder': '@'
 
@@ -2923,6 +2957,16 @@ angular.module('paasb')
 
 							var buildParam = function (filter) {
 
+								var opts = {},
+
+									filterOperator = self.getOperatorByFilterIndex(filter);
+
+								if(filterOperator) {
+
+									opts.$$operator = filterOperator;
+
+								}
+
 								var _params = angular.extend({
 
 									'condition': filter.selector.key,
@@ -2935,7 +2979,7 @@ angular.module('paasb')
 
 									'$$modified': filter.$$timestamp || null
 
-								}, filter.extend || {});
+								}, opts, filter.extend || {});
 
 								params.push(self.clean(_params, filter.middleware));
 
@@ -2975,6 +3019,14 @@ angular.module('paasb')
 								.element(div)
 								.attr('ng-hide', '!addedFilters.length')
 								.addClass('paasb-added-filters-wrapper paasb-clearfix');
+
+							if(scope.paasbSearchBoxEnableGrouping) {
+
+								angular
+									.element(div)
+									.prepend('<paasb-search-box-grouping />');
+
+							}
 
 							scope.wrapper
 								.parent()
@@ -3982,6 +4034,12 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
     "    <li ng-repeat=\"filter in filters\" data-filter-name=\"{{filter.name}}\" ng-class=\"{ 'child-filter': filter.child, 'root-filter': filter.root }\" ng-click=\"addFilter($event);\" ng-if=\"filter.notFiltered\"><i class=\"fa fa-filter\"></i><span ng-bind=\"filter.displayName\" class=\"filter-display-name\"></span><span ng-bind-html=\"Utils.trust(filter.filteredFrom)\" class=\"filtered-from\"></span></li>\n" +
     "  </ul>\n" +
     "</div>"
+  );
+
+
+  $templateCache.put('views/directives/searchbox-grouping.html',
+    "\n" +
+    "<div class=\"paasb-search-box-grouping\"><i class=\"fa fa-plus\"></i></div>"
   );
 
 

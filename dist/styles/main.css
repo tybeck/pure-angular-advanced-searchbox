@@ -290,7 +290,11 @@ div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-f
   left: 0;
   top: 0;
 }
-/* line 70, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 72, ../../src/styles/directives/searchbox-added-filter.scss */
+div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-filter-contents.child span.selector-type {
+  background: #FFDFDF;
+}
+/* line 82, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-filter-operator {
   background: #FFF;
   padding: 5px 6px 5px 6px;
@@ -299,7 +303,7 @@ div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-f
   margin-top: 8px;
   float: left;
 }
-/* line 79, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 91, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-filter-operator span {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.5);
@@ -310,19 +314,15 @@ div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-f
   padding-right: 2px;
   display: block;
 }
-/* line 92, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 104, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-filter-operator span i.fa-arrow-left {
   margin-right: 5px;
   color: rgba(0, 0, 0, 0.75);
 }
-/* line 97, ../../src/styles/directives/searchbox-added-filter.scss */
+/* line 109, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter div.paasb-searchbox-added-filter-operator span i.fa-arrow-right {
   margin-left: 5px;
   color: rgba(0, 0, 0, 0.75);
-}
-/* line 112, ../../src/styles/directives/searchbox-added-filter.scss */
-div.paasb-searchbox div.paasb-searchbox-added-filter.child span.selector-type {
-  background: #FFDFDF;
 }
 /* line 122, ../../src/styles/directives/searchbox-added-filter.scss */
 div.paasb-searchbox div.paasb-searchbox-added-filter span.filter-name {
@@ -516,4 +516,27 @@ div.paasb-searchbox-filter-moved-animation.transition {
   transition: border-width .5s ease-out, width .5s ease-out, height .5s ease-out;
   -moz-transition: border-width .5s ease-out, width .5s ease-out, height .5s ease-out;
   -webkit-transition: border-width .5s ease-out, width .5s ease-out, height .5s ease-out;
+}
+
+/* line 1, ../../src/styles/directives/searchbox-grouping.scss */
+div.paasb-search-box-grouping {
+  position: absolute;
+  right: 13px;
+  background: white;
+  cursor: pointer;
+  padding: 3px 6px 3px 6px;
+  border-top-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-left: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: #FFF;
+  -webkit-transition: background-color 600ms linear;
+  -moz-transition: background-color 600ms linear;
+  -o-transition: background-color 600ms linear;
+  -ms-transition: background-color 600ms linear;
+  transition: background-color 600ms linear;
+}
+/* line 19, ../../src/styles/directives/searchbox-grouping.scss */
+div.paasb-search-box-grouping:hover {
+  background: #f0f7fd;
 }

@@ -65,6 +65,18 @@ div.paasb-searchbox {
         top: 0;
       }
 
+      &.child {
+
+        span {
+
+          &.selector-type {
+            background: #FFDFDF;
+          }
+
+        }
+
+      }
+
     }
 
     div.paasb-searchbox-added-filter-operator {
@@ -99,18 +111,6 @@ div.paasb-searchbox {
             color: rgba(0, 0, 0, 0.75);
           }
 
-        }
-
-      }
-
-    }
-
-    &.child {
-
-      span {
-
-        &.selector-type {
-          background: #FFDFDF;
         }
 
       }

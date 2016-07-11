@@ -47,6 +47,8 @@ angular.module('paasb')
 
               'paasbSearchBoxFilterOperators': '=?',
 
+              'paasbSearchBoxEnableGrouping': '=?',
+
               'placeholder': '@'
 
             },
