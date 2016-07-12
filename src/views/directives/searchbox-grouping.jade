@@ -1,5 +1,6 @@
 div(
   class="paasb-search-box-grouping",
-  ng-click="addGrouping();"
+  ng-class="{ 'grouping-active': isGroupingEnabled }",
+  ng-click="toggleGrouping();"
 )
   i(class="fa fa-plus")

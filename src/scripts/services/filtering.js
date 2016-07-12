@@ -518,6 +518,12 @@ angular.module('paasb')
 
 					},
 
+					hasFilterGrouping: function () {
+
+						return scope.paasbSearchBoxEnableGrouping;
+
+					},
+
 					addByMemory: function (options, erased) {
 
 						var opts = options.filters || options,

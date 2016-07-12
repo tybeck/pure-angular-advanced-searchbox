@@ -24,15 +24,23 @@ angular.module('paasb')
 
             controller: function ($scope, $element, $attrs) {
 
-              angular.extend($scope, {
+              var Grouper = null;
 
-                addGrouping: function () {
+              if($scope.Search && $scope.Search.Grouper) {
 
-                  console.log('add grouping');
+                Grouper = $scope.Search.Grouper;
 
-                }
+                angular.extend($scope, {
 
-              });
+                  toggleGrouping: function () {
+
+                    return Grouper.toggle();
+
+                  }
+
+                });
+
+              }
 
             }
 

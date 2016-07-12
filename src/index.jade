@@ -16,7 +16,7 @@ html(ng-app="app")
       paasb-search-box-cache-filter="true",
       paasb-search-box-filter-selectors="sFilterSelectors",
       paasb-search-box-filter-operators="sFilterOperators",
-      paasb-search-box-enable-grouping="true",
+      paasb-search-box-enable-grouping="false",
       placeholder="Enter your query here..."
     )
     
@@ -41,6 +41,7 @@ html(ng-app="app")
     script(src="scripts/directives/draggable.js")
     
     script(src="scripts/services/ui.js")
+    script(src="scripts/services/grouping.js")
     script(src="scripts/services/filtering.js")
     script(src="scripts/services/auto-complete.js")
     script(src="scripts/services/utils.js")

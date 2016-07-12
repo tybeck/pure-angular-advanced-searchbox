@@ -15,11 +15,12 @@ angular.module('paasb')
       'paasbApi',
       'paasbUi',
       'paasbFiltering',
+      'paasbGrouping',
       'paasbPlaceholders',
       'paasbMemory',
       'paasbUtils',
       'FILTERS',
-      function ($timeout, $window, paasbApi, paasbUi, paasbFiltering, paasbPlaceholders, paasbMemory, paasbUtils, FILTERS) {
+      function ($timeout, $window, paasbApi, paasbUi, paasbFiltering, paasbGrouping, paasbPlaceholders, paasbMemory, paasbUtils, FILTERS) {
 
         return {
 
@@ -62,6 +63,8 @@ angular.module('paasb')
                 autoComplete = null,
 
                 Filterer = null,
+
+                Grouper = null,
 
                 Placeholding = null,
 
@@ -374,11 +377,15 @@ angular.module('paasb')
 
                     Filterer = new paasbFiltering($scope, config);
 
+                    Grouper = new paasbGrouping($scope, config);
+
                     Placeholding = new paasbPlaceholders($scope, config);
 
                     angular.extend($scope, {
 
                       'Search': {
+
+                        'Grouper': Grouper,
 
                         'Filtering': Filterer,
 

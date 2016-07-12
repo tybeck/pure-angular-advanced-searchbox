@@ -101,27 +101,28 @@ The searchbox will return data in JSON format and look something like:
 
 ```json
 {  
+   "query":"",
    "filters":[  
       {  
          "condition":"contains",
-         "value":"Yellow",
-         "$$name":"color",
-         "$$timestamp":1467920691448,
-         "$$modified":1467920912192
+         "value":"NK",
+         "name":"vendor_abbr",
+         "$$timestamp":1468346525594,
+         "$$modified":1468346710022
       },
       {  
          "condition":"contains",
-         "value":"NK",
-         "$$name":"vendor_abbr",
-         "$$timestamp":1467920912192,
-         "$$modified":1467920912192
+         "value":"Yellow",
+         "name":"color",
+         "$$timestamp":1468346710022,
+         "$$modified":1468346710022,
+         "$$operator":"AND"
       }
    ],
    "operators":[  
       "AND"
    ],
-   "$$lastChange":1467920919738,
-   "query":"Shoe"
+   "$$lastChange":1468346735881
 }
 ```
 

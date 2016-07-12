@@ -1304,8 +1304,6 @@ angular.module('paasb')
 
                       Filtering.addOperatorToFilter($scope.operator, filter, true);
 
-                      console.log('okay');
-
                     }
 
                     return $scope;
@@ -1775,15 +1773,23 @@ angular.module('paasb')
 
             controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
 
-              angular.extend($scope, {
+              var Grouper = null;
 
-                addGrouping: function () {
+              if($scope.Search && $scope.Search.Grouper) {
 
-                  console.log('add grouping');
+                Grouper = $scope.Search.Grouper;
 
-                }
+                angular.extend($scope, {
 
-              });
+                  toggleGrouping: function () {
+
+                    return Grouper.toggle();
+
+                  }
+
+                });
+
+              }
 
             }]
 
@@ -1808,11 +1814,12 @@ angular.module('paasb')
       'paasbApi',
       'paasbUi',
       'paasbFiltering',
+      'paasbGrouping',
       'paasbPlaceholders',
       'paasbMemory',
       'paasbUtils',
       'FILTERS',
-      function ($timeout, $window, paasbApi, paasbUi, paasbFiltering, paasbPlaceholders, paasbMemory, paasbUtils, FILTERS) {
+      function ($timeout, $window, paasbApi, paasbUi, paasbFiltering, paasbGrouping, paasbPlaceholders, paasbMemory, paasbUtils, FILTERS) {
 
         return {
 
@@ -1855,6 +1862,8 @@ angular.module('paasb')
                 autoComplete = null,
 
                 Filterer = null,
+
+                Grouper = null,
 
                 Placeholding = null,
 
@@ -2167,11 +2176,15 @@ angular.module('paasb')
 
                     Filterer = new paasbFiltering($scope, config);
 
+                    Grouper = new paasbGrouping($scope, config);
+
                     Placeholding = new paasbPlaceholders($scope, config);
 
                     angular.extend($scope, {
 
                       'Search': {
+
+                        'Grouper': Grouper,
 
                         'Filtering': Filterer,
 
@@ -3051,6 +3064,12 @@ angular.module('paasb')
 
 					},
 
+					hasFilterGrouping: function () {
+
+						return scope.paasbSearchBoxEnableGrouping;
+
+					},
+
 					addByMemory: function (options, erased) {
 
 						var opts = options.filters || options,
@@ -3351,6 +3370,67 @@ angular.module('paasb')
 						});
 
 						return deferred.promise;
+
+					}
+
+        });
+
+      };
+
+	}]);
+
+'use strict';
+
+/**
+ * @ngdoc service
+ * @name paasb.service:paasbGrouping
+ * @description
+ * # paasbGrouping Services
+ */
+
+angular.module('paasb')
+
+	.factory('paasbGrouping', [
+		'paasbUi',
+    function (paasbUi) {
+
+      var scope = null,
+
+				config = null;
+
+  		return function (_scope, _config) {
+
+        scope = _scope;
+
+				config = _config;
+
+        var Search = null;
+
+        scope.$watch('Search', function (__new, __old) {
+
+          if(angular.isObject(__new)) {
+
+            Search = __new;
+
+          }
+
+        });
+
+				angular.extend(scope, {
+
+					'isGroupingEnabled': false
+
+				});
+
+        angular.extend(this, {
+
+					toggle: function () {
+
+						paasbUi.extend(scope, {
+
+							'isGroupingEnabled': !scope.isGroupingEnabled
+
+						});
 
 					}
 
@@ -4066,7 +4146,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('views/directives/searchbox-grouping.html',
     "\n" +
-    "<div ng-click=\"addGrouping();\" class=\"paasb-search-box-grouping\"><i class=\"fa fa-plus\"></i></div>"
+    "<div ng-class=\"{ 'grouping-active': isGroupingEnabled }\" ng-click=\"toggleGrouping();\" class=\"paasb-search-box-grouping\"><i class=\"fa fa-plus\"></i></div>"
   );
 
 
