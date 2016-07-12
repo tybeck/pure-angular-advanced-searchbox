@@ -31,24 +31,14 @@
 ### TODOs
 
 - [ ] Add grouping around conditionals
-- [x] Add operators (**DONE**)
 - [ ] Build query (SOLR, SQL)
-- [x] Drag and drop filters into different positions. (**DONE**)
-- [x] Drag and drop filters into trash can? (**DONE**)
 - [ ] Add UI for validation
-- [x] Swap Drag N Drop (**DONE**)
-- [x] Insert At Drag N Drop (**DONE**)
-- [x] Make search box placeholders configurable (**DONE**)
 - [ ] Externalizing templates
-- [x] Externalizing operators / filter selectors (**DONE**)
-- [x] Modifiers to filters through middleware (**DONE**)
 - [ ] Update Live DEMO (In Progress)
 
 ### Known Bugs
 
-- [x] Operator gets reset on drag n drop (**DONE**)
-- [x] Paasb reports changes multiple times when drag n drop occurs (**DONE**)
-- [x] Trash can button doesn't respect delay (**DONE**)
+- [ ] None at the moment
 
 ### Screenshots
 
