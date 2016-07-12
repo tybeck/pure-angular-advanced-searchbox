@@ -35,7 +35,7 @@ angular.module('paasb')
 
               var Filtering = $scope.filtering,
 
-                copy = _.cloneDeep(FILTERS.SELECTORS),
+                copy = angular.copy(FILTERS.SELECTORS),
 
                 filter = $scope.filter;
 

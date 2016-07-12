@@ -148,7 +148,8 @@ angular.module('paasb')
 angular.module('paasb')
 
     .directive('paasbDraggable', [
-      function () {
+      'paasbUtils',
+      function (paasbUtils) {
 
         return {
 
@@ -164,7 +165,7 @@ angular.module('paasb')
 
                     var elem = angular.element(this),
 
-                      id = _.uuid(),
+                      id = paasbUtils.uuid(),
 
                       data = {
 
@@ -270,7 +271,7 @@ angular.module('paasb')
 
               filter.loading = false;
 
-              $element.attr('id', _.uuid());
+              $element.attr('id', paasbUtils.uuid());
 
               if(typeof filter.suggestedValues === 'string') {
 
@@ -420,7 +421,7 @@ angular.module('paasb')
 
                         if(!dragSourceElem.attr('id')) {
 
-                          dragSourceElem.attr('id', _.uuid());
+                          dragSourceElem.attr('id', paasbUtils.uuid());
 
                         }
 
@@ -1151,7 +1152,7 @@ angular.module('paasb')
 
               var Filtering = $scope.filtering,
 
-                operators = _.cloneDeep(FILTERS.OPERATORS),
+                operators = angular.copy(FILTERS.OPERATORS),
 
                 filter = $scope.filter;
 
@@ -1363,7 +1364,7 @@ angular.module('paasb')
 
               var Filtering = $scope.filtering,
 
-                copy = _.cloneDeep(FILTERS.SELECTORS),
+                copy = angular.copy(FILTERS.SELECTORS),
 
                 filter = $scope.filter;
 
@@ -1677,7 +1678,7 @@ angular.module('paasb')
                           filter.notFiltered = !filter.notFiltered;
 
                           if(!filter.notFiltered) {
-                            
+
                             self.addFilterAndClose(filter);
 
                           }
@@ -1704,7 +1705,7 @@ angular.module('paasb')
 
                   Search = __new;
 
-                  $scope.filters = _.cloneDeep($scope.filters);
+                  $scope.filters = angular.copy($scope.filters);
 
                   $scope.filters
       							.slice()
@@ -1773,6 +1774,16 @@ angular.module('paasb')
             'require': '^paasbSearchBox',
 
             controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+
+              angular.extend($scope, {
+
+                addGrouping: function () {
+
+                  console.log('add grouping');
+
+                }
+
+              });
 
             }]
 
@@ -1851,7 +1862,7 @@ angular.module('paasb')
 
                 searchBox = {
 
-                  'searchInputId': ('searchInput-' + _.uuid()),
+                  'searchInputId': ('searchInput-' + paasbUtils.uuid()),
 
                   hasAutoCompleteConfigurations: function () {
 
@@ -2647,7 +2658,7 @@ angular.module('paasb')
 
 						var sourceFilter = this.getFilterByElement(source),
 
-							clonedFilters = _.cloneDeep(scope.addedFilters),
+							clonedFilters = angular.copy(scope.addedFilters),
 
 							operators = this.getOperators();
 
@@ -2743,7 +2754,7 @@ angular.module('paasb')
 
 						if(sourceFilter && destFilter) {
 
-							var clonedFilters = _.cloneDeep(scope.addedFilters),
+							var clonedFilters = angular.copy(scope.addedFilters),
 
 								sFilter = sourceFilter.filter,
 
@@ -3009,7 +3020,7 @@ angular.module('paasb')
 
 						if(!this.filterContainerId) {
 
-							this.filterContainerId = _.uuid();
+							this.filterContainerId = paasbUtils.uuid();
 
 							var div = document.createElement('div');
 
@@ -3102,7 +3113,7 @@ angular.module('paasb')
 
             var childScope = scope.$new(true),
 
-							clonedFilter = _.cloneDeep(filter),
+							clonedFilter = angular.copy(filter),
 
 							operators = scope.paasbSearchBoxEnableFilteringOperators;
 
@@ -3140,7 +3151,7 @@ angular.module('paasb')
 
 							'$filter': filter,
 
-							'uuid': _.uuid()
+							'uuid': paasbUtils.uuid()
 
 						});
 
@@ -3677,6 +3688,22 @@ angular.module('paasb')
     function ($sce, $window) {
 
 			var paasbUtils = {
+				
+				uuid: function () {
+
+					var d = Date.now();
+
+					return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+
+						var r = (d + Math.round(Math.random() * 16)) % 16 | 0;
+
+						d = Math.floor(d / 16);
+
+						return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+
+					});
+
+				},
 
 				isJson: function (str) {
 
@@ -3691,7 +3718,7 @@ angular.module('paasb')
 					}
 
 					return true;
-					
+
 				},
 
 				removeObjectProperties: function(obj, props) {
@@ -4039,7 +4066,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('views/directives/searchbox-grouping.html',
     "\n" +
-    "<div class=\"paasb-search-box-grouping\"><i class=\"fa fa-plus\"></i></div>"
+    "<div ng-click=\"addGrouping();\" class=\"paasb-search-box-grouping\"><i class=\"fa fa-plus\"></i></div>"
   );
 
 

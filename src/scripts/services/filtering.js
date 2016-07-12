@@ -125,7 +125,7 @@ angular.module('paasb')
 
 						var sourceFilter = this.getFilterByElement(source),
 
-							clonedFilters = _.cloneDeep(scope.addedFilters),
+							clonedFilters = angular.copy(scope.addedFilters),
 
 							operators = this.getOperators();
 
@@ -221,7 +221,7 @@ angular.module('paasb')
 
 						if(sourceFilter && destFilter) {
 
-							var clonedFilters = _.cloneDeep(scope.addedFilters),
+							var clonedFilters = angular.copy(scope.addedFilters),
 
 								sFilter = sourceFilter.filter,
 
@@ -487,7 +487,7 @@ angular.module('paasb')
 
 						if(!this.filterContainerId) {
 
-							this.filterContainerId = _.uuid();
+							this.filterContainerId = paasbUtils.uuid();
 
 							var div = document.createElement('div');
 
@@ -580,7 +580,7 @@ angular.module('paasb')
 
             var childScope = scope.$new(true),
 
-							clonedFilter = _.cloneDeep(filter),
+							clonedFilter = angular.copy(filter),
 
 							operators = scope.paasbSearchBoxEnableFilteringOperators;
 
@@ -618,7 +618,7 @@ angular.module('paasb')
 
 							'$filter': filter,
 
-							'uuid': _.uuid()
+							'uuid': paasbUtils.uuid()
 
 						});
 

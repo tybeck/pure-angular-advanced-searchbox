@@ -56,7 +56,7 @@ angular.module('paasb')
 
               filter.loading = false;
 
-              $element.attr('id', _.uuid());
+              $element.attr('id', paasbUtils.uuid());
 
               if(typeof filter.suggestedValues === 'string') {
 
@@ -206,7 +206,7 @@ angular.module('paasb')
 
                         if(!dragSourceElem.attr('id')) {
 
-                          dragSourceElem.attr('id', _.uuid());
+                          dragSourceElem.attr('id', paasbUtils.uuid());
 
                         }
 

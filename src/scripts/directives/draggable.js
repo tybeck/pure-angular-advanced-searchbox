@@ -10,7 +10,8 @@
 angular.module('paasb')
 
     .directive('paasbDraggable', [
-      function () {
+      'paasbUtils',
+      function (paasbUtils) {
 
         return {
 
@@ -26,7 +27,7 @@ angular.module('paasb')
 
                     var elem = angular.element(this),
 
-                      id = _.uuid(),
+                      id = paasbUtils.uuid(),
 
                       data = {
 

@@ -37,7 +37,7 @@ angular.module('paasb')
 
               var Filtering = $scope.filtering,
 
-                operators = _.cloneDeep(FILTERS.OPERATORS),
+                operators = angular.copy(FILTERS.OPERATORS),
 
                 filter = $scope.filter;
 

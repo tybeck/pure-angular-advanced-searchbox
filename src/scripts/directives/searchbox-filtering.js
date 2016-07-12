@@ -174,7 +174,7 @@ angular.module('paasb')
                           filter.notFiltered = !filter.notFiltered;
 
                           if(!filter.notFiltered) {
-                            
+
                             self.addFilterAndClose(filter);
 
                           }
@@ -201,7 +201,7 @@ angular.module('paasb')
 
                   Search = __new;
 
-                  $scope.filters = _.cloneDeep($scope.filters);
+                  $scope.filters = angular.copy($scope.filters);
 
                   $scope.filters
       							.slice()

@@ -24,6 +24,16 @@ angular.module('paasb')
 
             controller: function ($scope, $element, $attrs) {
 
+              angular.extend($scope, {
+
+                addGrouping: function () {
+
+                  console.log('add grouping');
+
+                }
+
+              });
+
             }
 
         };

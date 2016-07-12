@@ -15,6 +15,22 @@ angular.module('paasb')
     function ($sce, $window) {
 
 			var paasbUtils = {
+				
+				uuid: function () {
+
+					var d = Date.now();
+
+					return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+
+						var r = (d + Math.round(Math.random() * 16)) % 16 | 0;
+
+						d = Math.floor(d / 16);
+
+						return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+
+					});
+
+				},
 
 				isJson: function (str) {
 
@@ -29,7 +45,7 @@ angular.module('paasb')
 					}
 
 					return true;
-					
+
 				},
 
 				removeObjectProperties: function(obj, props) {

@@ -69,7 +69,7 @@ angular.module('paasb')
 
                 searchBox = {
 
-                  'searchInputId': ('searchInput-' + _.uuid()),
+                  'searchInputId': ('searchInput-' + paasbUtils.uuid()),
 
                   hasAutoCompleteConfigurations: function () {
 

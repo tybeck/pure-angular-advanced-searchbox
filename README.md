@@ -38,11 +38,10 @@
 - [ ] Add UI for validation
 - [x] Swap Drag N Drop (**DONE**)
 - [x] Insert At Drag N Drop (**DONE**)
-- [ ] Make search box placeholders configurable (**DONE**)
-- [ ] Add themes and/or customizable styles
+- [x] Make search box placeholders configurable (**DONE**)
 - [ ] Externalizing templates
 - [x] Externalizing operators / filter selectors (**DONE**)
-- [ ] Modifiers to filters through middleware (**DONE**)
+- [x] Modifiers to filters through middleware (**DONE**)
 - [ ] Update Live DEMO (In Progress)
 
 ### Known Bugs
