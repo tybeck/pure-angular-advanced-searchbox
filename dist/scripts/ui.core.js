@@ -2984,7 +2984,7 @@ angular.module('paasb')
 
 									'value': filter.value,
 
-									'$$name': filter.name,
+									'name': filter.name,
 
 									'$$timestamp': filter.$$timestamp || null,
 
@@ -3077,7 +3077,7 @@ angular.module('paasb')
 
 							angular.forEach(scope.paasbSearchBoxFiltering, function (filter) {
 
-								if(option.$$name === filter.name || option.name === filter.name) {
+								if(option.name === filter.name) {
 
 									self.add(filter, option);
 
