@@ -156,7 +156,7 @@ angular.module('app')
         });
 
       });
-
+      
       $scope.sConfig = {
 
         'delay': 1000,

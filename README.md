@@ -30,7 +30,7 @@
 
 ### TODOs
 
-- [ ] Add grouping around conditionals
+- [ ] Add grouping around conditionals (In Progress)
 - [ ] Build query (SOLR, SQL)
 - [ ] Add UI for validation
 - [ ] Externalizing templates
@@ -38,7 +38,7 @@
 
 ### Known Bugs
 
-- [ ] None at the moment
+- [x] Verified - Cannot read property 'store' of undefined - Thanks to @IbrahimHd (**DONE**)
 
 ### Screenshots
 

@@ -15,7 +15,7 @@ angular.module('paasb')
     function ($sce, $window) {
 
 			var paasbUtils = {
-				
+
 				uuid: function () {
 
 					var d = Date.now();
@@ -90,9 +90,11 @@ angular.module('paasb')
 
 	        while(looping) {
 
-	          if(target[0] === document) {
+	          if((target[0] === document)
 
-	            break;
+							|| (!target[0] || !target[0].nodeName)) {
+
+	            	break;
 
 	          }
 
