@@ -195,18 +195,18 @@ angular.module('paasb')
                       .make('paasbSearchBoxConfig', {}, 'isObject')
                       .make('paasbSearchBoxAutoComplete', {}, 'isObject');
 
-                    params = $scope.searchParams;
-
                     config = $scope.paasbSearchBoxConfig;
-
-                    autoComplete = $scope.paasbSearchBoxAutoComplete;
-
-                    $scope.autoCompleteEnabled = this.hasAutoCompleteConfigurations();
 
                     this
                       .make('searchParams', this.shouldStore() ? paasbMemory.getAll() :
 
-                        defaultParams, 'isObject', 'query')
+                        defaultParams, 'isObject', 'query');
+
+                    params = $scope.searchParams;
+
+                    autoComplete = $scope.paasbSearchBoxAutoComplete;
+
+                    $scope.autoCompleteEnabled = this.hasAutoCompleteConfigurations();
 
                     if($scope.query) {
 

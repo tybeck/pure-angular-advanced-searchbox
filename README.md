@@ -353,6 +353,11 @@ $scope.$on('onRegisterApi', function(ev, api) {
       <td>User friendly display name of the search parameter.</td>
       <td>string</td>
     </tr>
+     <tr>
+      <td>middleware</td>
+      <td>Middlewares allow you to alter the values after being entered and validated by <strong>paasb</strong>; this will only show within the updated parameters, not shown visibly within the UI.</td>
+      <td>array[function]</td>
+    </tr>
     <tr>
       <td>multi</td>
       <td>Should multiple search filters of the same key be allowed? Default is <b>false</b></td>
