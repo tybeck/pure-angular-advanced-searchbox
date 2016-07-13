@@ -64,7 +64,6 @@ Load the javascript/css and declare your angular dependency:
 <!-- dependency includes -->
 <script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/lodash/lodash.js"></script>
-<script src="bower_components/lodash-mix/index.js"></script>
 
 <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
 
