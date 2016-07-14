@@ -35,6 +35,8 @@ angular.module('paasb')
 
               var Filtering = $scope.filtering,
 
+                EventHandling = Filtering.getEventHandler(),
+
                 copy = angular.copy(FILTERS.SELECTORS),
 
                 filter = $scope.filter;
@@ -68,6 +70,9 @@ angular.module('paasb')
                   if(filter.value) {
 
                     Filtering.update();
+
+                    EventHandling
+                      .onFilterSelectorChanged(selector, filter);
 
                   }
 

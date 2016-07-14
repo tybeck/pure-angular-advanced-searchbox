@@ -37,6 +37,8 @@ angular.module('paasb')
 
               var Filtering = $scope.filtering,
 
+                EventHandling = Filtering.getEventHandler(),
+
                 operators = angular.copy(FILTERS.OPERATORS),
 
                 filter = $scope.filter;
@@ -100,6 +102,9 @@ angular.module('paasb')
                     $scope.operator = operator;
 
                     Filtering.addOperatorToFilter(operator, filter);
+
+                    EventHandling
+                      .onOperatorChanged(operator, filter);
 
                     operator.selected = true;
 

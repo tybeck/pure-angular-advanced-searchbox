@@ -42,6 +42,8 @@ angular.module('paasb')
 
               var Filtering = $scope.filtering,
 
+                EventHandling = Filtering.getEventHandler(),
+
                 filter = $scope.filter,
 
                 operators = $scope.operators,
@@ -384,6 +386,9 @@ angular.module('paasb')
 
                     }
 
+                    EventHandling
+                      .onLeavedEditMode(filter);
+
                   });
 
                 },
@@ -407,6 +412,9 @@ angular.module('paasb')
                       }, 25);
 
                       $scope.setFocus();
+
+                      EventHandling
+                        .onEnteredEditMode(filter);
 
                     }
 
@@ -458,13 +466,20 @@ angular.module('paasb')
 
                 addWatch: function () {
 
-                  $scope.$watch('value', function (__new) {
+                  $scope.$watch('value', function (__new, __old) {
 
                     filter.value = __new || '';
 
                     if(filter.value) {
 
-                      Filtering.update();
+                      if(__new !== __old) {
+
+                        Filtering.update();
+
+                        EventHandling
+                          .onFilterChanged(filter);
+
+                      }
 
                     }
 

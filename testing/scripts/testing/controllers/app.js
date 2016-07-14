@@ -139,24 +139,92 @@ angular.module('app')
 
       ];
 
-      $timeout(function () {
-
-        console.log($scope);
-
-      }, 2500);
-
       $scope.$on('onRegisterApi', function (ev, api) {
 
         console.log('api', api);
 
-        $scope.$on('onChange', function (ev, params) {
+        var change = function (ev, params) {
 
-          console.log(params);
+          console.log(ev, params, 'params');
 
-        });
+        };
+
+        api
+          .on('onChange', change)
+          .on('onQueryAdded', function (ev, query) {
+
+            console.log(ev, 'query:', query);
+
+          })
+          .on('onEnteredEditMode', function (ev, filter) {
+
+            console.log(ev, 'edit', filter);
+
+          })
+          .on('onLeavedEditMode', function (ev, filter) {
+
+            console.log(ev, 'leave', filter);
+
+          });
+        //
+        // api.on('onQueryRemoved', function (ev, query) {
+        //
+        //   console.log(ev, 'removed query:', query);
+        //
+        // });
+        //
+        // api.on('onQueryChanged', function (ev, query) {
+        //
+        //   console.log(ev, 'changed query:', query);
+        //
+        // });
+        //
+        // api.on('onEraser', function (ev) {
+        //
+        //   console.log(ev, 'erased');
+        //
+        // });
+        //
+        // api.on('onGarbage', function (ev) {
+        //
+        //   console.log(ev, 'garbage');
+        //
+        // });
+        //
+        // api.on('onFilterAdded', function (ev, filter) {
+        //
+        //   console.log(ev, 'added filter', filter);
+        //
+        // });
+        //
+        // api.on('onFilterRemoved', function (ev, filter) {
+        //
+        //   console.log(ev, 'removed filter', filter);
+        //
+        // });
+        //
+        // api.on('onFilterChanged', function (ev, filter) {
+        //
+        //   console.log(ev, 'changed filter', filter);
+        //
+        // });
+        //
+        // api.on('onOperatorChanged', function (ev, op) {
+        //
+        //   console.log(ev, 'changed operator', op);
+        //
+        // });
+        //
+        // api.on('onFilterSelectorChanged', function (ev, sel) {
+        //
+        //   console.log(ev, 'changed selector', sel);
+        //
+        // });
+
+        // api.off('onchange');
 
       });
-      
+
       $scope.sConfig = {
 
         'delay': 1000,

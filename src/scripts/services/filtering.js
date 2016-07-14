@@ -21,7 +21,9 @@ angular.module('paasb')
 		'FILTERS',
     function ($q, $filter, $compile, $http, paasbUi, paasbUtils, paasbMemory, paasbValidation, FILTERS) {
 
-      var scope = null,
+      var EventHandling = null,
+
+				scope = null,
 
 				config = null;
 
@@ -58,6 +60,20 @@ angular.module('paasb')
         angular.extend(this, {
 
 					'clean': $filter('paasbClean'),
+
+					addEventHandler: function (handler) {
+
+						EventHandling = handler;
+
+						return this;
+
+					},
+
+					getEventHandler: function () {
+
+						return EventHandling;
+
+					},
 
 					removeByElement: function (elem) {
 
@@ -169,15 +185,15 @@ angular.module('paasb')
 
 							}
 
-							this.rearrangeOperators(sourceFilter, destFilter);
+							this
+								.rearrangeOperators(sourceFilter, destFilter)
+								.removeAll(true, false, {
 
-							this.removeAll(true, false, {
+									'drag': true
 
-								'drag': true
-
-							});
-
-							this.addByMemory(clonedFilters, true);
+								})
+								.addByMemory(clonedFilters, true)
+								.update();
 
 						}
 
@@ -211,6 +227,8 @@ angular.module('paasb')
 
 						}
 
+						return this;
+
 					},
 
 					swapFilter: function (source, dest) {
@@ -237,13 +255,14 @@ angular.module('paasb')
 
 							sFilter.recentlyMoved = true;
 
-							this.removeAll(true, false, {
+							this
+								.removeAll(true, false, {
 
-								'drag': true
+									'drag': true
 
-							});
-
-							this.addByMemory(clonedFilters, true);
+								})
+								.addByMemory(clonedFilters, true)
+								.update();
 
 						}
 
@@ -552,7 +571,7 @@ angular.module('paasb')
 
 								if(option.name === filter.name) {
 
-									self.add(filter, option);
+									self.add(filter, option, true);
 
 								}
 
@@ -582,7 +601,7 @@ angular.module('paasb')
 
 					},
 
-          add: function (filter, options) {
+          add: function (filter, options, cached) {
 
             var childScope = scope.$new(true),
 
@@ -650,6 +669,13 @@ angular.module('paasb')
 
 							scope.addedFilters.push(clonedFilter);
 
+							if(!cached) {
+
+								EventHandling
+									.onFilterAdded(clonedFilter);
+
+							}
+
 						});
 
           },
@@ -712,15 +738,11 @@ angular.module('paasb')
 
 										scope.registeredOperators.splice(oIndex, 1);
 
-										console.log(scope.addedOperators);
-
 										if(!dontUpdate || (options && options.deleteOperators)) {
 
 											scope.addedOperators.splice(oIndex, 1);
 
 										}
-
-										console.log(scope.addedOperators);
 
 									}
 
@@ -739,6 +761,9 @@ angular.module('paasb')
 									filter.$filter.notFiltered = true;
 
 									scope.addedFilters.splice(addedObject.length - 1 - addedIndex, 1);
+
+									EventHandling
+										.onFilterRemoved(addedFilter);
 
 								}
 
@@ -800,6 +825,8 @@ angular.module('paasb')
 							this.update();
 
 						}
+
+						return this;
 
           },
 

@@ -311,6 +311,51 @@ $scope.sFilterSelectors = [
       <td>onChange</td>
       <td>Fired every time a change occurs on search box.</td>
     </tr>
+     </tr>
+        <tr>
+      <td>onQueryAdded</td>
+      <td>Fired only when a query initially get's added - will respects delays.</td>
+    </tr>
+    <tr>
+      <td>onQueryRemoved</td>
+      <td>Fired only when a query is removed - will respects delays.</td>
+    </tr>
+    <tr>
+      <td>onQueryChanged</td>
+      <td>Fired only when a query is changed.</td>
+    </tr>
+    <tr>
+      <td>onFilterAdded</td>
+      <td>Fires when a filter initially get's added to search.</td>
+    </tr>
+     <tr>
+      <td>onFilterRemoved</td>
+      <td>Fires when a filter is removed from search.</td>
+    </tr>
+    <tr>
+      <td>onOperatorChanged</td>
+      <td>Fires when a operator get's changed.</td>
+    </tr>
+     <tr>
+      <td>onFilterSelectorChanged</td>
+      <td>Fires when a filter selector changes.</td>
+    </tr>
+     <tr>
+      <td>onEraser</td>
+      <td>Fires when eraser is triggered.</td>
+    </tr>
+   <tr>
+      <td>onGarbage</td>
+      <td>Fires when garbage is triggered.</td>
+    </tr>
+    <tr>
+      <td>onEnteredEditMode</td>
+      <td>Fires when your within a editing mode.</td>
+    </tr>
+    <tr>
+      <td>onLeavedEditMode</td>
+      <td>Fires when your leaving a editing mode.</td>
+    </tr>
   </tbody>
 </table>
 
@@ -321,11 +366,12 @@ $scope.$on('onRegisterApi', function(ev, api) {
 
 	console.log('api!', api);
 
-	$scope.$on('onChange', function (changeEv, parameters) {
+	api
+		.on('onChange', function (ev, params) {
 
-		console.log('parameters!', parameters);
+			console.log('parameters!', params);
 
-	});
+		});
 
 });
 ```

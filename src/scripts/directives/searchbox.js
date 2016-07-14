@@ -17,10 +17,11 @@ angular.module('paasb')
       'paasbFiltering',
       'paasbGrouping',
       'paasbPlaceholders',
+      'paasbEventHandling',
       'paasbMemory',
       'paasbUtils',
       'FILTERS',
-      function ($timeout, $window, paasbApi, paasbUi, paasbFiltering, paasbGrouping, paasbPlaceholders, paasbMemory, paasbUtils, FILTERS) {
+      function ($timeout, $window, paasbApi, paasbUi, paasbFiltering, paasbGrouping, paasbPlaceholders, paasbEventHandling, paasbMemory, paasbUtils, FILTERS) {
 
         return {
 
@@ -67,6 +68,10 @@ angular.module('paasb')
                 Grouper = null,
 
                 Placeholding = null,
+
+                API = null,
+
+                EventHandling = null,
 
                 timer = null,
 
@@ -130,6 +135,9 @@ angular.module('paasb')
 
                       $scope.query = '';
 
+                      EventHandling
+                        .onEraser();
+
                     },
 
                     handleGarbage: function () {
@@ -143,6 +151,9 @@ angular.module('paasb')
                         });
 
                         $scope.query = '';
+
+                        EventHandling
+                          .onGarbage();
 
                       }
 
@@ -210,7 +221,13 @@ angular.module('paasb')
 
                     if($scope.query) {
 
-                      $scope.hasQuery = true;
+                      paasbUi.extend($scope, {
+
+                        'hasQuery': true,
+
+                        'delayedQuery': $scope.query
+
+                      });
 
                     }
 
@@ -222,7 +239,7 @@ angular.module('paasb')
 
                     if(config && config.store) {
 
-                        $scope.paasbSearchBoxCacheFilter = true;
+                      $scope.paasbSearchBoxCacheFilter = true;
 
                     }
 
@@ -231,20 +248,6 @@ angular.module('paasb')
                       'searchInputId': this.searchInputId
 
                     });
-
-                    return this;
-
-                  },
-
-                  send: function (params) {
-
-                    angular.extend(params, {
-
-                      '$$lastChange': new Date().getTime()
-
-                    });
-
-                    $scope.$emit('onChange', params);
 
                     return this;
 
@@ -282,7 +285,8 @@ angular.module('paasb')
 
                         timer = $timeout(function () {
 
-                          self.send(params);
+                          EventHandling
+                            .onChange(params);
 
                         }, config.delay);
 
@@ -296,7 +300,8 @@ angular.module('paasb')
 
                         }
 
-                        self.send(params);
+                        EventHandling
+                          .onChange(params);
 
                       }
 
@@ -310,7 +315,7 @@ angular.module('paasb')
 
                     });
 
-                    $scope.$watch('query', function (__new) {
+                    $scope.$watch('query', function (__new, __old) {
 
                       if(typeof __new !== 'undefined') {
 
@@ -332,11 +337,17 @@ angular.module('paasb')
 
                             }
 
+                            params.query = __new;
+
                             timer = $timeout(function () {
 
-                              params.query = __new;
+                              EventHandling
+                                .onChange(params)
+                                .onQueryAdded(__new, $scope.delayedQuery)
+                                .onQueryRemoved(__new, $scope.delayedQuery)
+                                .onQueryChanged(__new, $scope.delayedQuery);
 
-                              self.send(params);
+                              $scope.delayedQuery = __new;
 
                             }, config.delay);
 
@@ -352,7 +363,13 @@ angular.module('paasb')
 
                             params.query = __new;
 
-                            self.send(params);
+                            EventHandling
+                              .onChange(params)
+                              .onQueryAdded(__new, $scope.delayedQuery)
+                              .onQueryRemoved(__new, $scope.delayedQuery)
+                              .onQueryChanged(__new, $scope.delayedQuery);
+
+                            $scope.delayedQuery = __new;
 
                           }
 
@@ -380,6 +397,10 @@ angular.module('paasb')
 
                     Placeholding = new paasbPlaceholders($scope, config);
 
+                    API = new paasbApi($scope, Filterer, Placeholding);
+
+                    EventHandling = new paasbEventHandling($scope, API);
+
                     angular.extend($scope, {
 
                       'Search': {
@@ -388,27 +409,26 @@ angular.module('paasb')
 
                         'Filtering': Filterer,
 
-                        'Placeholding': Placeholding
+                        'Placeholding': Placeholding,
+
+                        'API': API,
+
+                        'EventHandling': EventHandling
 
                       }
 
                     });
 
                     Filterer
+                      .addEventHandler(EventHandling)
                       .addMemoryOperators()
                       .addByMemory(params);
 
                     Placeholding.setup();
 
-                    $scope.$emit('onRegisterApi', this.getAPI());
+                    $scope.$emit('onRegisterApi', API);
 
                     return this;
-
-                  },
-
-                  getAPI: function () {
-
-                    return(new paasbApi($scope, Filterer, Placeholding));
 
                   },
 
@@ -444,8 +464,10 @@ angular.module('paasb')
                     .configure()
                     .dom()
                     .register()
-                    .addEvents()
-                    .send(params);
+                    .addEvents();
+                    
+                  EventHandling
+                    .onChange(params);
 
                 });
 
