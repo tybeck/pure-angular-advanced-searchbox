@@ -581,7 +581,7 @@ angular.module('paasb')
 
                     if(!filter.value) {
 
-                      Filtering.remove(filter);
+                      Filtering.remove(filter, true);
 
                     } else {
 
@@ -593,7 +593,7 @@ angular.module('paasb')
 
                         if(filter.restrictedSuggestedValues) {
 
-                          Filtering.remove(filter);
+                          Filtering.remove(filter, true);
 
                         }
 
