@@ -148,7 +148,8 @@ angular.module('paasb')
 angular.module('paasb')
 
     .directive('paasbDraggable', [
-      function () {
+      'paasbUtils',
+      function (paasbUtils) {
 
         return {
 
@@ -164,7 +165,7 @@ angular.module('paasb')
 
                     var elem = angular.element(this),
 
-                      id = _.uuid(),
+                      id = paasbUtils.uuid(),
 
                       data = {
 
@@ -256,6 +257,8 @@ angular.module('paasb')
 
               var Filtering = $scope.filtering,
 
+                EventHandling = Filtering.getEventHandler(),
+
                 filter = $scope.filter,
 
                 operators = $scope.operators,
@@ -270,7 +273,7 @@ angular.module('paasb')
 
               filter.loading = false;
 
-              $element.attr('id', _.uuid());
+              $element.attr('id', paasbUtils.uuid());
 
               if(typeof filter.suggestedValues === 'string') {
 
@@ -420,7 +423,7 @@ angular.module('paasb')
 
                         if(!dragSourceElem.attr('id')) {
 
-                          dragSourceElem.attr('id', _.uuid());
+                          dragSourceElem.attr('id', paasbUtils.uuid());
 
                         }
 
@@ -578,7 +581,7 @@ angular.module('paasb')
 
                     if(!filter.value) {
 
-                      Filtering.remove(filter);
+                      Filtering.remove(filter, true);
 
                     } else {
 
@@ -590,13 +593,16 @@ angular.module('paasb')
 
                         if(filter.restrictedSuggestedValues) {
 
-                          Filtering.remove(filter);
+                          Filtering.remove(filter, true);
 
                         }
 
                       }
 
                     }
+
+                    EventHandling
+                      .onLeavedEditMode(filter);
 
                   });
 
@@ -621,6 +627,9 @@ angular.module('paasb')
                       }, 25);
 
                       $scope.setFocus();
+
+                      EventHandling
+                        .onEnteredEditMode(filter);
 
                     }
 
@@ -672,13 +681,20 @@ angular.module('paasb')
 
                 addWatch: function () {
 
-                  $scope.$watch('value', function (__new) {
+                  $scope.$watch('value', function (__new, __old) {
 
                     filter.value = __new || '';
 
                     if(filter.value) {
 
-                      Filtering.update();
+                      if(__new !== __old) {
+
+                        Filtering.update();
+
+                        EventHandling
+                          .onFilterChanged(filter);
+
+                      }
 
                     }
 
@@ -1151,7 +1167,9 @@ angular.module('paasb')
 
               var Filtering = $scope.filtering,
 
-                operators = _.cloneDeep(FILTERS.OPERATORS),
+                EventHandling = Filtering.getEventHandler(),
+
+                operators = angular.copy(FILTERS.OPERATORS),
 
                 filter = $scope.filter;
 
@@ -1214,6 +1232,9 @@ angular.module('paasb')
                     $scope.operator = operator;
 
                     Filtering.addOperatorToFilter(operator, filter);
+
+                    EventHandling
+                      .onOperatorChanged(operator, filter);
 
                     operator.selected = true;
 
@@ -1303,8 +1324,6 @@ angular.module('paasb')
 
                       Filtering.addOperatorToFilter($scope.operator, filter, true);
 
-                      console.log('okay');
-
                     }
 
                     return $scope;
@@ -1363,7 +1382,9 @@ angular.module('paasb')
 
               var Filtering = $scope.filtering,
 
-                copy = _.cloneDeep(FILTERS.SELECTORS),
+                EventHandling = Filtering.getEventHandler(),
+
+                copy = angular.copy(FILTERS.SELECTORS),
 
                 filter = $scope.filter;
 
@@ -1396,6 +1417,9 @@ angular.module('paasb')
                   if(filter.value) {
 
                     Filtering.update();
+
+                    EventHandling
+                      .onFilterSelectorChanged(selector, filter);
 
                   }
 
@@ -1704,7 +1728,7 @@ angular.module('paasb')
 
                   Search = __new;
 
-                  $scope.filters = _.cloneDeep($scope.filters);
+                  $scope.filters = angular.copy($scope.filters);
 
                   $scope.filters
       							.slice()
@@ -1774,6 +1798,24 @@ angular.module('paasb')
 
             controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
 
+              var Grouper = null;
+
+              if($scope.Search && $scope.Search.Grouper) {
+
+                Grouper = $scope.Search.Grouper;
+
+                angular.extend($scope, {
+
+                  toggleGrouping: function () {
+
+                    return Grouper.toggle();
+
+                  }
+
+                });
+
+              }
+
             }]
 
         };
@@ -1797,11 +1839,13 @@ angular.module('paasb')
       'paasbApi',
       'paasbUi',
       'paasbFiltering',
+      'paasbGrouping',
       'paasbPlaceholders',
+      'paasbEventHandling',
       'paasbMemory',
       'paasbUtils',
       'FILTERS',
-      function ($timeout, $window, paasbApi, paasbUi, paasbFiltering, paasbPlaceholders, paasbMemory, paasbUtils, FILTERS) {
+      function ($timeout, $window, paasbApi, paasbUi, paasbFiltering, paasbGrouping, paasbPlaceholders, paasbEventHandling, paasbMemory, paasbUtils, FILTERS) {
 
         return {
 
@@ -1845,13 +1889,19 @@ angular.module('paasb')
 
                 Filterer = null,
 
+                Grouper = null,
+
                 Placeholding = null,
+
+                API = null,
+
+                EventHandling = null,
 
                 timer = null,
 
                 searchBox = {
 
-                  'searchInputId': ('searchInput-' + _.uuid()),
+                  'searchInputId': ('searchInput-' + paasbUtils.uuid()),
 
                   hasAutoCompleteConfigurations: function () {
 
@@ -1869,11 +1919,11 @@ angular.module('paasb')
 
                         if(method === 'isObject') {
 
-                          val = angular.extend({}, extend);
+                          $scope[name] = angular.extend({}, extend);
 
                         } else {
 
-                          val = extend;
+                          $scope[name] = extend;
 
                         }
 
@@ -1909,6 +1959,9 @@ angular.module('paasb')
 
                       $scope.query = '';
 
+                      EventHandling
+                        .onEraser();
+
                     },
 
                     handleGarbage: function () {
@@ -1923,6 +1976,9 @@ angular.module('paasb')
 
                         $scope.query = '';
 
+                        EventHandling
+                          .onGarbage();
+
                       }
 
                     }
@@ -1933,7 +1989,7 @@ angular.module('paasb')
 
                     return (paasbMemory.getAndSet('cache') ||
 
-                      $scope.paasbSearchBoxConfig.store) ? true : false;
+                      config.store) ? true : false;
 
                   },
 
@@ -1970,17 +2026,32 @@ angular.module('paasb')
                     }
 
                     this
-                      .make('searchParams', this.shouldStore() ? paasbMemory.getAll() :
-
-                        defaultParams, 'isObject', 'query')
-
                       .make('paasbSearchBoxFiltering', [], 'isArray')
                       .make('paasbSearchBoxConfig', {}, 'isObject')
                       .make('paasbSearchBoxAutoComplete', {}, 'isObject');
 
+                    config = $scope.paasbSearchBoxConfig;
+
+                    this
+                      .make('searchParams', this.shouldStore() ? paasbMemory.getAll() :
+
+                        defaultParams, 'isObject', 'query');
+
+                    params = $scope.searchParams;
+
+                    autoComplete = $scope.paasbSearchBoxAutoComplete;
+
+                    $scope.autoCompleteEnabled = this.hasAutoCompleteConfigurations();
+
                     if($scope.query) {
 
-                      $scope.hasQuery = true;
+                      paasbUi.extend($scope, {
+
+                        'hasQuery': true,
+
+                        'delayedQuery': $scope.query
+
+                      });
 
                     }
 
@@ -1990,41 +2061,17 @@ angular.module('paasb')
 
                     }
 
-                    if($scope.paasbSearchBoxConfig
+                    if(config && config.store) {
 
-                      && $scope.paasbSearchBoxConfig.store) {
-
-                        $scope.paasbSearchBoxCacheFilter = true;
+                      $scope.paasbSearchBoxCacheFilter = true;
 
                     }
-
-                    params = $scope.searchParams;
-
-                    config = $scope.paasbSearchBoxConfig;
-
-                    autoComplete = $scope.paasbSearchBoxAutoComplete;
-
-                    $scope.autoCompleteEnabled = this.hasAutoCompleteConfigurations();
 
                     paasbUi.extend($scope, {
 
                       'searchInputId': this.searchInputId
 
                     });
-
-                    return this;
-
-                  },
-
-                  send: function (params) {
-
-                    angular.extend(params, {
-
-                      '$$lastChange': new Date().getTime()
-
-                    });
-
-                    $scope.$emit('onChange', params);
 
                     return this;
 
@@ -2062,7 +2109,8 @@ angular.module('paasb')
 
                         timer = $timeout(function () {
 
-                          self.send(params);
+                          EventHandling
+                            .onChange(params);
 
                         }, config.delay);
 
@@ -2076,7 +2124,8 @@ angular.module('paasb')
 
                         }
 
-                        self.send(params);
+                        EventHandling
+                          .onChange(params);
 
                       }
 
@@ -2090,7 +2139,7 @@ angular.module('paasb')
 
                     });
 
-                    $scope.$watch('query', function (__new) {
+                    $scope.$watch('query', function (__new, __old) {
 
                       if(typeof __new !== 'undefined') {
 
@@ -2112,11 +2161,17 @@ angular.module('paasb')
 
                             }
 
+                            params.query = __new;
+
                             timer = $timeout(function () {
 
-                              params.query = __new;
+                              EventHandling
+                                .onChange(params)
+                                .onQueryAdded(__new, $scope.delayedQuery)
+                                .onQueryRemoved(__new, $scope.delayedQuery)
+                                .onQueryChanged(__new, $scope.delayedQuery);
 
-                              self.send(params);
+                              $scope.delayedQuery = __new;
 
                             }, config.delay);
 
@@ -2132,7 +2187,13 @@ angular.module('paasb')
 
                             params.query = __new;
 
-                            self.send(params);
+                            EventHandling
+                              .onChange(params)
+                              .onQueryAdded(__new, $scope.delayedQuery)
+                              .onQueryRemoved(__new, $scope.delayedQuery)
+                              .onQueryChanged(__new, $scope.delayedQuery);
+
+                            $scope.delayedQuery = __new;
 
                           }
 
@@ -2156,35 +2217,42 @@ angular.module('paasb')
 
                     Filterer = new paasbFiltering($scope, config);
 
+                    Grouper = new paasbGrouping($scope, config);
+
                     Placeholding = new paasbPlaceholders($scope, config);
+
+                    API = new paasbApi($scope, Filterer, Placeholding);
+
+                    EventHandling = new paasbEventHandling($scope, API);
 
                     angular.extend($scope, {
 
                       'Search': {
 
+                        'Grouper': Grouper,
+
                         'Filtering': Filterer,
 
-                        'Placeholding': Placeholding
+                        'Placeholding': Placeholding,
+
+                        'API': API,
+
+                        'EventHandling': EventHandling
 
                       }
 
                     });
 
                     Filterer
+                      .addEventHandler(EventHandling)
                       .addMemoryOperators()
                       .addByMemory(params);
 
                     Placeholding.setup();
 
-                    $scope.$emit('onRegisterApi', this.getAPI());
+                    $scope.$emit('onRegisterApi', API);
 
                     return this;
-
-                  },
-
-                  getAPI: function () {
-
-                    return(new paasbApi($scope, Filterer, Placeholding));
 
                   },
 
@@ -2220,8 +2288,10 @@ angular.module('paasb')
                     .configure()
                     .dom()
                     .register()
-                    .addEvents()
-                    .send(params);
+                    .addEvents();
+                    
+                  EventHandling
+                    .onChange(params);
 
                 });
 
@@ -2428,7 +2498,75 @@ angular.module('paasb')
 
   		return (function (scope, filtering, placeholding) {
 
+				var helpers = {
+
+					hasEventErrors: function (evt, fn, emptyFnAllowed) {
+
+						if(typeof evt !== 'string') {
+
+							throw new TypeError('Paasb API - Event Name parameter must be type String!');
+
+						}
+
+						if(typeof fn !== 'function' && !emptyFnAllowed) {
+
+							throw new TypeError('Paasb API - Event Function parameter must be type Function!');
+
+						}
+
+						return this;
+
+					},
+
+					hasInvalidEventType: function (evt, types) {
+
+						var validType = false;
+
+						angular.forEach(types, function (type) {
+
+							type = type.toLowerCase();
+
+							evt = evt.toLowerCase();
+
+							if(type === evt) {
+
+								validType = true;
+
+							}
+
+						});
+
+						if(!validType) {
+
+							throw new ReferenceError('Paasb API - Invalid Event Type Provided!');
+
+						}
+
+						return this;
+
+					}
+
+				};
+
         return({
+
+					'$$registeredEvents': [],
+
+					'$$allowedEvents': [
+						'onChange',
+						'onQueryAdded',
+						'onQueryRemoved',
+						'onQueryChanged',
+						'onFilterAdded',
+						'onFilterRemoved',
+						'onFilterChanged',
+						'onOperatorChanged',
+						'onFilterSelectorChanged',
+						'onEraser',
+						'onGarbage',
+						'onEnteredEditMode',
+						'onLeavedEditMode'
+					],
 
           'Filtering': filtering,
 
@@ -2451,6 +2589,92 @@ angular.module('paasb')
             }
 
           },
+
+					on: function (evt, fn) {
+
+						var self = this,
+
+							isRegisteredAlready = false;
+
+						helpers
+							.hasEventErrors(evt, fn)
+							.hasInvalidEventType(evt, self.$$allowedEvents);
+
+						angular.forEach(self.$$registeredEvents, function (event) {
+
+							if(event && event.fn === fn && event.type === evt) {
+
+								isRegisteredAlready = true;
+
+							}
+
+						});
+
+						if(!isRegisteredAlready) {
+
+							self.$$registeredEvents.push({
+
+								'type': evt,
+
+								'fn': fn
+
+							});
+
+						}
+
+						return this;
+
+					},
+
+					off: function (evt, fn) {
+
+						var self = this,
+
+							isFnEmpty = false;
+
+						helpers
+							.hasEventErrors(evt, fn, true)
+							.hasInvalidEventType(evt, self.$$allowedEvents);
+
+						if(typeof fn !== 'function') {
+
+							isFnEmpty = true;
+
+						}
+
+						self.$$registeredEvents
+							.slice()
+							.reverse()
+							.forEach(function (addedEvent, addedIndex, addedObject) {
+
+								if((addedEvent && addedEvent.fn === fn && addedEvent.type === evt) ||
+
+									(isFnEmpty && addedEvent && addedEvent.type === evt)) {
+
+									self.$$registeredEvents.splice(addedObject.length - 1 - addedIndex, 1);
+
+								}
+
+							});
+
+							return this;
+
+					},
+
+					offAll: function () {
+
+						self.$$registeredEvents
+							.slice()
+							.reverse()
+							.forEach(function (addedEvent, addedIndex, addedObject) {
+
+								self.$$registeredEvents.splice(addedObject.length - 1 - addedIndex, 1);
+
+							});
+
+						return this;
+
+					},
 
           destroy: function () {
 
@@ -2524,6 +2748,204 @@ angular.module('paasb')
 
 /**
  * @ngdoc service
+ * @name paasb.service:paasbEventHandling
+ * @description
+ * # paasbEventHandling Services
+ */
+
+angular.module('paasb')
+
+	.factory('paasbEventHandling', [
+    function () {
+
+      var scope = null,
+
+        api = null;
+
+  		return (function (_scope, _api) {
+
+        scope = _scope;
+
+        api = _api;
+
+        return ({
+
+          fire: function (type, data) {
+
+						var ev = {
+
+							'$$lastChange': new Date().getTime()
+
+						};
+
+            angular.forEach(api.$$registeredEvents, function (event) {
+
+              type = type.toLowerCase();
+
+              if(event && event.type
+
+                && event.type.toLowerCase() === type
+
+                && typeof event.fn === 'function') {
+
+                  event.fn(ev, data);
+
+              }
+
+            });
+
+            return this;
+
+          },
+
+          onQueryAdded: function (n, o) {
+
+            if(typeof o === 'undefined' || typeof o !== 'undefined' && !o.length) {
+
+              if(n && n.length) {
+
+                this.fire('onQueryAdded', n);
+
+              }
+
+            }
+
+						return this;
+
+          },
+
+          onQueryRemoved: function (n, o) {
+
+            if(typeof o !== 'undefined' && o.length) {
+
+              if(!n || typeof n === 'string' && !n.length) {
+
+								this.fire('onQueryRemoved', n);
+
+							}
+
+            }
+
+						return this;
+
+          },
+
+					onQueryChanged: function (n, o) {
+
+						if(n !== o) {
+
+							this.fire('onQueryChanged', n);
+
+						}
+
+					},
+
+					onEraser: function () {
+
+						this.fire('onEraser');
+
+						return this;
+
+					},
+
+					onGarbage: function () {
+
+						this.fire('onGarbage');
+
+						return this;
+
+					},
+
+          onChange: function (parameters) {
+
+            this.fire('onChange', parameters);
+
+            return this;
+
+          },
+
+					onFilterAdded: function (filter) {
+
+						this.fire('onFilterAdded', filter);
+
+						return this;
+
+					},
+
+					onFilterRemoved: function (filter) {
+
+						this.fire('onFilterRemoved', filter);
+
+						return this;
+
+					},
+
+					onFilterChanged: function (filter) {
+
+						this.fire('onFilterChanged', filter);
+
+						return this;
+
+					},
+
+					onOperatorChanged: function (operator, filter) {
+
+						var opts = {
+
+							'name': operator ? operator.name : '',
+
+							'filter': filter
+
+						}
+
+						this.fire('onOperatorChanged', opts);
+
+						return this;
+
+					},
+
+					onFilterSelectorChanged: function (selector, filter) {
+
+						var opts = {
+
+							'selector': selector,
+
+							'filter': filter
+
+						}
+
+						this.fire('onFilterSelectorChanged', opts);
+
+						return this;
+
+					},
+
+					onEnteredEditMode: function (filter) {
+
+						this.fire('onEnteredEditMode', filter);
+
+						return this;
+
+					},
+
+					onLeavedEditMode: function (filter) {
+
+						this.fire('onLeavedEditMode', filter);
+
+						return this;
+
+					}
+
+        });
+
+      });
+
+	}]);
+
+'use strict';
+
+/**
+ * @ngdoc service
  * @name paasb.service:paasbFiltering
  * @description
  * # paasbFiltering Services
@@ -2543,7 +2965,9 @@ angular.module('paasb')
 		'FILTERS',
     function ($q, $filter, $compile, $http, paasbUi, paasbUtils, paasbMemory, paasbValidation, FILTERS) {
 
-      var scope = null,
+      var EventHandling = null,
+
+				scope = null,
 
 				config = null;
 
@@ -2580,6 +3004,20 @@ angular.module('paasb')
         angular.extend(this, {
 
 					'clean': $filter('paasbClean'),
+
+					addEventHandler: function (handler) {
+
+						EventHandling = handler;
+
+						return this;
+
+					},
+
+					getEventHandler: function () {
+
+						return EventHandling;
+
+					},
 
 					removeByElement: function (elem) {
 
@@ -2647,7 +3085,7 @@ angular.module('paasb')
 
 						var sourceFilter = this.getFilterByElement(source),
 
-							clonedFilters = _.cloneDeep(scope.addedFilters),
+							clonedFilters = angular.copy(scope.addedFilters),
 
 							operators = this.getOperators();
 
@@ -2691,15 +3129,15 @@ angular.module('paasb')
 
 							}
 
-							this.rearrangeOperators(sourceFilter, destFilter);
+							this
+								.rearrangeOperators(sourceFilter, destFilter)
+								.removeAll(true, false, {
 
-							this.removeAll(true, false, {
+									'drag': true
 
-								'drag': true
-
-							});
-
-							this.addByMemory(clonedFilters, true);
+								})
+								.addByMemory(clonedFilters, true)
+								.update();
 
 						}
 
@@ -2733,6 +3171,8 @@ angular.module('paasb')
 
 						}
 
+						return this;
+
 					},
 
 					swapFilter: function (source, dest) {
@@ -2743,7 +3183,7 @@ angular.module('paasb')
 
 						if(sourceFilter && destFilter) {
 
-							var clonedFilters = _.cloneDeep(scope.addedFilters),
+							var clonedFilters = angular.copy(scope.addedFilters),
 
 								sFilter = sourceFilter.filter,
 
@@ -2759,13 +3199,14 @@ angular.module('paasb')
 
 							sFilter.recentlyMoved = true;
 
-							this.removeAll(true, false, {
+							this
+								.removeAll(true, false, {
 
-								'drag': true
+									'drag': true
 
-							});
-
-							this.addByMemory(clonedFilters, true);
+								})
+								.addByMemory(clonedFilters, true)
+								.update();
 
 						}
 
@@ -2973,7 +3414,7 @@ angular.module('paasb')
 
 									'value': filter.value,
 
-									'$$name': filter.name,
+									'name': filter.name,
 
 									'$$timestamp': filter.$$timestamp || null,
 
@@ -3009,7 +3450,7 @@ angular.module('paasb')
 
 						if(!this.filterContainerId) {
 
-							this.filterContainerId = _.uuid();
+							this.filterContainerId = paasbUtils.uuid();
 
 							var div = document.createElement('div');
 
@@ -3040,6 +3481,12 @@ angular.module('paasb')
 
 					},
 
+					hasFilterGrouping: function () {
+
+						return scope.paasbSearchBoxEnableGrouping;
+
+					},
+
 					addByMemory: function (options, erased) {
 
 						var opts = options.filters || options,
@@ -3066,9 +3513,9 @@ angular.module('paasb')
 
 							angular.forEach(scope.paasbSearchBoxFiltering, function (filter) {
 
-								if(option.$$name === filter.name || option.name === filter.name) {
+								if(option.name === filter.name) {
 
-									self.add(filter, option);
+									self.add(filter, option, true);
 
 								}
 
@@ -3098,11 +3545,11 @@ angular.module('paasb')
 
 					},
 
-          add: function (filter, options) {
+          add: function (filter, options, cached) {
 
             var childScope = scope.$new(true),
 
-							clonedFilter = _.cloneDeep(filter),
+							clonedFilter = angular.copy(filter),
 
 							operators = scope.paasbSearchBoxEnableFilteringOperators;
 
@@ -3140,7 +3587,7 @@ angular.module('paasb')
 
 							'$filter': filter,
 
-							'uuid': _.uuid()
+							'uuid': paasbUtils.uuid()
 
 						});
 
@@ -3165,6 +3612,13 @@ angular.module('paasb')
 							scope.hasFilters = true;
 
 							scope.addedFilters.push(clonedFilter);
+
+							if(!cached) {
+
+								EventHandling
+									.onFilterAdded(clonedFilter);
+
+							}
 
 						});
 
@@ -3228,15 +3682,11 @@ angular.module('paasb')
 
 										scope.registeredOperators.splice(oIndex, 1);
 
-										console.log(scope.addedOperators);
-
 										if(!dontUpdate || (options && options.deleteOperators)) {
 
 											scope.addedOperators.splice(oIndex, 1);
 
 										}
-
-										console.log(scope.addedOperators);
 
 									}
 
@@ -3255,6 +3705,9 @@ angular.module('paasb')
 									filter.$filter.notFiltered = true;
 
 									scope.addedFilters.splice(addedObject.length - 1 - addedIndex, 1);
+
+									EventHandling
+										.onFilterRemoved(addedFilter);
 
 								}
 
@@ -3317,6 +3770,8 @@ angular.module('paasb')
 
 						}
 
+						return this;
+
           },
 
 					loadSource: function (filter) {
@@ -3340,6 +3795,67 @@ angular.module('paasb')
 						});
 
 						return deferred.promise;
+
+					}
+
+        });
+
+      };
+
+	}]);
+
+'use strict';
+
+/**
+ * @ngdoc service
+ * @name paasb.service:paasbGrouping
+ * @description
+ * # paasbGrouping Services
+ */
+
+angular.module('paasb')
+
+	.factory('paasbGrouping', [
+		'paasbUi',
+    function (paasbUi) {
+
+      var scope = null,
+
+				config = null;
+
+  		return function (_scope, _config) {
+
+        scope = _scope;
+
+				config = _config;
+
+        var Search = null;
+
+        scope.$watch('Search', function (__new, __old) {
+
+          if(angular.isObject(__new)) {
+
+            Search = __new;
+
+          }
+
+        });
+
+				angular.extend(scope, {
+
+					'isGroupingEnabled': false
+
+				});
+
+        angular.extend(this, {
+
+					toggle: function () {
+
+						paasbUi.extend(scope, {
+
+							'isGroupingEnabled': !scope.isGroupingEnabled
+
+						});
 
 					}
 
@@ -3678,6 +4194,22 @@ angular.module('paasb')
 
 			var paasbUtils = {
 
+				uuid: function () {
+
+					var d = Date.now();
+
+					return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+
+						var r = (d + Math.round(Math.random() * 16)) % 16 | 0;
+
+						d = Math.floor(d / 16);
+
+						return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+
+					});
+
+				},
+
 				isJson: function (str) {
 
 					try {
@@ -3736,9 +4268,11 @@ angular.module('paasb')
 
 	        while(looping) {
 
-	          if(target[0] === document) {
+	          if((target[0] === document)
 
-	            break;
+							|| (!target[0] || !target[0].nodeName)) {
+
+	            	break;
 
 	          }
 
@@ -4039,7 +4573,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('views/directives/searchbox-grouping.html',
     "\n" +
-    "<div class=\"paasb-search-box-grouping\"><i class=\"fa fa-plus\"></i></div>"
+    "<div ng-class=\"{ 'grouping-active': isGroupingEnabled }\" ng-click=\"toggleGrouping();\" class=\"paasb-search-box-grouping\"><i class=\"fa fa-plus\"></i></div>"
   );
 
 
