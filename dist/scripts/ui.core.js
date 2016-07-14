@@ -2289,7 +2289,7 @@ angular.module('paasb')
                     .dom()
                     .register()
                     .addEvents();
-                    
+
                   EventHandling
                     .onChange(params);
 
