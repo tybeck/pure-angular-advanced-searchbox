@@ -23,15 +23,19 @@ angular.module('paasb')
 
       var EventHandling = null,
 
+				Grouping = null,
+
 				scope = null,
 
 				config = null;
 
-  		return function (_scope, _config) {
+  		return function (_scope, _grouping, _config) {
 
         scope = _scope;
 
 				config = _config;
+
+				Grouping = _grouping;
 
         var Search = null;
 
@@ -66,6 +70,30 @@ angular.module('paasb')
 						EventHandling = handler;
 
 						return this;
+
+					},
+
+					getGrouping: function () {
+
+						return Grouping || null;
+
+					},
+
+					getFilterScopes: function () {
+
+						return scope.addedScopes;
+
+					},
+
+					getFilterScope: function (filter) {
+
+						if(filter && filter.uuid) {
+
+							return scope.addedScopes[filter.uuid] || null;
+
+						}
+
+						return null;
 
 					},
 

@@ -78,6 +78,28 @@ angular.module('paasb')
 
 				},
 
+				isParent: function(refNode, otherNode) {
+
+					var parent = otherNode.parentNode;
+
+					do {
+
+						if (refNode == parent) {
+
+							return true;
+
+						} else {
+
+							parent = parent.parentNode;
+
+						}
+
+					} while (parent);
+
+					return false;
+
+				},
+
 	      getParentByAttribute: function (target, nodeName, attrName) {
 
 	        var looping = true,

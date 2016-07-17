@@ -43,13 +43,97 @@ angular.module('paasb')
 
         angular.extend(this, {
 
+					'addedParanthesis': [],
+
+					addFake: function (elem) {
+
+						if(this.addedParanthesis && this.addedParanthesis.length % 2 !== 1) {
+
+							var element = angular.element(document.createElement('div'));
+
+							element.text('(');
+
+							elem.prepend(element);
+
+							this.addedParanthesis.push({
+
+								'groupingElement': element,
+
+								'element': elem
+
+							});
+
+						}
+
+					},
+
+					removeLastFake: function () {
+
+						if(this.addedParanthesis && this.addedParanthesis.length) {
+
+							var lastGrouping = this.addedParanthesis[this.addedParanthesis.length - 1];
+
+							lastGrouping.groupingElement.remove();
+
+							this.addedParanthesis.splice(this.addedParanthesis.length - 1, 1);
+
+						}
+
+					},
+
+					hasOpeningParanthesis: function () {
+
+						if(this.addedParanthesis && this.addedParanthesis.length === 1) {
+
+							return true;
+
+						}
+
+					},
+
+					hasGrouping: function () {
+
+						if(this.addedParanthesis && this.addedParanthesis.length === 2) {
+
+							return true;
+
+						}
+
+					},
+
 					toggle: function () {
 
-						paasbUi.extend(scope, {
+						var Filtering = null,
 
-							'isGroupingEnabled': !scope.isGroupingEnabled
+							filters = [];
 
-						});
+						this.addedParanthesis = [];
+
+						if(Search && Search.Filtering) {
+
+							Filtering = Search.Filtering;
+
+							paasbUi.extend(scope, {
+
+								'isGroupingEnabled': !scope.isGroupingEnabled
+
+							});
+
+							filters = Filtering.getFilterScopes();
+
+							angular.forEach(filters, function (filter) {
+
+								var method = (scope.isGroupingEnabled ? 'enable' : 'disable') + 'Grouping';
+
+								if(filter && filter[method]) {
+
+									filter[method].call();
+
+								}
+
+							});
+
+						}
 
 					}
 

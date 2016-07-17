@@ -42,6 +42,8 @@ angular.module('paasb')
 
               var Filtering = $scope.filtering,
 
+                Grouping = Filtering.getGrouping(),
+
                 EventHandling = Filtering.getEventHandler(),
 
                 filter = $scope.filter,
@@ -128,6 +130,24 @@ angular.module('paasb')
 
               }
 
+              var scope = Filtering.getFilterScope(filter);
+
+              angular.extend(scope, {
+
+                enableGrouping: function () {
+
+                  $document.on('mouseover mouseout', $scope.events.groupingEvents);
+
+                },
+
+                disableGrouping: function () {
+
+                  $document.off('mouseover mouseout', $scope.events.groupingEvents);
+
+                }
+
+              });
+
               paasbUi.extend($scope, {
 
                 'Utils': paasbUtils,
@@ -170,13 +190,47 @@ angular.module('paasb')
 
                 'events': {
 
+                  groupingEvents: function (ev) {
+
+                    var isChild = $element[0].contains(ev.target),
+
+                      isSelf = $element[0] == ev.target,
+
+                      isInside = isChild || isSelf;
+
+                    switch(ev.type) {
+
+                      case 'mouseover':
+
+                        if(isInside) {
+
+                          Grouping.addFake($element);
+
+                        }
+
+                      break;
+
+                      case 'mouseout':
+
+                        if(!isInside) {
+
+                          Grouping.removeLastFake();
+
+                        }
+
+                      break;
+
+                    }
+
+                  },
+
                   searchboxClick: function (ev) {
 
-                    var isChild = $element[0].contains(ev.target);
+                    var isChild = $element[0].contains(ev.target),
 
-                    var isSelf = $element[0] == ev.target;
+                      isSelf = $element[0] == ev.target,
 
-                    var isInside = isChild || isSelf;
+                      isInside = isChild || isSelf;
 
                     if(!isInside) {
 

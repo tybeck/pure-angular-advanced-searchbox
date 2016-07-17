@@ -257,6 +257,8 @@ angular.module('paasb')
 
               var Filtering = $scope.filtering,
 
+                Grouping = Filtering.getGrouping(),
+
                 EventHandling = Filtering.getEventHandler(),
 
                 filter = $scope.filter,
@@ -343,6 +345,24 @@ angular.module('paasb')
 
               }
 
+              var scope = Filtering.getFilterScope(filter);
+
+              angular.extend(scope, {
+
+                enableGrouping: function () {
+
+                  $document.on('mouseover mouseout', $scope.events.groupingEvents);
+
+                },
+
+                disableGrouping: function () {
+
+                  $document.off('mouseover mouseout', $scope.events.groupingEvents);
+
+                }
+
+              });
+
               paasbUi.extend($scope, {
 
                 'Utils': paasbUtils,
@@ -385,13 +405,47 @@ angular.module('paasb')
 
                 'events': {
 
+                  groupingEvents: function (ev) {
+
+                    var isChild = $element[0].contains(ev.target),
+
+                      isSelf = $element[0] == ev.target,
+
+                      isInside = isChild || isSelf;
+
+                    switch(ev.type) {
+
+                      case 'mouseover':
+
+                        if(isInside) {
+
+                          Grouping.addFake($element);
+
+                        }
+
+                      break;
+
+                      case 'mouseout':
+
+                        if(!isInside) {
+
+                          Grouping.removeLastFake();
+
+                        }
+
+                      break;
+
+                    }
+
+                  },
+
                   searchboxClick: function (ev) {
 
-                    var isChild = $element[0].contains(ev.target);
+                    var isChild = $element[0].contains(ev.target),
 
-                    var isSelf = $element[0] == ev.target;
+                      isSelf = $element[0] == ev.target,
 
-                    var isInside = isChild || isSelf;
+                      isInside = isChild || isSelf;
 
                     if(!isInside) {
 
@@ -2209,15 +2263,26 @@ angular.module('paasb')
 
                     });
 
+                    $scope.input.on('keypress', function (ev) {
+
+                      if(ev && ev.keyCode === 13) {
+
+                        EventHandling
+                          .onChange(params);
+
+                      }
+
+                    });
+
                     return this;
 
                   },
 
                   register: function () {
 
-                    Filterer = new paasbFiltering($scope, config);
-
                     Grouper = new paasbGrouping($scope, config);
+
+                    Filterer = new paasbFiltering($scope, Grouper, config);
 
                     Placeholding = new paasbPlaceholders($scope, config);
 
@@ -2289,7 +2354,7 @@ angular.module('paasb')
                     .dom()
                     .register()
                     .addEvents();
-                    
+
                   EventHandling
                     .onChange(params);
 
@@ -2967,15 +3032,19 @@ angular.module('paasb')
 
       var EventHandling = null,
 
+				Grouping = null,
+
 				scope = null,
 
 				config = null;
 
-  		return function (_scope, _config) {
+  		return function (_scope, _grouping, _config) {
 
         scope = _scope;
 
 				config = _config;
+
+				Grouping = _grouping;
 
         var Search = null;
 
@@ -3010,6 +3079,30 @@ angular.module('paasb')
 						EventHandling = handler;
 
 						return this;
+
+					},
+
+					getGrouping: function () {
+
+						return Grouping || null;
+
+					},
+
+					getFilterScopes: function () {
+
+						return scope.addedScopes;
+
+					},
+
+					getFilterScope: function (filter) {
+
+						if(filter && filter.uuid) {
+
+							return scope.addedScopes[filter.uuid] || null;
+
+						}
+
+						return null;
 
 					},
 
@@ -3849,13 +3942,97 @@ angular.module('paasb')
 
         angular.extend(this, {
 
+					'addedParanthesis': [],
+
+					addFake: function (elem) {
+
+						if(this.addedParanthesis && this.addedParanthesis.length % 2 !== 1) {
+
+							var element = angular.element(document.createElement('div'));
+
+							element.text('(');
+
+							elem.prepend(element);
+
+							this.addedParanthesis.push({
+
+								'groupingElement': element,
+
+								'element': elem
+
+							});
+
+						}
+
+					},
+
+					removeLastFake: function () {
+
+						if(this.addedParanthesis && this.addedParanthesis.length) {
+
+							var lastGrouping = this.addedParanthesis[this.addedParanthesis.length - 1];
+
+							lastGrouping.groupingElement.remove();
+
+							this.addedParanthesis.splice(this.addedParanthesis.length - 1, 1);
+
+						}
+
+					},
+
+					hasOpeningParanthesis: function () {
+
+						if(this.addedParanthesis && this.addedParanthesis.length === 1) {
+
+							return true;
+
+						}
+
+					},
+
+					hasGrouping: function () {
+
+						if(this.addedParanthesis && this.addedParanthesis.length === 2) {
+
+							return true;
+
+						}
+
+					},
+
 					toggle: function () {
 
-						paasbUi.extend(scope, {
+						var Filtering = null,
 
-							'isGroupingEnabled': !scope.isGroupingEnabled
+							filters = [];
 
-						});
+						this.addedParanthesis = [];
+
+						if(Search && Search.Filtering) {
+
+							Filtering = Search.Filtering;
+
+							paasbUi.extend(scope, {
+
+								'isGroupingEnabled': !scope.isGroupingEnabled
+
+							});
+
+							filters = Filtering.getFilterScopes();
+
+							angular.forEach(filters, function (filter) {
+
+								var method = (scope.isGroupingEnabled ? 'enable' : 'disable') + 'Grouping';
+
+								if(filter && filter[method]) {
+
+									filter[method].call();
+
+								}
+
+							});
+
+						}
 
 					}
 
@@ -4253,6 +4430,28 @@ angular.module('paasb')
 					document.body.removeChild(scrollDiv);
 
 					return scrollbarWidth;
+
+				},
+
+				isParent: function(refNode, otherNode) {
+
+					var parent = otherNode.parentNode;
+
+					do {
+
+						if (refNode == parent) {
+
+							return true;
+
+						} else {
+
+							parent = parent.parentNode;
+
+						}
+
+					} while (parent);
+
+					return false;
 
 				},
 

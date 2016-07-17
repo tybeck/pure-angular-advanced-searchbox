@@ -385,15 +385,26 @@ angular.module('paasb')
 
                     });
 
+                    $scope.input.on('keypress', function (ev) {
+
+                      if(ev && ev.keyCode === 13) {
+
+                        EventHandling
+                          .onChange(params);
+
+                      }
+
+                    });
+
                     return this;
 
                   },
 
                   register: function () {
 
-                    Filterer = new paasbFiltering($scope, config);
-
                     Grouper = new paasbGrouping($scope, config);
+
+                    Filterer = new paasbFiltering($scope, Grouper, config);
 
                     Placeholding = new paasbPlaceholders($scope, config);
 
@@ -465,7 +476,7 @@ angular.module('paasb')
                     .dom()
                     .register()
                     .addEvents();
-                    
+
                   EventHandling
                     .onChange(params);
 
