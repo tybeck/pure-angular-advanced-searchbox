@@ -8,6 +8,17 @@ div.paasb-searchbox {
       color: #585858;
       cursor: pointer;
 
+      &.magnifier-always-on {
+
+        right: 38px;
+
+        &.has-filters,
+        &.has-query {
+          right: 60px;
+        }
+
+      }
+
       &.active {
         color: #4A92D0;
       }

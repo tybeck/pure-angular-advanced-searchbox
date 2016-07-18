@@ -35,6 +35,7 @@
 - [ ] Add UI for validation
 - [ ] Externalizing templates
 - [ ] Update Live DEMO (In Progress)
+- [ ] Add ability to only update params via ENTER key or clicking Search Button
 
 ### Known Bugs
 
@@ -177,6 +178,7 @@ $scope.sFilters = [
 $scope.sConfig = {
     'delay': 1000, /* How long before paasb fires off a change event */
     'store': true /* Should we store our query/caching in local storage? */
+    'showMagnifierAlways': false /* Should we keep magnifier or remove it when there is some sort of query/filter? */
 };
 
 $scope.sFilterOperators = [
@@ -505,6 +507,12 @@ $scope.$on('onRegisterApi', function(ev, api) {
       <td>Should we store our query/caching in local storage? Default is <b>false</b></td>
       <td>boolean</td>
     </tr>
+    <tr>
+      <td>showMagnifierAlways</td>
+      <td>Should we keep magnifier or remove it when there is some sort of query/filter? Default is <b>false</b>.</td>
+      <td>boolean</td>
+    </tr>
+
     <tr>
       <td>delay</td>
       <td>Would you like to provide a delay before the search parameters get updated? Default is <b>0</b></td>

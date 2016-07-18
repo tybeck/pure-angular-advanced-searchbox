@@ -239,6 +239,8 @@ angular.module('app')
 
         'updateOnlyByEnterKey': true,
 
+        'showMagnifierAlways': true,
+
         'placeholderInterval': 3000,
 
         'placeholderSpeedOutInterval': 15,

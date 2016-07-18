@@ -25,13 +25,53 @@ div.paasb-searchbox {
         }
 
         &.has-eraser-and-no-cache-filtering {
-          right: 68px;
+          right: 62px;
           margin-top: -10px;
         }
 
+        &.magnifier-always-on {
+
+          right: 62px;
+
+          &.no-cache-filtering {
+
+            right: 38px;
+
+            &.has-filters {
+              right: 62px;
+            }
+
+          }
+
+          &.has-eraser-and-no-cache-filtering {
+
+            &.has-query {
+              right: 84px;
+            }
+
+            &.has-filters.has-query,
+            &.has-query {
+              right: 84px;
+            }
+
+          }
+
+          &.has-filters.has-query,
+          &.has-query {
+            right: 109px;
+          }
+
+          &.has-filters {
+            right: 84px;
+          }
+
+        }
+
         &.has-eraser-and-cache-filtering {
+
           right: 88px;
           margin-top: -10px;
+
         }
 
       }
@@ -49,8 +89,18 @@ div.paasb-searchbox {
         color: #4A92D0;
         cursor: pointer;
 
+        &.magnifier-always-on {
+          right: 84px;
+        }
+
         &.no-cache-filtering {
+
           right: 40px;
+
+          &.magnifier-always-on {
+            right: 60px;
+          }
+
         }
 
       }
@@ -59,6 +109,10 @@ div.paasb-searchbox {
 
         cursor: pointer;
         color: #337ab7;
+
+        &.magnifier-always-on {
+          right: 38px;
+        }
 
         &:hover {
 

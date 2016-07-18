@@ -77,34 +77,74 @@ div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog.no-cache-filtering {
 }
 /* line 27, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog.has-eraser-and-no-cache-filtering {
-  right: 68px;
+  right: 62px;
   margin-top: -10px;
 }
 /* line 32, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog.magnifier-always-on {
+  right: 62px;
+}
+/* line 36, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog.magnifier-always-on.no-cache-filtering {
+  right: 38px;
+}
+/* line 40, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog.magnifier-always-on.no-cache-filtering.has-filters {
+  right: 62px;
+}
+/* line 48, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog.magnifier-always-on.has-eraser-and-no-cache-filtering.has-query {
+  right: 84px;
+}
+/* line 52, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog.magnifier-always-on.has-eraser-and-no-cache-filtering.has-filters.has-query, div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog.magnifier-always-on.has-eraser-and-no-cache-filtering.has-query {
+  right: 84px;
+}
+/* line 59, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog.magnifier-always-on.has-filters.has-query, div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog.magnifier-always-on.has-query {
+  right: 109px;
+}
+/* line 64, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog.magnifier-always-on.has-filters {
+  right: 84px;
+}
+/* line 70, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-cog.has-eraser-and-cache-filtering {
   right: 88px;
   margin-top: -10px;
 }
-/* line 46, ../../src/styles/directives/searchbox.scss */
+/* line 86, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-eraser {
   right: 62px;
   color: #4A92D0;
   cursor: pointer;
 }
-/* line 52, ../../src/styles/directives/searchbox.scss */
+/* line 92, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-eraser.magnifier-always-on {
+  right: 84px;
+}
+/* line 96, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-eraser.no-cache-filtering {
   right: 40px;
 }
-/* line 58, ../../src/styles/directives/searchbox.scss */
+/* line 100, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-eraser.no-cache-filtering.magnifier-always-on {
+  right: 60px;
+}
+/* line 108, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-trash {
   cursor: pointer;
   color: #337ab7;
 }
-/* line 63, ../../src/styles/directives/searchbox.scss */
+/* line 113, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-trash.magnifier-always-on {
+  right: 38px;
+}
+/* line 117, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-trash:hover {
   color: #000;
 }
-/* line 73, ../../src/styles/directives/searchbox.scss */
+/* line 127, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper > input {
   font-size: 18px;
   border: none;
@@ -496,6 +536,14 @@ div.paasb-searchbox div.paasb-searchbox-wrapper i.paasb-search-box-cache-filter 
   cursor: pointer;
 }
 /* line 11, ../../src/styles/directives/searchbox-cache-filters.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.paasb-search-box-cache-filter.magnifier-always-on {
+  right: 38px;
+}
+/* line 15, ../../src/styles/directives/searchbox-cache-filters.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.paasb-search-box-cache-filter.magnifier-always-on.has-filters, div.paasb-searchbox div.paasb-searchbox-wrapper i.paasb-search-box-cache-filter.magnifier-always-on.has-query {
+  right: 60px;
+}
+/* line 22, ../../src/styles/directives/searchbox-cache-filters.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper i.paasb-search-box-cache-filter.active {
   color: #4A92D0;
 }

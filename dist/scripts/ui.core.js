@@ -2018,6 +2018,13 @@ angular.module('paasb')
 
                     },
 
+                    handleSearch: function () {
+
+                      EventHandling
+                        .onChange(params);
+
+                    },
+
                     handleGarbage: function () {
 
                       if((params.query && params.query.length) || $scope.hasFilters) {
@@ -2055,7 +2062,9 @@ angular.module('paasb')
 
                       'filters': {}
 
-                    };
+                    },
+
+                      configuredParams = {};
 
                     if($scope.paasbSearchBoxEnableFilteringOperators) {
 
@@ -2086,10 +2095,24 @@ angular.module('paasb')
 
                     config = $scope.paasbSearchBoxConfig;
 
-                    this
-                      .make('searchParams', this.shouldStore() ? paasbMemory.getAll() :
+                    if(this.shouldStore()) {
 
-                        defaultParams, 'isObject', 'query');
+                      configuredParams = paasbMemory.getAll();
+
+                      if(_.isEmpty(configuredParams)) {
+
+                        configuredParams = defaultParams;
+
+                      }
+
+                    } else {
+
+                      configuredParams = defaultParams;
+
+                    }
+
+                    this
+                      .make('searchParams', configuredParams, 'isObject', 'query');
 
                     params = $scope.searchParams;
 
@@ -2123,7 +2146,9 @@ angular.module('paasb')
 
                     paasbUi.extend($scope, {
 
-                      'searchInputId': this.searchInputId
+                      'searchInputId': this.searchInputId,
+
+                      'showMagnifierAlways': config.showMagnifierAlways || false
 
                     });
 
@@ -2194,6 +2219,14 @@ angular.module('paasb')
                     });
 
                     $scope.$watch('query', function (__new, __old) {
+
+                      if(!__new && !__old && typeof __new === 'string'
+
+                        && typeof __old === 'string') {
+
+                          return;
+
+                      }
 
                       if(typeof __new !== 'undefined') {
 
@@ -4728,7 +4761,7 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('views/directives/searchbox-cache-filters.html',
-    "<i ng-class=\"{ 'active': cacheActive }\" ng-click=\"handleCache();\" class=\"paasb-search-box-cache-filter fa fa-archive\"></i>"
+    "<i ng-class=\"{ 'active': cacheActive, 'magnifier-always-on': showMagnifierAlways, 'has-query': hasQuery, 'has-filters': hasFilters }\" ng-click=\"handleCache();\" class=\"paasb-search-box-cache-filter fa fa-archive\"></i>"
   );
 
 
@@ -4780,9 +4813,9 @@ angular.module('paasb').run(['$templateCache', function($templateCache) {
     "\n" +
     "<div data-search-box=\"true\" class=\"paasb-searchbox\">\n" +
     "  <paasb-search-box-filtering search=\"Search\" filters=\"paasbSearchBoxFiltering\" ng-if=\"paasbSearchBoxFiltering &amp;&amp; paasbSearchBoxFiltering.length\"></paasb-search-box-filtering>\n" +
-    "  <div class=\"paasb-searchbox-wrapper\"><i ng-class=\"{ 'fa-search': !query.length, 'fa-trash': ((query &amp;&amp; query.length) || hasFilters) }\" ng-click=\"handleGarbage();\" paasb-draggable=\"\" draggable=\"true\" class=\"fa\"></i>\n" +
-    "    <paasb-search-box-cache-filter ng-if=\"paasbSearchBoxCacheFilter\"></paasb-search-box-cache-filter><i ng-if=\"isLoading\" ng-class=\"{ 'no-cache-filtering': !paasbSearchBoxCacheFilter, 'has-eraser-and-no-cache-filtering': (hasQuery &amp;&amp; !paasbSearchBoxCacheFilter), 'has-eraser-and-cache-filtering': (hasQuery &amp;&amp; paasbSearchBoxCacheFilter) }\" class=\"fa fa-cog fa-spin\"></i>\n" +
-    "    <input type=\"text\" ng-model=\"query\" id=\"{{searchInputId}}\"/><i ng-if=\"hasQuery\" ng-class=\"{ 'no-cache-filtering': !paasbSearchBoxCacheFilter }\" ng-click=\"handleEraser();\" class=\"fa fa-eraser\"></i>\n" +
+    "  <div class=\"paasb-searchbox-wrapper\"><i ng-if=\"((!hasQuery &amp;&amp; !hasFilters) || showMagnifierAlways)\" ng-class=\"{ 'magnifier-always-on': showMagnifierAlways }\" ng-click=\"handleSearch();\" class=\"fa fa-search\"></i><i ng-if=\"(hasQuery || hasFilters)\" ng-class=\"{ 'magnifier-always-on': showMagnifierAlways }\" ng-click=\"handleGarbage();\" paasb-draggable=\"\" draggable=\"true\" class=\"fa fa-trash\"></i>\n" +
+    "    <paasb-search-box-cache-filter ng-if=\"paasbSearchBoxCacheFilter\"></paasb-search-box-cache-filter><i ng-if=\"isLoading\" ng-class=\"{ 'no-cache-filtering': !paasbSearchBoxCacheFilter, 'has-eraser-and-no-cache-filtering': (hasQuery &amp;&amp; !paasbSearchBoxCacheFilter), 'has-eraser-and-cache-filtering': (hasQuery &amp;&amp; paasbSearchBoxCacheFilter), 'magnifier-always-on': showMagnifierAlways, 'has-filters': hasFilters, 'has-query': hasQuery }\" class=\"fa fa-cog fa-spin\"></i>\n" +
+    "    <input type=\"text\" ng-model=\"query\" id=\"{{searchInputId}}\"/><i ng-if=\"hasQuery\" ng-class=\"{ 'no-cache-filtering': !paasbSearchBoxCacheFilter, 'magnifier-always-on': showMagnifierAlways }\" ng-click=\"handleEraser();\" class=\"fa fa-eraser\"></i>\n" +
     "    <paasb-search-box-auto-complete query=\"searchParams.query\" config=\"paasbSearchBoxAutoComplete\" input=\"input\" ng-if=\"autoCompleteEnabled\"></paasb-search-box-auto-complete>\n" +
     "  </div>\n" +
     "</div>"

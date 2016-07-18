@@ -140,6 +140,13 @@ angular.module('paasb')
 
                     },
 
+                    handleSearch: function () {
+
+                      EventHandling
+                        .onChange(params);
+
+                    },
+
                     handleGarbage: function () {
 
                       if((params.query && params.query.length) || $scope.hasFilters) {
@@ -177,7 +184,9 @@ angular.module('paasb')
 
                       'filters': {}
 
-                    };
+                    },
+
+                      configuredParams = {};
 
                     if($scope.paasbSearchBoxEnableFilteringOperators) {
 
@@ -208,10 +217,24 @@ angular.module('paasb')
 
                     config = $scope.paasbSearchBoxConfig;
 
-                    this
-                      .make('searchParams', this.shouldStore() ? paasbMemory.getAll() :
+                    if(this.shouldStore()) {
 
-                        defaultParams, 'isObject', 'query');
+                      configuredParams = paasbMemory.getAll();
+
+                      if(_.isEmpty(configuredParams)) {
+
+                        configuredParams = defaultParams;
+
+                      }
+
+                    } else {
+
+                      configuredParams = defaultParams;
+
+                    }
+
+                    this
+                      .make('searchParams', configuredParams, 'isObject', 'query');
 
                     params = $scope.searchParams;
 
@@ -245,7 +268,9 @@ angular.module('paasb')
 
                     paasbUi.extend($scope, {
 
-                      'searchInputId': this.searchInputId
+                      'searchInputId': this.searchInputId,
+
+                      'showMagnifierAlways': config.showMagnifierAlways || false
 
                     });
 
@@ -316,6 +341,14 @@ angular.module('paasb')
                     });
 
                     $scope.$watch('query', function (__new, __old) {
+
+                      if(!__new && !__old && typeof __new === 'string'
+
+                        && typeof __old === 'string') {
+
+                          return;
+
+                      }
 
                       if(typeof __new !== 'undefined') {
 
