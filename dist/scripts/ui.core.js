@@ -2148,7 +2148,7 @@ angular.module('paasb')
 
                       'searchInputId': this.searchInputId,
 
-                      'showMagnifierAlways': config.showMagnifierAlways || false
+                      'showMagnifierAlways': config.showMagnifierAlways || true
 
                     });
 
@@ -2158,99 +2158,123 @@ angular.module('paasb')
 
                   addEvents: function () {
 
-                    var self = this;
+                    var self = this,
+
+                      hasDelay = false;
+
+                    if(config && typeof config.delay === 'number') {
+
+                      hasDelay = true;
+
+                    }
 
                     angular.extend($scope, this.events);
 
-                    Filterer.watch(function (filters, operators, refresh) {
+                    if(hasDelay) {
 
-                      if($scope.paasbSearchBoxEnableFilteringOperators) {
-
-                        paasbMemory.getAndSet('operators', operators);
-
-                      }
-
-                      if(timer) {
-
-                        $timeout.cancel(timer);
-
-                      }
-
-                      if(config.delay && !refresh) {
-
-                        params.filters = filters;
+                      Filterer.watch(function (filters, operators, refresh) {
 
                         if($scope.paasbSearchBoxEnableFilteringOperators) {
 
-                          params.operators = operators;
+                          paasbMemory.getAndSet('operators', operators);
 
                         }
 
-                        timer = $timeout(function () {
+                        if(timer) {
+
+                          $timeout.cancel(timer);
+
+                        }
+
+                        if(config.delay && !refresh) {
+
+                          params.filters = filters;
+
+                          if($scope.paasbSearchBoxEnableFilteringOperators) {
+
+                            params.operators = operators;
+
+                          }
+
+                          timer = $timeout(function () {
+
+                            EventHandling
+                              .onChange(params);
+
+                          }, config.delay);
+
+                        } else {
+
+                          params.filters = filters;
+
+                          if($scope.paasbSearchBoxEnableFilteringOperators) {
+
+                            params.operators = operators;
+
+                          }
 
                           EventHandling
                             .onChange(params);
 
-                        }, config.delay);
+                        }
 
-                      } else {
+                      });
 
-                        params.filters = filters;
+                      $scope.$watch('query', function (__new, __old) {
 
-                        if($scope.paasbSearchBoxEnableFilteringOperators) {
+                        if(!__new && !__old && typeof __new === 'string'
 
-                          params.operators = operators;
+                          && typeof __old === 'string') {
+
+                            return;
 
                         }
 
-                        EventHandling
-                          .onChange(params);
+                        if(typeof __new !== 'undefined') {
 
-                      }
+                          if(paasbMemory.getAndSet('query') !== __new) {
 
-                    });
+                            paasbMemory.getAndSet('query', __new);
 
-                    $scope.$on('take.autoSuggestion', function (ev, data) {
+                            paasbUi.extend($scope, {
 
-                      $scope.skipDelay = true;
+                              'hasQuery': (__new && __new.length) ? true : false
 
-                      $scope.query = data;
+                            });
 
-                    });
+                            if(config.delay && !$scope.skipDelay) {
 
-                    $scope.$watch('query', function (__new, __old) {
+                              if(timer) {
 
-                      if(!__new && !__old && typeof __new === 'string'
+                                $timeout.cancel(timer);
 
-                        && typeof __old === 'string') {
+                              }
 
-                          return;
+                              params.query = __new;
 
-                      }
+                              timer = $timeout(function () {
 
-                      if(typeof __new !== 'undefined') {
+                                EventHandling
+                                  .onChange(params)
+                                  .onQueryAdded(__new, $scope.delayedQuery)
+                                  .onQueryRemoved(__new, $scope.delayedQuery)
+                                  .onQueryChanged(__new, $scope.delayedQuery);
 
-                        if(paasbMemory.getAndSet('query') !== __new) {
+                                $scope.delayedQuery = __new;
 
-                          paasbMemory.getAndSet('query', __new);
+                              }, config.delay);
 
-                          paasbUi.extend($scope, {
+                            } else {
 
-                            'hasQuery': (__new && __new.length) ? true : false
+                              if(timer) {
 
-                          });
+                                $timeout.cancel(timer);
 
-                          if(config.delay && !$scope.skipDelay) {
+                              }
 
-                            if(timer) {
+                              $scope.skipDelay = false;
 
-                              $timeout.cancel(timer);
-
-                            }
-
-                            params.query = __new;
-
-                            timer = $timeout(function () {
+                              params.query = __new;
 
                               EventHandling
                                 .onChange(params)
@@ -2260,33 +2284,21 @@ angular.module('paasb')
 
                               $scope.delayedQuery = __new;
 
-                            }, config.delay);
-
-                          } else {
-
-                            if(timer) {
-
-                              $timeout.cancel(timer);
-
                             }
-
-                            $scope.skipDelay = false;
-
-                            params.query = __new;
-
-                            EventHandling
-                              .onChange(params)
-                              .onQueryAdded(__new, $scope.delayedQuery)
-                              .onQueryRemoved(__new, $scope.delayedQuery)
-                              .onQueryChanged(__new, $scope.delayedQuery);
-
-                            $scope.delayedQuery = __new;
 
                           }
 
                         }
 
-                      }
+                      });
+
+                    }
+
+                    $scope.$on('take.autoSuggestion', function (ev, data) {
+
+                      $scope.skipDelay = true;
+
+                      $scope.query = data;
 
                     });
 

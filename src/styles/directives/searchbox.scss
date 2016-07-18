@@ -122,6 +122,21 @@ div.paasb-searchbox {
 
       }
 
+      &.fa-search {
+
+        cursor: pointer;
+        -webkit-transition: color 600ms linear;
+        -moz-transition: color 600ms linear;
+        -o-transition: color 600ms linear;
+        -ms-transition: color 600ms linear;
+        transition: color 600ms linear;
+
+        &:hover {
+          color: #337ab7;
+        }
+
+      }
+
     }
 
     > input {

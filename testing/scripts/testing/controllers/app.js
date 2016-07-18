@@ -227,7 +227,7 @@ angular.module('app')
 
       $scope.sConfig = {
 
-        'delay': 1000,
+        // 'delay': 1000,
 
         // 'store': true,
 
@@ -238,8 +238,6 @@ angular.module('app')
         ],
 
         'updateOnlyByEnterKey': true,
-
-        'showMagnifierAlways': true,
 
         'placeholderInterval': 3000,
 

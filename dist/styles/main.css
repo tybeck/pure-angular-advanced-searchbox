@@ -144,7 +144,20 @@ div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-trash.magnifier-always-on {
 div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-trash:hover {
   color: #000;
 }
-/* line 127, ../../src/styles/directives/searchbox.scss */
+/* line 125, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-search {
+  cursor: pointer;
+  -webkit-transition: color 600ms linear;
+  -moz-transition: color 600ms linear;
+  -o-transition: color 600ms linear;
+  -ms-transition: color 600ms linear;
+  transition: color 600ms linear;
+}
+/* line 134, ../../src/styles/directives/searchbox.scss */
+div.paasb-searchbox div.paasb-searchbox-wrapper i.fa-search:hover {
+  color: #337ab7;
+}
+/* line 142, ../../src/styles/directives/searchbox.scss */
 div.paasb-searchbox div.paasb-searchbox-wrapper > input {
   font-size: 18px;
   border: none;

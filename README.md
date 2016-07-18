@@ -509,13 +509,13 @@ $scope.$on('onRegisterApi', function(ev, api) {
     </tr>
     <tr>
       <td>showMagnifierAlways</td>
-      <td>Should we keep magnifier or remove it when there is some sort of query/filter? Default is <b>false</b>.</td>
+      <td>Should we keep magnifier or remove it when there is some sort of query/filter? Default is <b>true</b>.</td>
       <td>boolean</td>
     </tr>
 
     <tr>
       <td>delay</td>
-      <td>Would you like to provide a delay before the search parameters get updated? Default is <b>0</b></td>
+      <td>Would you like to provide a delay before the search parameters get updated? Default is <b>null</b>.  If no delay is provided, then automatic updates will not be triggered.</td>
       <td>number</td>
     </tr>
     <tr>
