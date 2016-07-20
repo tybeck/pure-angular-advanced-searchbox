@@ -47,12 +47,6 @@ angular.module('paasb')
 
                 'availableSelectors': null,
 
-                'filter': angular.extend(filter, {
-
-                  'hasFilterSelectors': $element
-
-                }),
-
                 takeSelector: function (selector) {
 
                   angular.forEach($scope.availableSelectors,
@@ -76,7 +70,7 @@ angular.module('paasb')
 
                   }
 
-                  $scope.reAutoSize();
+                  Filtering.autoSizeByFilter(filter);
 
                   var input = filter.element.find('input')[0];
 
@@ -162,7 +156,7 @@ angular.module('paasb')
 
                 if(editing) {
 
-                  $scope.reAutoSize();
+                  Filtering.autoSizeByFilter(filter);
 
                 }
 

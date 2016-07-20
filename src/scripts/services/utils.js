@@ -146,6 +146,12 @@ angular.module('paasb')
 
 				getStyle: function (elem, style) {
 
+					if(elem && elem.length) {
+
+						elem = elem[0];
+
+					}
+
 					return parseInt($window.getComputedStyle(elem, null).getPropertyValue(style));
 
 				},

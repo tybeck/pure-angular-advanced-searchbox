@@ -58,7 +58,13 @@ angular.module('paasb')
 
                 dragSourceCount = 0;
 
-              filter.loading = false;
+              angular.extend(filter, {
+
+                'loading': false,
+
+                '$$filtering': Filtering
+
+              });
 
               $element.attr('id', paasbUtils.uuid());
 
@@ -149,6 +155,8 @@ angular.module('paasb')
               });
 
               paasbUi.extend($scope, {
+
+                'inputId': paasbUtils.uuid(),
 
                 'Utils': paasbUtils,
 
@@ -426,7 +434,9 @@ angular.module('paasb')
 
                       if(filter.suggestedValue) {
 
-                        filter.value = filter.suggestedValue.value;
+                        console.log(filter.suggestedValue, $scope.value, filter.$$lastValue);
+
+                        $scope.value = filter.suggestedValue.value;
 
                       } else {
 
@@ -488,6 +498,8 @@ angular.module('paasb')
 
                   input = $element.find('input');
 
+                  filter.$$input = input;
+
                   return $scope;
 
                 },
@@ -522,16 +534,53 @@ angular.module('paasb')
 
                   $scope.$watch('value', function (__new, __old) {
 
+                    Filtering.autoSizeByFilter(filter);
+
                     filter.value = __new || '';
 
                     if(filter.value) {
 
                       if(__new !== __old) {
 
-                        Filtering.update();
+                        if(filter && filter.suggestedValues) {
 
-                        EventHandling
-                          .onFilterChanged(filter);
+                          if(filter.suggestedValue && filter.suggestedValue.value === filter.$$lastValue) {
+
+                            return;
+
+                          }
+
+                          var matchesSuggestedValue = false;
+
+                          angular.forEach(filter.suggestedValues, function (suggestedValue) {
+
+                            if(suggestedValue === __new) {
+
+                              matchesSuggestedValue = true;
+
+                            }
+
+                          });
+
+                          if(matchesSuggestedValue) {
+
+                            filter.$$lastValue = filter.value;
+
+                            Filtering.update();
+
+                            EventHandling
+                              .onFilterChanged(filter);
+
+                          }
+
+                        } else {
+
+                          Filtering.update();
+
+                          EventHandling
+                            .onFilterChanged(filter);
+
+                        }
 
                       }
 

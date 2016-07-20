@@ -87,7 +87,7 @@ angular.module('paasb')
 
                     $document[$scope.showOperators ? 'bind': 'unbind']('click', $scope.events.docClick);
 
-                    $scope.reAutoSize();
+                    Filtering.autoSizeByFilter(filter);
 
                   },
 

@@ -1,0 +1,15 @@
+div(
+  class="paasb-search-box-auto-suggestions",
+  ng-if="filter.suggestedValues"
+)
+  ul(
+    ng-hide="!filter.editing",
+    paasb-auto-size="filter",
+    paasb-auto-size-type="suggestions",
+    ng-if="!filter.loading"
+  )
+    li(
+      ng-repeat="suggestion in filter.suggestedValues | paasbSuggest: filter.value:filter"
+      ng-click="takeSuggestion(suggestion.value)"
+    )
+      span(ng-bind-html="Utils.trust(suggestion.modified)")

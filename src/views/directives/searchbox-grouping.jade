@@ -3,4 +3,6 @@ div(
   ng-class="{ 'grouping-active': isGroupingEnabled }",
   ng-click="toggleGrouping();"
 )
-  i(class="fa fa-plus")
+  i(class="fa fa-plus", ng-if="!isGroupingEnabled")
+  i(class="fa fa-remove", ng-if="isGroupingEnabled")
+  

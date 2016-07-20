@@ -57,6 +57,8 @@ angular.module('paasb')
 
 					'registeredOperators': [],
 
+					'autoSizeFilterElements': {},
+
 					'addedScopes': {}
 
 				});
@@ -64,6 +66,84 @@ angular.module('paasb')
         angular.extend(this, {
 
 					'clean': $filter('paasbClean'),
+
+					autoSize: function (target, source) {
+
+						if(target && source) {
+
+							var targetElem = target[0],
+
+								sourceElem = source[0],
+
+								bounding = sourceElem.getBoundingClientRect();
+
+							var spacing = (paasbUtils.getStyle(sourceElem, 'border-left-width')
+
+								+ paasbUtils.getStyle(sourceElem, 'border-right-width'));
+
+							target
+								.css('left', bounding.left  + 'px')
+								.css('width', (bounding.width - spacing) + 'px')
+								.css('top', (bounding.top - (bounding.top - bounding.bottom)) + 'px');
+
+						}
+
+						return this;
+
+					},
+
+					autoSizeByFilter: function (filter) {
+
+						var self = this;
+
+						if(filter && filter.uuid) {
+
+							paasbUi.apply(function () {
+
+								var autoSizeFilterElements = scope.autoSizeFilterElements[filter.uuid];
+
+								if(autoSizeFilterElements) {
+
+									var operatorElementSource = autoSizeFilterElements.operator;
+
+									if(operatorElementSource) {
+
+										operatorElementSource = operatorElementSource
+											.parent()
+											.parent();
+
+									}
+
+									self
+										.autoSize(autoSizeFilterElements.suggestions, filter.$$input)
+										.autoSize(autoSizeFilterElements.selector, autoSizeFilterElements.suggestions || filter.$$input)
+										.autoSize(autoSizeFilterElements.operator, operatorElementSource);
+
+								}
+
+							}, 25);
+
+						}
+
+					},
+
+					addAutoSizeElementToFilter: function (filter, elem, type) {
+
+						if(filter && filter.uuid) {
+
+							var autoSizeFilterElements = scope.autoSizeFilterElements[filter.uuid];
+
+							if(!autoSizeFilterElements) {
+
+								scope.autoSizeFilterElements[filter.uuid] = {};
+
+							}
+
+							scope.autoSizeFilterElements[filter.uuid][type] = elem;
+
+						}
+
+					},
 
 					addEventHandler: function (handler) {
 
@@ -502,7 +582,9 @@ angular.module('paasb')
 
 									'$$timestamp': filter.$$timestamp || null,
 
-									'$$modified': filter.$$timestamp || null
+									'$$modified': filter.$$timestamp || null,
+
+									'$$lastValue': filter.value
 
 								}, opts, filter.extend || {});
 
@@ -586,7 +668,6 @@ angular.module('paasb')
 									'editing',
 									'element',
 									'filteredFrom',
-									'hasFilterSelectors',
 									'loading',
 									'notFiltered',
 									'selector',
@@ -640,6 +721,7 @@ angular.module('paasb')
 						this
 							.addProperty(clonedFilter, options, '$$timestamp')
 							.addProperty(clonedFilter, options, '$$modified')
+							.addProperty(clonedFilter, options, '$$lastValue');
 
 						angular.extend(childScope, {
 

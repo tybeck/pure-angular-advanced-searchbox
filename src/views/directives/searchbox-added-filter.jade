@@ -30,24 +30,18 @@ div(
     input(
       type="text", 
       ng-model="value",
-      ng-hide="!filter.editing"
+      ng-hide="!filter.editing",
+      id="{{inputId}}"
     )
     span(ng-hide="!filter.loading") Loading...
     paasb-search-box-filter-selectors(
       filtering="filtering",
       filter="filter"
     )
-    div(ng-if="filter.suggestedValues")
-      ul(
-        ng-hide="!filter.editing",
-        paasb-auto-size="filter",
-        ng-if="!filter.loading"
-      )
-        li(
-          ng-repeat="suggestion in filter.suggestedValues | suggest: filter.value:filter"
-          ng-click="takeSuggestion(suggestion.value)"
-        )
-          span(ng-bind-html="Utils.trust(suggestion.modified)")
+    paasb-search-box-auto-suggestions(
+      filtering="filtering",
+      filter="filter"
+    )
     i(
       class="fa fa-times",
       ng-click="destroy();"

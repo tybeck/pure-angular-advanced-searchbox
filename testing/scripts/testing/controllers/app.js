@@ -111,6 +111,13 @@ angular.module('app')
         }, {
           'name': 'color',
           'displayName': 'Vendor Color',
+          'suggestedValues': [
+            'Yellow',
+            'Red',
+            'Black',
+            'Green'
+          ],
+          'restrictedSuggestedValues': true,
           'root': 'Product'
         }, {
           'name': 'gender',
@@ -150,22 +157,22 @@ angular.module('app')
         };
 
         api
-          .on('onChange', change)
-          .on('onQueryAdded', function (ev, query) {
-
-            console.log(ev, 'query:', query);
-
-          })
-          .on('onEnteredEditMode', function (ev, filter) {
-
-            console.log(ev, 'edit', filter);
-
-          })
-          .on('onLeavedEditMode', function (ev, filter) {
-
-            console.log(ev, 'leave', filter);
-
-          });
+          .on('onChange', change);
+          // .on('onQueryAdded', function (ev, query) {
+          //
+          //   console.log(ev, 'query:', query);
+          //
+          // })
+          // .on('onEnteredEditMode', function (ev, filter) {
+          //
+          //   console.log(ev, 'edit', filter);
+          //
+          // })
+          // .on('onLeavedEditMode', function (ev, filter) {
+          //
+          //   console.log(ev, 'leave', filter);
+          //
+          // });
         //
         // api.on('onQueryRemoved', function (ev, query) {
         //
@@ -227,7 +234,7 @@ angular.module('app')
 
       $scope.sConfig = {
 
-        // 'delay': 1000,
+        'delay': 1000,
 
         // 'store': true,
 
